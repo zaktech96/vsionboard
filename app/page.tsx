@@ -6,6 +6,7 @@ import Pricing from "@/components/homepage/pricing";
 import SideBySide from "@/components/homepage/side-by-side";
 import PageWrapper from "@/components/wrapper/page-wrapper";
 import config from "@/config";
+import { WaitlistForm } from "@/lib/components/waitlist-form";
 
 export default function Home() {
   return (
@@ -25,6 +26,9 @@ export default function Home() {
       {(config.auth.enabled && config.payments.enabled) && <div>
         <Pricing />
       </div>}
+      <div className="flex justify-center items-center w-full my-[8rem]">
+        <WaitlistForm />
+      </div>
       <div className="flex justify-center items-center w-full my-[8rem]">
         <AccordionComponent />
       </div>
