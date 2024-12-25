@@ -6,12 +6,15 @@ import Stripe from 'stripe';
 // Initialize Stripe with your secret key
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-interface PageProps {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+type SearchParams = { [key: string]: string | string[] | undefined };
 
-export default async function SuccessPage({ searchParams }: PageProps) {
+export default async function SuccessPage({
+  params,
+  searchParams,
+}: {
+  params: {};
+  searchParams: SearchParams;
+}) {
   const session = await stripe.checkout.sessions.retrieve(searchParams?.session_id as string);
 
   return (
