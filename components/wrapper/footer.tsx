@@ -61,8 +61,6 @@ export const Footer = () => {
             </div>
             <div className="flex gap-20 flex-row">
               <div className="flex flex-col text-sm max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
-                <p>Built with ❤️</p>
-                <p>Premium Product</p>
                 <Link 
                   href="https://x.com/_7obaid_" 
                   target="_blank" 

@@ -22,19 +22,7 @@ export default function HeroSection() {
       <div className="flex justify-center items-center gap-3">
         <Link href="/dashboard" className="mt-5">
           <Button className="animate-buttonheartbeat rounded-md bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white">
-            Get Started
-          </Button>
-        </Link>
-
-        <Link
-          href="https://github.com"
-          target="_blank"
-          className="mt-5"
-          aria-label="View Documentation"
-        >
-          <Button variant="outline" className="flex gap-1">
-            Documentation
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            Purchase Now
           </Button>
         </Link>
         <Link
