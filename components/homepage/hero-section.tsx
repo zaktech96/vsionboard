@@ -25,12 +25,12 @@ export default function HeroSection() {
           </Button>
         </Link> */}
         <Link
-            href="https://github.com/ObaidUr-Rahmaan/titan"
-            target='_blank'
-            className='animate-buttonheartbeat border p-2 rounded-full mt-5 hover:dark:bg-black hover:cursor-pointer'
-            aria-label="View NextJS 14 Starter Template on GitHub"
+            href="#"
+            className='animate-buttonheartbeat border border-green-500 p-2 rounded-full mt-5 hover:bg-green-500/10 hover:cursor-not-allowed opacity-70 flex items-center gap-2'
+            aria-label="Access Only - Contact for Repository Access"
         >
             <Github className='w-5 h-5' aria-hidden="true" />
+            <span className="text-sm">Access Only - DM on Discord/X for Link</span>
         </Link>
       </div>
       <div className="hidden md:block -mt-64">
