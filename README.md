@@ -1,6 +1,6 @@
 # Titan
 
-Easy-to-setup, fully-featured, and customizable Next.js starter kit.
+Easy-to-setup, fully-featured, and customizable Next.js Boilerplate.
 
 ## Prerequisites
 - Node.js and pnpm installed (See https://blueprint.codeandcreed.tech/pre-requisites)
