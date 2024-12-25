@@ -26,7 +26,7 @@ export default function HeroSection() {
       </div>
       <div className="-mt-64">
         <MacbookScroll 
-          src={"https://i.postimg.cc/sgzd27c5/real-dashboard.webp"}
+          src={"https://utfs.io/f/69a12ab1-4d57-4913-90f9-38c6aca6c373-1txg2.png"}
           showGradient
         />
       </div>
