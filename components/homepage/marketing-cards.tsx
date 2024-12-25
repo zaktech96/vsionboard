@@ -91,7 +91,7 @@ const SpringAnimatedFeatures = () => {
         <h2
           className={`${TITLE_TAILWIND_CLASS} mt-2 font-semibold tracking-tight dark:text-white text-gray-900`}
         >
-          Titan: Built with the best
+          Built with the best
         </h2>
         <p className="mx-auto max-w-[500px] text-gray-600 dark:text-gray-400 text-center mt-2 ">
           Your customers deserve a product built with the best technologies in our Titan
