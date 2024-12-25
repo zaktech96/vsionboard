@@ -6,8 +6,17 @@ import Stripe from 'stripe';
 // Initialize Stripe with your secret key
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export default async function SuccessPage(props: any) {
-  const session = await stripe.checkout.sessions.retrieve(props.searchParams?.session_id as string);
+type Params = Promise<{ slug: string }>;
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+interface PageProps {
+  params: Params;
+  searchParams: SearchParams;
+}
+
+export default async function SuccessPage({ params, searchParams }: PageProps) {
+  const resolvedParams = await searchParams;
+  const session = await stripe.checkout.sessions.retrieve(resolvedParams?.session_id as string);
 
   return (
     <main className="flex min-w-screen flex-col items-center justify-between">
