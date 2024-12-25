@@ -154,8 +154,8 @@ export const Lid = ({
         <div className="absolute inset-0 bg-[#272729] rounded-lg" />
         <Image
           src={src as string}
-          height={1024}
-          width={512}
+          height={1366}
+          width={1024}
           alt="macbook display"
           className="object-cover object-center absolute rounded-lg inset-0 h-full w-full"
           style={{ objectFit: 'cover' }}
