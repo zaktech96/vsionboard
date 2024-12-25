@@ -22,9 +22,15 @@ export default function Home() {
       <div className="flex flex-col p-2 w-full justify-center items-center">
         <MarketingCards />
       </div>
-      <div>{config.payments.enabled ? <Pricing /> : <PaymentSetupNotice />}</div>
-      <div className="flex justify-center items-center w-full my-[4rem]">
-        {config.email.enabled ? <WaitlistForm /> : <EmailSetupNotice />}
+      <div className="flex justify-center items-center w-full my-[4rem] min-h-[200px]">
+        <div className="w-full max-w-2xl mx-auto">
+          {config.payments.enabled ? <Pricing /> : <PaymentSetupNotice />}
+        </div>
+      </div>
+      <div className="flex justify-center items-center w-full my-[4rem] min-h-[200px]">
+        <div className="w-full max-w-2xl mx-auto">
+          {config.email.enabled ? <WaitlistForm /> : <EmailSetupNotice />}
+        </div>
       </div>
       <div className="flex justify-center items-center w-full my-[4rem]">
         <AccordionComponent />
