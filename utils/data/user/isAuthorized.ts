@@ -15,6 +15,14 @@ export const isAuthorized = async (
     };
   }
 
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+    console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_KEY environment variables');
+    return {
+      authorized: false,
+      message: 'Database configuration error',
+    };
+  }
+
   const result = await clerkClient.users.getUser(userId);
 
   if (!result) {
@@ -27,8 +35,8 @@ export const isAuthorized = async (
   const cookieStore = await cookies();
 
   const supabase = createServerClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_KEY,
     {
       cookies: {
         async get(name: string) {
@@ -66,6 +74,7 @@ export const isAuthorized = async (
       message: 'User is not subscribed',
     };
   } catch (error: any) {
+    console.error('Failed to check authorization:', error);
     return {
       authorized: false,
       message: error.message,

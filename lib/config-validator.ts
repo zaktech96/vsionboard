@@ -25,10 +25,13 @@ export function validateConfig() {
         .filter((envVar) => !process.env[envVar])
         .join(', ');
 
-      throw new Error(
+      console.error(
         `${feature} is enabled in config but missing required environment variables: ${missingVars}. ` +
           `Please add them to your .env or .env.local file.`
       );
+      
+      // Disable the feature
+      (config as any)[feature].enabled = false;
     }
   });
 }
