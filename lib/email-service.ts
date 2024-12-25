@@ -3,11 +3,7 @@ import { render } from '@react-email/render';
 import * as React from 'react';
 import { Email } from './email';
 
-if (!process.env.PLUNK_API_KEY) {
-  throw new Error('Missing PLUNK_API_KEY environment variable');
-}
-
-const plunk = new Plunk(process.env.PLUNK_API_KEY);
+const plunk = new Plunk(process.env.PLUNK_API_KEY || '');
 
 interface SendEmailParams {
   to: string;
@@ -17,6 +13,11 @@ interface SendEmailParams {
 
 export async function sendEmail({ to, subject, url }: SendEmailParams) {
   try {
+    if (!process.env.PLUNK_API_KEY) {
+      console.error('Missing PLUNK_API_KEY environment variable');
+      return { success: false, error: 'Missing API key' };
+    }
+
     const emailComponent = React.createElement(Email, { url });
     const htmlBody = await render(emailComponent);
 

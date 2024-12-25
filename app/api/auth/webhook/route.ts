@@ -10,7 +10,10 @@ export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
-    throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local');
+    console.error('Missing WEBHOOK_SECRET from Clerk Dashboard in .env or .env.local');
+    return new Response('Webhook configuration error', {
+      status: 500,
+    });
   }
 
   // Get the headers

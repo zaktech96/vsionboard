@@ -3,9 +3,16 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = process.env.STRIPE_SECRET_KEY 
+  ? new Stripe(process.env.STRIPE_SECRET_KEY)
+  : undefined;
 
 export async function POST(req: NextRequest) {
+  if (!stripe) {
+    console.error('Missing STRIPE_SECRET_KEY environment variable');
+    return NextResponse.json({ error: 'Stripe configuration error' }, { status: 500 });
+  }
+
   const cookieStore = await cookies();
 
   const supabase: any = createServerClient(
@@ -23,9 +30,9 @@ export async function POST(req: NextRequest) {
   return webhooksHandler(reqText, req, supabase);
 }
 
-async function getCustomerEmail(customerId: string): Promise<string | null> {
+async function getCustomerEmail(customerId: string, stripeClient: Stripe): Promise<string | null> {
   try {
-    const customer = await stripe.customers.retrieve(customerId);
+    const customer = await stripeClient.customers.retrieve(customerId);
     return (customer as Stripe.Customer).email;
   } catch (error) {
     console.error('Error fetching customer:', error);
@@ -38,8 +45,13 @@ async function handleSubscriptionEvent(
   type: 'created' | 'updated' | 'deleted',
   supabase: ReturnType<typeof createServerClient>
 ) {
+  if (!stripe) {
+    console.error('Missing STRIPE_SECRET_KEY environment variable');
+    return NextResponse.json({ error: 'Stripe configuration error' }, { status: 500 });
+  }
+
   const subscription = event.data.object as Stripe.Subscription;
-  const customerEmail = await getCustomerEmail(subscription.customer as string);
+  const customerEmail = await getCustomerEmail(subscription.customer as string, stripe);
 
   if (!customerEmail) {
     return NextResponse.json({
@@ -108,8 +120,13 @@ async function handleInvoiceEvent(
   status: 'succeeded' | 'failed',
   supabase: ReturnType<typeof createServerClient>
 ) {
+  if (!stripe) {
+    console.error('Missing STRIPE_SECRET_KEY environment variable');
+    return NextResponse.json({ error: 'Stripe configuration error' }, { status: 500 });
+  }
+
   const invoice = event.data.object as Stripe.Invoice;
-  const customerEmail = await getCustomerEmail(invoice.customer as string);
+  const customerEmail = await getCustomerEmail(invoice.customer as string, stripe);
 
   if (!customerEmail) {
     return NextResponse.json({
@@ -150,6 +167,11 @@ async function handleCheckoutSessionCompleted(
   event: Stripe.Event,
   supabase: ReturnType<typeof createServerClient>
 ) {
+  if (!stripe) {
+    console.error('Missing STRIPE_SECRET_KEY environment variable');
+    return NextResponse.json({ error: 'Stripe configuration error' }, { status: 500 });
+  }
+
   const session = event.data.object as Stripe.Checkout.Session;
   const metadata: any = session?.metadata;
 
@@ -234,6 +256,11 @@ async function webhooksHandler(
   request: NextRequest,
   supabase: ReturnType<typeof createServerClient>
 ): Promise<NextResponse> {
+  if (!stripe) {
+    console.error('Missing STRIPE_SECRET_KEY environment variable');
+    return NextResponse.json({ error: 'Stripe configuration error' }, { status: 500 });
+  }
+
   const sig = request.headers.get('Stripe-Signature');
 
   try {
