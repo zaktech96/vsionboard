@@ -56,9 +56,6 @@ export default function Footer() {
                                     <li>
                                         <a href="https://twitter.com/rasmickyy" target="_blank" className="transition hover:opacity-75"> Twitter </a>
                                     </li>
-                                    <li>
-                                        <a href="https://www.youtube.com/@rasmic" target="_blank" className="  transition hover:opacity-75"> YouTube </a>
-                                    </li>
                                 </ul>
                             </div>
 

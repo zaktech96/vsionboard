@@ -5,7 +5,7 @@ import PageWrapper from "@/components/wrapper/page-wrapper";
 import { VideoPlayer } from '@/components/video-player';
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://starter.rasmic.xyz"),
+  metadataBase: new URL("https://titan.codeandcreed.tech"),
   keywords: [''],
   title: 'Marketing page',
   openGraph: {
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: 'Marketing page',
     description: 'Put description of the page.',
     siteId: "",
-    creator: "@rasmickyy",
+    creator: "@_7obaid_",
     creatorId: "",
     images: [''],
   },

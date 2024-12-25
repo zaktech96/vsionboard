@@ -8,23 +8,23 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://starter.rasmic.xyz"),
+  metadataBase: new URL("https://titan.codeandcreed.tech"),
   title: {
-    default: 'Nextjs Starter Kit',
-    template: `%s | Nextjs Starter Kit`
+    default: 'Tian - Boilerplate',
+    template: `%s | Boilerplate`
   },
-  description: 'The Ultimate Nextjs 14 Starter Kit for quickly building your SaaS, giving you time to focus on what really matters',
+  description: 'Kickstart your next project with minimal friction - so you can focus on building cool stuff',
   openGraph: {
-    description: 'The Ultimate Nextjs 14 Starter Kit for quickly building your SaaS, giving you time to focus on what really matters',
+    description: 'Kickstart your next project with minimal friction - so you can focus on building cool stuff',
     images: ['https://utfs.io/f/8a428f85-ae83-4ca7-9237-6f8b65411293-eun6ii.png'],
-    url: 'https://starter.rasmic.xyz/'
+    url: 'titan.codeandcreed.tech'
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Nextjs Starter Kit',
-    description: 'The Ultimate Nextjs 14 Starter Kit for quickly building your SaaS, giving you time to focus on what really matters',
+    title: 'Titan Boilerplate',
+    description: 'Kickstart your next project with minimal friction - so you can focus on building cool stuff',
     siteId: "",
-    creator: "@rasmic",
+    creator: "@_7obaid_",
     creatorId: "",
     images: ['https://utfs.io/f/8a428f85-ae83-4ca7-9237-6f8b65411293-eun6ii.png'],
   },
