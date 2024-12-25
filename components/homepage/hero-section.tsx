@@ -6,7 +6,7 @@ import { TITLE_TAILWIND_CLASS } from '@/utils/constants';
 export default function HeroSection() {
   return (
     <section
-      className="flex flex-col items-center justify-center leading-6 mt-32"
+      className="flex flex-col items-center justify-center leading-6 mt-24"
       aria-label="Titan Hero"
     >
       <h1
@@ -30,6 +30,9 @@ export default function HeroSection() {
           showGradient
         />
       </div>
+      <div className="h-64" />
+      <div className="h-64" />
+      <div className="h-32" />
     </section>
   );
 }
