@@ -1,25 +1,24 @@
-import { Computer, Network } from 'lucide-react';
-import { FaBusinessTime } from 'react-icons/fa';
+import { Computer, Network, Zap } from 'lucide-react';
 import { OrbitingCirclesComponent } from './orbiting-circles';
 import { TITLE_TAILWIND_CLASS } from '@/utils/constants';
 
 const features = [
   {
-    name: 'Build faster.',
+    name: 'Build faster',
     description:
       'Get up and running in no time with pre-configured settings and best practices. Say goodbye to setup and focus on what truly matters - building your application.',
+    icon: Zap,
+  },
+  {
+    name: 'Production Ready',
+    description:
+      'Built with modern tools and best practices. Authentication, database, payments, and more - everything you need to launch your SaaS is included.',
     icon: Computer,
   },
   {
-    name: 'Focus on business logic.',
+    name: 'Scale with ease',
     description:
-      'Concentrate on solving business problems instead of dealing with the repetitive setup.',
-    icon: FaBusinessTime,
-  },
-  {
-    name: 'Ready for scale.',
-    description:
-      'Prepare for growth from day one. With built-in optimizations and scalable architecture, your application will be ready to handle increased traffic and complexity.',
+      'Built on a rock-solid foundation with NextJS, TypeScript, and Tailwind CSS. Deploy with confidence and scale without worry.',
     icon: Network,
   },
 ];
@@ -34,10 +33,7 @@ export default function SideBySide() {
               <p
                 className={`${TITLE_TAILWIND_CLASS} mt-2 font-semibold tracking-tight dark:text-white text-gray-900`}
               >
-                Titan: A faster way to production
-              </p>
-              <p className="mt-6 leading-8 text-gray-600 dark:text-gray-400">
-                Accelerate your development with this powerful Boilerplate
+                A faster way to production
               </p>
               <dl className="mt-10 max-w-xl space-y-8 leading-7 text-gray-600 lg:max-w-none">
                 {features.map((feature) => (

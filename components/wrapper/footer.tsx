@@ -1,107 +1,109 @@
-'use client';
-import { useForm } from 'react-hook-form';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
+import Link from "next/link";
 
-export default function Footer() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
+export const Footer = () => {
+  const navigationItems = [
+    {
+      title: "Product",
+      items: [
+        {
+          title: "Features",
+          href: "#",
+        },
+        {
+          title: "Documentation",
+          href: "#",
+        },
+        {
+          title: "Pricing",
+          href: "#",
+        },
+        {
+          title: "Roadmap",
+          href: "#",
+        },
+      ],
+    },
+    {
+      title: "Company",
+      items: [
+        {
+          title: "About",
+          href: "#",
+        },
+        {
+          title: "Blog",
+          href: "#",
+        },
+        {
+          title: "GitHub",
+          href: "https://github.com",
+        },
+        {
+          title: "Contact",
+          href: "#",
+        },
+      ],
+    },
+  ];
 
-  const onSubmit = async (data: any) => {};
   return (
-    <footer className="border-t dark:bg-black">
-      <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-        <div className="lg:grid lg:grid-cols-2">
-          <div className="border-b   py-8 lg:order-last lg:border-b-0 lg:border-s lg:py-16 lg:ps-16">
-            <div className="mt-8 space-y-4 lg:mt-0">
-              <div>
-                <h3 className="text-2xl font-medium">This is a fake newsletter title</h3>
-                <p className="mt-4 max-w-lg  ">
-                  This is not a real newsletter email input. This is for you to build upon
-                </p>
+    <footer className="w-full py-20 lg:py-40 border-t">
+      <div className="container mx-auto px-4">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className="flex gap-8 flex-col items-start">
+            <div className="flex gap-2 flex-col">
+              <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
+                Titan
+              </h2>
+              <p className="text-lg max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
+                The Ultimate NextJS Boilerplate for Startups
+              </p>
+            </div>
+            <div className="flex gap-20 flex-row">
+              <div className="flex flex-col text-sm max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
+                <p>Built with ❤️</p>
+                <p>Premium Product</p>
+                <Link 
+                  href="https://x.com/_7obaid_" 
+                  target="_blank" 
+                  className="hover:text-primary transition-colors mt-2"
+                >
+                  Created by @_7obaid_
+                </Link>
               </div>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col border rounded-xl p-4 gap-3 mt-6 w-full"
-              >
-                <Input
-                  {...register('email', { required: true })}
-                  placeholder="Enter your email"
-                  type="email"
-                />
-                <Button type="submit">Sign Up</Button>
-              </form>
+              <div className="flex flex-col text-sm max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
+                <Link href="#" className="hover:text-primary transition-colors">Terms of service</Link>
+                <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
+                <Link href="#" className="hover:text-primary transition-colors">Security</Link>
+              </div>
             </div>
           </div>
-
-          <div className="py-8 lg:py-16 lg:pe-16">
-            <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
-              <div>
-                <p className="font-medium ">Socials</p>
-
-                <ul className="mt-6 space-y-4 text-sm">
-                  <li>
-                    <a
-                      href="https://twitter.com/rasmickyy"
-                      target="_blank"
-                      className="transition hover:opacity-75"
-                    >
-                      {' '}
-                      Twitter{' '}
-                    </a>
-                  </li>
-                </ul>
+          <div className="grid lg:grid-cols-2 gap-10 items-start">
+            {navigationItems.map((item) => (
+              <div
+                key={item.title}
+                className="flex text-base gap-1 flex-col items-start"
+              >
+                <div className="flex flex-col gap-2">
+                  <p className="text-xl">{item.title}</p>
+                  {item.items &&
+                    item.items.map((subItem) => (
+                      <Link
+                        key={subItem.title}
+                        href={subItem.href}
+                        className="flex justify-between items-center hover:text-primary transition-colors"
+                      >
+                        <span className="text-muted-foreground">
+                          {subItem.title}
+                        </span>
+                      </Link>
+                    ))}
+                </div>
               </div>
-
-              <div>
-                <p className="font-medium ">Helpful Links</p>
-
-                <ul className="mt-6 space-y-4 text-sm">
-                  <li>
-                    <a
-                      target="_blank"
-                      href="/"
-                      rel="noopener noreferrer"
-                      className="  transition hover:opacity-75"
-                    >
-                      {' '}
-                      Docs{' '}
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/" className="  transition hover:opacity-75">
-                      {' '}
-                      Methodology{' '}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-8 border-t   pt-8">
-              <ul className="flex flex-wrap gap-4 text-xs">
-                <li>
-                  <a href="/" target="_blank" className="transition hover:opacity-75">
-                    Terms & Conditions{' '}
-                  </a>
-                </li>
-
-                <li>
-                  <a href="/" target="_blank" className="transition hover:opacity-75">
-                    Privacy Policy{' '}
-                  </a>
-                </li>
-              </ul>
-
-              <p className="mt-8 text-xs  ">&copy; 2024. SomeCompany LLC. All rights reserved.</p>
-            </div>
+            ))}
           </div>
         </div>
       </div>
     </footer>
   );
-}
+}; 

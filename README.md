@@ -1,10 +1,10 @@
 # Titan
 
-Easy-to-setup, fully-featured, and customizable Next.js Boilerplate.
+Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
 
 ## Tech Stack
 
-- [Next.js](https://nextjs.org/) - Full-stack React framework
+- [NextJS 15](https://nextjs.org/) - Full-stack React framework
 - [Supabase](https://supabase.com/) - Store data in a managed database
 - [Clerk](https://clerk.com/) - Authenticate your Users
 - [Stripe](https://stripe.com/) - Collect Payments
@@ -107,7 +107,7 @@ Easy-to-setup, fully-featured, and customizable Next.js Boilerplate.
 ## Learn More
 
 Refer to the documentation of the individual technologies used in this project for more detailed information:
-- [Next.js Documentation](https://nextjs.org/docs)
+- [NextJS Documentation](https://nextjs.org/docs)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Supabase Documentation](https://supabase.io/docs)
 - [Prisma Documentation](https://www.prisma.io/docs)

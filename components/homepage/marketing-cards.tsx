@@ -16,21 +16,13 @@ const ProjectsData = [
   },
   {
     id: 2,
-    name: 'TypeScript',
-    description:
-      'A typed superset of JavaScript that enhances code maintainability and scalability.',
-    image: 'https://utfs.io/f/5b51351d-218b-4931-a296-0a9275030aaf-8myeez.png',
-    url: 'https://www.typescriptlang.org/',
-  },
-  {
-    id: 3,
     name: 'Tailwind CSS',
     description: 'A utility-first CSS framework for building custom designs with ease.',
     image: 'https://utfs.io/f/666774c0-dc3a-4d5a-84b7-cc96e682db61-bhgw4o.png',
     url: 'https://tailwindui.com/',
   },
   {
-    id: 4,
+    id: 3,
     name: 'Shadcn UI',
     description: 'Beautifully designed components by Shadcn.',
     image: 'https://utfs.io/f/bc4c7cdb-dc42-452c-8744-0ad2c3232e7f-exyul9.png',
@@ -38,14 +30,14 @@ const ProjectsData = [
     url: 'https://ui.shadcn.com',
   },
   {
-    id: 5,
+    id: 4,
     name: 'Clerk Authentication',
     description: 'Seamless and secure authentication service for web applications.',
     image: 'https://utfs.io/f/aee7360d-54f1-4ed1-a4b4-49a56b455bf4-1ker11.png',
     url: 'https://clerk.com/',
   },
   {
-    id: 6,
+    id: 5,
     name: 'Supabase (PostgreSQL)',
     description:
       'PostgreSQL-based open-source database with Supabase for building scalable applications.',
@@ -53,7 +45,7 @@ const ProjectsData = [
     url: 'https://supabase.com/',
   },
   {
-    id: 7,
+    id: 6,
     name: 'Prisma ORM',
     description:
       'Modern database toolkit for TypeScript and Node.js, simplifying database interactions.',
@@ -61,26 +53,19 @@ const ProjectsData = [
     url: 'https://prisma.io/',
   },
   {
-    id: 8,
-    name: 'Stripe Subsctiptions & One time payments',
+    id: 7,
+    name: 'Stripe Subsctiptions & One-Time Payments',
     description:
       'Payment processing solution for handling subscriptions and one-off transactions securely.',
     image: 'https://utfs.io/f/a2fbe9db-35f8-4738-a4c4-0b9a29f4efc7-er2coj.png',
     url: 'https://stripe.com',
   },
   {
-    id: 9,
+    id: 8,
     name: 'Tanstack Query',
     description: 'For client side fetching, caching, and revalidation.',
     image: 'https://utfs.io/f/ee162388-f998-4740-bfc4-9d9a7050f485-90gb5l.png',
     url: 'https://tanstack.com/query/v5',
-  },
-  {
-    id: 10,
-    name: 'Upstash (Redis)',
-    description: 'Redis-based cloud database service for rate-limiting.',
-    image: 'https://utfs.io/f/c01790c1-7c12-4a5e-b50f-a44358124853-3mzznq.png',
-    url: 'https://upstash.com/',
   },
 ];
 
@@ -91,10 +76,10 @@ const SpringAnimatedFeatures = () => {
         <h2
           className={`${TITLE_TAILWIND_CLASS} mt-2 font-semibold tracking-tight dark:text-white text-gray-900`}
         >
-          Built with the best
+          Built with the best Tech - Minimal friction
         </h2>
-        <p className="mx-auto max-w-[500px] text-gray-600 dark:text-gray-400 text-center mt-2 ">
-          Your customers deserve a product built with the best technologies in our Titan
+        <p className="mx-auto max-w-[600px] text-gray-600 dark:text-gray-400 text-center mt-2 ">
+          Your customers deserve your focus - build with tech that just works.
         </p>
       </div>
       <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

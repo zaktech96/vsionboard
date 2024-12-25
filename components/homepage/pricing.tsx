@@ -19,6 +19,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { toast } from 'sonner';
 import { TITLE_TAILWIND_CLASS } from '@/utils/constants';
 import { useRouter } from 'next/navigation';
+import { PaymentSetupNotice } from '@/components/payment-setup-notice';
+import config from '@/config';
 
 type PricingSwitchProps = {
   onSwitch: (value: string) => void;
@@ -204,32 +206,38 @@ export default function Pricing() {
     }
   };
 
+  if (!config.payments.enabled) {
+    return <PaymentSetupNotice />;
+  }
+
   const plans = [
     {
-      title: 'Basic',
-      monthlyPrice: 10,
-      yearlyPrice: 100,
-      description: 'Essential features you need to get started',
+      title: 'Starter',
+      monthlyPrice: 15,
+      yearlyPrice: 150,
+      description: 'Perfect for small teams just getting started',
       features: [
-        'Example Feature Number 1',
-        'Example Feature Number 2',
-        'Example Feature Number 3',
+        'Up to 10 team members',
+        'Basic AI insights',
+        'Real-time collaboration',
+        'Standard integrations',
       ],
       priceIdMonthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID,
       priceIdYearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID,
-      actionLabel: 'Get Started',
+      actionLabel: 'Start Free Trial',
     },
     {
       title: 'Pro',
-      monthlyPrice: 25,
-      yearlyPrice: 250,
-      description: 'Perfect for owners of small & medium businessess',
+      monthlyPrice: 49,
+      yearlyPrice: 490,
+      description: 'Advanced features for growing teams',
       features: [
-        'Example Feature Number 1',
-        'Example Feature Number 2',
-        'Example Feature Number 3',
+        'Up to 50 team members',
+        'Advanced AI analytics',
+        'Custom workflow automation',
+        'Priority support',
       ],
-      actionLabel: 'Get Started',
+      actionLabel: 'Start Free Trial',
       priceIdMonthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID,
       priceIdYearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID,
       popular: true,
@@ -237,12 +245,12 @@ export default function Pricing() {
     {
       title: 'Enterprise',
       price: 'Custom',
-      description: 'Dedicated support and infrastructure to fit your needs',
+      description: 'Custom solutions for large organizations',
       features: [
-        'Example Feature Number 1',
-        'Example Feature Number 2',
-        'Example Feature Number 3',
-        'Super Exclusive Feature',
+        'Unlimited team members',
+        'Custom AI model training',
+        'Dedicated success manager',
+        'SLA guarantees',
       ],
       actionLabel: 'Contact Sales',
       priceIdMonthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID,
@@ -254,8 +262,8 @@ export default function Pricing() {
   return (
     <div>
       <PricingHeader
-        title="Sample Pricing Plans"
-        subtitle="Use these sample pricing cards in your SAAS"
+        title="Simple, Transparent Pricing"
+        subtitle="Choose the plan that's right for your team"
       />
       <PricingSwitch onSwitch={togglePricingPeriod} />
       <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">

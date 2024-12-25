@@ -14,11 +14,10 @@ export default function HeroSection() {
       <h1
         className={`${TITLE_TAILWIND_CLASS} scroll-m-20 font-semibold tracking-tight text-center max-w-[1120px] bg-gradient-to-b dark:text-white`}
       >
-        Titan: Build & Ship Fast
+        Build & Ship Fast
       </h1>
       <p className="mx-auto max-w-[700px] text-gray-500 text-center mt-2 dark:text-gray-400">
-        The Ultimate Nextjs 15 Boilerplate for quickly building your SaaS, giving you time to focus
-        on what really matters
+        The Ultimate NextJS Boilerplate for quickly building your Startup - Focus on your Product.
       </p>
       <div className="flex justify-center items-center gap-3">
         <Link href="/dashboard" className="mt-5">
@@ -28,21 +27,21 @@ export default function HeroSection() {
         </Link>
 
         <Link
-          href="https://discord.gg/HUcHdrrDgY"
+          href="https://github.com"
           target="_blank"
           className="mt-5"
-          aria-label="Join Discord (opens in a new tab)"
+          aria-label="View Documentation"
         >
           <Button variant="outline" className="flex gap-1">
-            Join Discord
+            Documentation
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Button>
         </Link>
         <Link
-          href="https://github.com/michaelshimeles/nextjs14-starter-template"
+          href="https://github.com"
           target="_blank"
           className="animate-buttonheartbeat border p-2 rounded-full mt-5 hover:dark:bg-black hover:cursor-pointer"
-          aria-label="View NextJS 14 Starter Template on GitHub"
+          aria-label="View on GitHub"
         >
           <Github className="w-5 h-5" aria-hidden="true" />
         </Link>
