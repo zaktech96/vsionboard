@@ -24,15 +24,22 @@ export const isAuthorized = async (
     };
   }
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const supabase = createServerClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        async get(name: string) {
+          const cookie = cookieStore.get(name);
+          return cookie?.value;
+        },
+        async set(name: string, value: string, options: any) {
+          cookieStore.set(name, value, options);
+        },
+        async remove(name: string, options: any) {
+          cookieStore.delete(name);
         },
       },
     }
