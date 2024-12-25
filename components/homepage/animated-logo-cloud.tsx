@@ -1,4 +1,3 @@
-
 const logos = [
   {
     name: 'Prime',
@@ -29,7 +28,7 @@ const logos = [
     name: 'mistral',
     url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tyos2ayezryjskox3wzs.svg',
   },
-]
+];
 
 const AnimatedLogoCloud = () => {
   return (
@@ -50,19 +49,14 @@ const AnimatedLogoCloud = () => {
                 className="flex shrink-0 animate-logo-cloud flex-row justify-around gap-6"
               >
                 {logos.map((logo, key) => (
-                  <img
-                    key={key}
-                    src={logo.url}
-                    className="h-10 w-28 px-2"
-                    alt={`${logo.name}`}
-                  />
+                  <img key={key} src={logo.url} className="h-10 w-28 px-2" alt={`${logo.name}`} />
                 ))}
               </div>
             ))}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AnimatedLogoCloud
+export default AnimatedLogoCloud;

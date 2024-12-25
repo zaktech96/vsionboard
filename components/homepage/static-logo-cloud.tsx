@@ -23,7 +23,7 @@ const logos = [
     name: 'Mistral',
     url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tyos2ayezryjskox3wzs.svg',
   },
-]
+];
 
 const StaticLogoCloud = () => {
   return (
@@ -44,7 +44,7 @@ const StaticLogoCloud = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default StaticLogoCloud
+export default StaticLogoCloud;

@@ -1,5 +1,5 @@
-"use client"
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+'use client';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { Maximize, Minimize, Pause, Play, Volume2, VolumeX } from 'lucide-react';
 
 interface CustomVideoPlayerProps {
@@ -32,16 +32,16 @@ export const VideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
 
     const handleVideoEnd = () => setIsPlaying(false);
 
-    video.addEventListener("timeupdate", updateProgress);
-    video.addEventListener("ended", handleVideoEnd);
+    video.addEventListener('timeupdate', updateProgress);
+    video.addEventListener('ended', handleVideoEnd);
 
     if (autoplay) {
-      video.play().catch((error) => console.error("Autoplay failed:", error));
+      video.play().catch((error) => console.error('Autoplay failed:', error));
     }
 
     return () => {
-      video.removeEventListener("timeupdate", updateProgress);
-      video.removeEventListener("ended", handleVideoEnd);
+      video.removeEventListener('timeupdate', updateProgress);
+      video.removeEventListener('ended', handleVideoEnd);
     };
   }, [autoplay]);
 
@@ -65,16 +65,16 @@ export const VideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
     };
 
     if (playerRef.current) {
-      playerRef.current.addEventListener("mousemove", handleMouseMove);
-      playerRef.current.addEventListener("mouseleave", handleMouseLeave);
+      playerRef.current.addEventListener('mousemove', handleMouseMove);
+      playerRef.current.addEventListener('mouseleave', handleMouseLeave);
     }
 
     const inactivityInterval = setInterval(checkMouseInactivity, 1000);
 
     return () => {
       if (playerRef.current) {
-        playerRef.current.removeEventListener("mousemove", handleMouseMove);
-        playerRef.current.removeEventListener("mouseleave", handleMouseLeave);
+        playerRef.current.removeEventListener('mousemove', handleMouseMove);
+        playerRef.current.removeEventListener('mouseleave', handleMouseLeave);
       }
       clearInterval(inactivityInterval);
     };
@@ -91,10 +91,10 @@ export const VideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
       setIsFullscreen(!!document.fullscreenElement);
     };
 
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
 
     return () => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, []);
 
@@ -137,14 +137,12 @@ export const VideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
   }, []);
 
   return (
-    <div ref={playerRef} className="flex flex-col justify-center items-center max-w-full relative mb-16">
+    <div
+      ref={playerRef}
+      className="flex flex-col justify-center items-center max-w-full relative mb-16"
+    >
       <div className="relative w-full">
-        <video
-          ref={videoRef}
-          className="w-full cursor-pointer"
-          src={videoSrc}
-          onClick={togglePlay}
-        >
+        <video ref={videoRef} className="w-full cursor-pointer" src={videoSrc} onClick={togglePlay}>
           Your browser does not support the video tag.
         </video>
         {!isPlaying && (
@@ -153,7 +151,8 @@ export const VideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
           </div>
         )}
       </div>
-      <div className={`
+      <div
+        className={`
           text-white
          bg-black bg-opacity-50
           p-2 w-full absolute
@@ -161,9 +160,13 @@ export const VideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
           left-0
           transition-opacity duration-300 ease-in-out
           ${showControls ? 'opacity-100' : 'opacity-0'}
-        `}>
+        `}
+      >
         <div className="flex items-center justify-between">
-          <button onClick={togglePlay} className="p-1 bg-transparent border-none cursor-pointer flex items-center justify-center mr-0 text-inherit">
+          <button
+            onClick={togglePlay}
+            className="p-1 bg-transparent border-none cursor-pointer flex items-center justify-center mr-0 text-inherit"
+          >
             {isPlaying ? <Pause size={20} /> : <Play size={20} />}
           </button>
           <input

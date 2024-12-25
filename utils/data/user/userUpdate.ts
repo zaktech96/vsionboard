@@ -1,7 +1,7 @@
-"server only";
-import { userUpdateProps } from "@/utils/types";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+'server only';
+import { userUpdateProps } from '@/utils/types';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 export const userUpdate = async ({
   email,
@@ -26,7 +26,7 @@ export const userUpdate = async ({
 
   try {
     const { data, error } = await supabase
-      .from("user")
+      .from('user')
       .update([
         {
           email,
@@ -36,7 +36,7 @@ export const userUpdate = async ({
           user_id,
         },
       ])
-      .eq("email", email)
+      .eq('email', email)
       .select();
 
     if (data) return data;

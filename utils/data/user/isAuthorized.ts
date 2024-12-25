@@ -1,18 +1,17 @@
-"server only";
+'server only';
 
-import { clerkClient } from "@clerk/nextjs/server";
-import { cookies } from "next/headers";
-import { createServerClient } from "@supabase/ssr";
-import config from "@/tailwind.config";
+import { clerkClient } from '@clerk/nextjs/server';
+import { cookies } from 'next/headers';
+import { createServerClient } from '@supabase/ssr';
+import config from '@/tailwind.config';
 
 export const isAuthorized = async (
   userId: string
 ): Promise<{ authorized: boolean; message: string }> => {
-
   if (!config.payments.enabled) {
     return {
       authorized: true,
-      message: "Payments are disabled",
+      message: 'Payments are disabled',
     };
   }
 
@@ -21,7 +20,7 @@ export const isAuthorized = async (
   if (!result) {
     return {
       authorized: false,
-      message: "User not found",
+      message: 'User not found',
     };
   }
 
@@ -40,10 +39,7 @@ export const isAuthorized = async (
   );
 
   try {
-    const { data, error } = await supabase
-      .from("subscriptions")
-      .select("*")
-      .eq("user_id", userId);
+    const { data, error } = await supabase.from('subscriptions').select('*').eq('user_id', userId);
 
     if (error?.code)
       return {
@@ -51,16 +47,16 @@ export const isAuthorized = async (
         message: error.message,
       };
 
-    if (data && data[0].status === "active") {
+    if (data && data[0].status === 'active') {
       return {
         authorized: true,
-        message: "User is subscribed",
+        message: 'User is subscribed',
       };
     }
 
     return {
       authorized: false,
-      message: "User is not subscribed",
+      message: 'User is not subscribed',
     };
   } catch (error: any) {
     return {

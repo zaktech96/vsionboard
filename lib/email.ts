@@ -11,14 +11,14 @@ interface EmailProps {
 export function Email({ url }: EmailProps) {
   return React.createElement(
     Html,
-    { lang: "en" },
+    { lang: 'en' },
     React.createElement(
       Section,
       { style: { padding: '20px', textAlign: 'center' } },
       React.createElement(
         Text,
         { style: { fontSize: '20px', color: '#333' } },
-        "Thanks for joining our waitlist!"
+        'Thanks for joining our waitlist!'
       ),
       React.createElement(
         Text,
@@ -36,10 +36,10 @@ export function Email({ url }: EmailProps) {
             borderRadius: '6px',
             textDecoration: 'none',
             marginTop: '16px',
-          }
+          },
         },
-        "Visit Our Website"
+        'Visit Our Website'
       )
     )
   );
-} 
+}

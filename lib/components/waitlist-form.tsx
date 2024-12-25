@@ -23,7 +23,7 @@ export function WaitlistForm() {
       });
 
       if (!response.ok) throw new Error('Failed to join waitlist');
-      
+
       setStatus('success');
       setEmail('');
     } catch (error) {
@@ -50,7 +50,7 @@ export function WaitlistForm() {
       >
         {status === 'loading' ? 'Joining...' : 'Join Waitlist'}
       </button>
-      
+
       {status === 'success' && (
         <p className="text-green-500 text-center">Thanks for joining! Check your email.</p>
       )}
@@ -59,4 +59,4 @@ export function WaitlistForm() {
       )}
     </form>
   );
-} 
+}

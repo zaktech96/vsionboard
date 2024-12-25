@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { CheckCircle, Clock, Menu, Shield, Trash2, X } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { Button } from '@/components/ui/button';
+import { CheckCircle, Clock, Menu, Shield, Trash2, X } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export function LandingPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const router = useRouter()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -45,26 +45,49 @@ export function LandingPage() {
               </Button>
             </Link>
           </div>
-          <Button className="hidden md:inline-flex bg-green-600 hover:bg-green-700">Get Started</Button>
+          <Button className="hidden md:inline-flex bg-green-600 hover:bg-green-700">
+            Get Started
+          </Button>
         </div>
       </header>
 
       {mobileMenuOpen && (
         <div className="md:hidden bg-white py-2 px-4">
           <nav className="flex flex-col space-y-2">
-            <Link className="text-sm font-medium hover:text-green-600" href="#services" onClick={() => setMobileMenuOpen(false)}>
+            <Link
+              className="text-sm font-medium hover:text-green-600"
+              href="#services"
+              onClick={() => setMobileMenuOpen(false)}
+            >
               Services
             </Link>
-            <Link className="text-sm font-medium hover:text-green-600" href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>
+            <Link
+              className="text-sm font-medium hover:text-green-600"
+              href="#how-it-works"
+              onClick={() => setMobileMenuOpen(false)}
+            >
               How It Works
             </Link>
-            <Link className="text-sm font-medium hover:text-green-600" href="#testimonials" onClick={() => setMobileMenuOpen(false)}>
+            <Link
+              className="text-sm font-medium hover:text-green-600"
+              href="#testimonials"
+              onClick={() => setMobileMenuOpen(false)}
+            >
               Testimonials
             </Link>
-            <Link className="text-sm font-medium hover:text-green-600" href="#faq" onClick={() => setMobileMenuOpen(false)}>
+            <Link
+              className="text-sm font-medium hover:text-green-600"
+              href="#faq"
+              onClick={() => setMobileMenuOpen(false)}
+            >
               FAQ
             </Link>
-            <Button className="w-full bg-green-600 hover:bg-green-700" onClick={() => setMobileMenuOpen(false)}>Get Started</Button>
+            <Button
+              className="w-full bg-green-600 hover:bg-green-700"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Get Started
+            </Button>
           </nav>
         </div>
       )}
@@ -86,7 +109,9 @@ export function LandingPage() {
 
         <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
           <div className="container mx-auto text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12">How WasteInspect Pro Works</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12">
+              How WasteInspect Pro Works
+            </h2>
             <div className="max-w-3xl mx-auto mb-8 sm:mb-12">
               <div className="aspect-w-16 aspect-h-9">
                 <Image
@@ -99,7 +124,7 @@ export function LandingPage() {
               </div>
             </div>
             <div className="flex justify-center space-x-4 sm:space-x-8">
-              {["Client 1", "Client 2", "Client 3", "Client 4", "Client 5"].map((client) => (
+              {['Client 1', 'Client 2', 'Client 3', 'Client 4', 'Client 5'].map((client) => (
                 <div key={client} className="w-10 h-10 sm:w-16 sm:h-16 bg-gray-200 rounded-full" />
               ))}
             </div>
@@ -108,28 +133,30 @@ export function LandingPage() {
 
         <section id="services" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="container mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Our Services</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">
+              Our Services
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
                 {
                   icon: <Trash2 className="h-8 w-8 sm:h-10 sm:w-10 text-green-600" />,
-                  title: "Waste Audits",
-                  description: "Comprehensive analysis of waste streams and management practices",
+                  title: 'Waste Audits',
+                  description: 'Comprehensive analysis of waste streams and management practices',
                 },
                 {
                   icon: <CheckCircle className="h-8 w-8 sm:h-10 sm:w-10 text-green-600" />,
-                  title: "Compliance Checks",
-                  description: "Ensure adherence to local and federal waste management regulations",
+                  title: 'Compliance Checks',
+                  description: 'Ensure adherence to local and federal waste management regulations',
                 },
                 {
                   icon: <Clock className="h-8 w-8 sm:h-10 sm:w-10 text-green-600" />,
-                  title: "Real-time Reporting",
-                  description: "Instant access to inspection results and recommendations",
+                  title: 'Real-time Reporting',
+                  description: 'Instant access to inspection results and recommendations',
                 },
                 {
                   icon: <Shield className="h-8 w-8 sm:h-10 sm:w-10 text-green-600" />,
-                  title: "Environmental Protection",
-                  description: "Minimize environmental impact through optimized waste management",
+                  title: 'Environmental Protection',
+                  description: 'Minimize environmental impact through optimized waste management',
                 },
               ].map((service, index) => (
                 <div key={index} className="text-center">
@@ -144,13 +171,15 @@ export function LandingPage() {
 
         <section id="how-it-works" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
           <div className="container mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">How It Works</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">
+              How It Works
+            </h2>
             <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
               {[
-                "Schedule an inspection with our team of experts",
-                "Our inspectors conduct a thorough on-site waste management audit",
-                "Receive a detailed report with actionable insights and recommendations",
-                "Implement changes and track improvements over time",
+                'Schedule an inspection with our team of experts',
+                'Our inspectors conduct a thorough on-site waste management audit',
+                'Receive a detailed report with actionable insights and recommendations',
+                'Implement changes and track improvements over time',
               ].map((step, index) => (
                 <div key={index} className="flex items-center">
                   <div className="flex-shrink-0 mr-4">
@@ -167,20 +196,25 @@ export function LandingPage() {
 
         <section id="testimonials" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
           <div className="container mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">What Our Clients Say</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">
+              What Our Clients Say
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto">
               {[
                 {
-                  quote: "WasteInspect Pro has revolutionized our waste management processes. Highly recommended!",
-                  author: "Jane Doe, CEO of GreenCorp",
+                  quote:
+                    'WasteInspect Pro has revolutionized our waste management processes. Highly recommended!',
+                  author: 'Jane Doe, CEO of GreenCorp',
                 },
                 {
-                  quote: "The insights provided by their inspections have saved us both time and money.",
-                  author: "John Smith, Facilities Manager at EcoIndustries",
+                  quote:
+                    'The insights provided by their inspections have saved us both time and money.',
+                  author: 'John Smith, Facilities Manager at EcoIndustries',
                 },
                 {
-                  quote: "Their team is professional and thorough. We've seen significant improvements in our waste management.",
-                  author: "Michael Shimeles, Operations Manager at CleanTech Solutions",
+                  quote:
+                    "Their team is professional and thorough. We've seen significant improvements in our waste management.",
+                  author: 'Michael Shimeles, Operations Manager at CleanTech Solutions',
                 },
               ].map((testimonial, index) => (
                 <div key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
@@ -194,20 +228,25 @@ export function LandingPage() {
 
         <section id="faq" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
           <div className="container mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Frequently Asked Questions</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">
+              Frequently Asked Questions
+            </h2>
             <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
               {[
                 {
-                  question: "How often should we conduct waste management inspections?",
-                  answer: "The frequency of inspections depends on your specific needs and regulatory requirements. We typically recommend quarterly inspections for most businesses.",
+                  question: 'How often should we conduct waste management inspections?',
+                  answer:
+                    'The frequency of inspections depends on your specific needs and regulatory requirements. We typically recommend quarterly inspections for most businesses.',
                 },
                 {
-                  question: "What types of businesses can benefit from your services?",
-                  answer: "Our services are valuable for a wide range of industries, including manufacturing, healthcare, hospitality, and educational institutions.",
+                  question: 'What types of businesses can benefit from your services?',
+                  answer:
+                    'Our services are valuable for a wide range of industries, including manufacturing, healthcare, hospitality, and educational institutions.',
                 },
                 {
-                  question: "How long does a typical inspection take?",
-                  answer: "The duration of an inspection varies based on the size and complexity of your facility. Most inspections are completed within 1-2 business days.",
+                  question: 'How long does a typical inspection take?',
+                  answer:
+                    'The duration of an inspection varies based on the size and complexity of your facility. Most inspections are completed within 1-2 business days.',
                 },
               ].map((faq, index) => (
                 <div key={index}>
@@ -221,8 +260,12 @@ export function LandingPage() {
 
         <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-green-600 text-white">
           <div className="container mx-auto text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Optimize Your Waste Management?</h2>
-            <p className="text-lg sm:text-xl mb-6 sm:mb-8">Get started with WasteInspect Pro today</p>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+              Ready to Optimize Your Waste Management?
+            </h2>
+            <p className="text-lg sm:text-xl mb-6 sm:mb-8">
+              Get started with WasteInspect Pro today
+            </p>
             <Button className="bg-white text-green-600 hover:bg-gray-100 text-base sm:text-lg py-2 px-4 sm:px-6">
               Schedule Your Inspection
             </Button>
@@ -298,5 +341,5 @@ export function LandingPage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

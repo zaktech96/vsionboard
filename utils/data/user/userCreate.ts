@@ -1,8 +1,8 @@
-"server only"
+'server only';
 
-import { cookies } from "next/headers";
-import { createServerClient } from "@supabase/ssr";
-import { userCreateProps } from "@/utils/types";
+import { cookies } from 'next/headers';
+import { createServerClient } from '@supabase/ssr';
+import { userCreateProps } from '@/utils/types';
 
 export const userCreate = async ({
   email,
@@ -27,7 +27,7 @@ export const userCreate = async ({
 
   try {
     const { data, error } = await supabase
-      .from("user")
+      .from('user')
       .insert([
         {
           email,
@@ -39,8 +39,8 @@ export const userCreate = async ({
       ])
       .select();
 
-    console.log("data", data);
-    console.log("error", error);
+    console.log('data', data);
+    console.log('error', error);
 
     if (error?.code) return error;
     return data;
