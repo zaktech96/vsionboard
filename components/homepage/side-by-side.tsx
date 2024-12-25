@@ -37,7 +37,7 @@ export default function SideBySide() {
                 Titan: A faster way to production
               </p>
               <p className="mt-6 leading-8 text-gray-600 dark:text-gray-400">
-                Accelerate your development with this powerful Titan
+                Accelerate your development with this powerful Boilerplate
               </p>
               <dl className="mt-10 max-w-xl space-y-8 leading-7 text-gray-600 lg:max-w-none">
                 {features.map((feature) => (
