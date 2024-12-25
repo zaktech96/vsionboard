@@ -1,46 +1,46 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export const Footer = () => {
   const navigationItems = [
     {
-      title: "Product",
+      title: 'Product',
       items: [
         {
-          title: "Features",
-          href: "#",
+          title: 'Features',
+          href: '#',
         },
         {
-          title: "Documentation",
-          href: "#",
+          title: 'Documentation',
+          href: '#',
         },
         {
-          title: "Pricing",
-          href: "#",
+          title: 'Pricing',
+          href: '#',
         },
         {
-          title: "Roadmap",
-          href: "#",
+          title: 'Roadmap',
+          href: '#',
         },
       ],
     },
     {
-      title: "Company",
+      title: 'Company',
       items: [
         {
-          title: "About",
-          href: "#",
+          title: 'About',
+          href: '#',
         },
         {
-          title: "Blog",
-          href: "#",
+          title: 'Blog',
+          href: '#',
         },
         {
-          title: "GitHub",
-          href: "https://github.com",
+          title: 'GitHub',
+          href: 'https://github.com',
         },
         {
-          title: "Contact",
-          href: "#",
+          title: 'Contact',
+          href: '#',
         },
       ],
     },
@@ -61,27 +61,30 @@ export const Footer = () => {
             </div>
             <div className="flex gap-20 flex-row">
               <div className="flex flex-col text-sm max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
-                <Link 
-                  href="https://x.com/_7obaid_" 
-                  target="_blank" 
+                <Link
+                  href="https://x.com/_7obaid_"
+                  target="_blank"
                   className="hover:text-primary transition-colors mt-2"
                 >
                   Created by @_7obaid_
                 </Link>
               </div>
               <div className="flex flex-col text-sm max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
-                <Link href="#" className="hover:text-primary transition-colors">Terms of service</Link>
-                <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
-                <Link href="#" className="hover:text-primary transition-colors">Security</Link>
+                <Link href="#" className="hover:text-primary transition-colors">
+                  Terms of service
+                </Link>
+                <Link href="#" className="hover:text-primary transition-colors">
+                  Privacy Policy
+                </Link>
+                <Link href="#" className="hover:text-primary transition-colors">
+                  Security
+                </Link>
               </div>
             </div>
           </div>
           <div className="grid lg:grid-cols-2 gap-10 items-start">
             {navigationItems.map((item) => (
-              <div
-                key={item.title}
-                className="flex text-base gap-1 flex-col items-start"
-              >
+              <div key={item.title} className="flex text-base gap-1 flex-col items-start">
                 <div className="flex flex-col gap-2">
                   <p className="text-xl">{item.title}</p>
                   {item.items &&
@@ -91,9 +94,7 @@ export const Footer = () => {
                         href={subItem.href}
                         className="flex justify-between items-center hover:text-primary transition-colors"
                       >
-                        <span className="text-muted-foreground">
-                          {subItem.title}
-                        </span>
+                        <span className="text-muted-foreground">{subItem.title}</span>
                       </Link>
                     ))}
                 </div>
@@ -104,4 +105,4 @@ export const Footer = () => {
       </div>
     </footer>
   );
-}; 
+};

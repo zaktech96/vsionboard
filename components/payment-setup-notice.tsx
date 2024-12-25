@@ -25,4 +25,4 @@ export function PaymentSetupNotice() {
       </AlertDescription>
     </Alert>
   );
-} 
+}

@@ -22,9 +22,7 @@ export default function Home() {
       <div className="flex flex-col p-2 w-full justify-center items-center">
         <MarketingCards />
       </div>
-      <div>
-        {config.payments.enabled ? <Pricing /> : <PaymentSetupNotice />}
-      </div>
+      <div>{config.payments.enabled ? <Pricing /> : <PaymentSetupNotice />}</div>
       <div className="flex justify-center items-center w-full my-[4rem]">
         {config.email.enabled ? <WaitlistForm /> : <EmailSetupNotice />}
       </div>

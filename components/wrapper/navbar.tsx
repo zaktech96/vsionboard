@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -8,10 +8,10 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import { Menu, MoveRight, X } from "lucide-react";
-import { useState } from "react";
-import Link from "next/link";
+} from '@/components/ui/navigation-menu';
+import { Menu, MoveRight, X } from 'lucide-react';
+import { useState } from 'react';
+import Link from 'next/link';
 import ModeToggle from '../mode-toggle';
 import { useAuth } from '@clerk/nextjs';
 import config from '@/config';
@@ -20,51 +20,51 @@ import { UserProfile } from '../user-profile';
 export default function NavBar() {
   const navigationItems = [
     {
-      title: "Home",
-      href: "/",
-      description: "",
+      title: 'Home',
+      href: '/',
+      description: '',
     },
     {
-      title: "Features",
-      description: "Everything you need to build your next SaaS",
+      title: 'Features',
+      description: 'Everything you need to build your next SaaS',
       items: [
         {
-          title: "Feature 1",
-          href: "#",
+          title: 'Feature 1',
+          href: '#',
         },
         {
-          title: "Feature 2",
-          href: "#",
+          title: 'Feature 2',
+          href: '#',
         },
         {
-          title: "Feature 3",
-          href: "#",
+          title: 'Feature 3',
+          href: '#',
         },
         {
-          title: "Feature 4",
-          href: "#",
+          title: 'Feature 4',
+          href: '#',
         },
       ],
     },
     {
-      title: "Resources",
-      description: "Helpful resources to get you started",
+      title: 'Resources',
+      description: 'Helpful resources to get you started',
       items: [
         {
-          title: "Test Resource",
-          href: "#",
+          title: 'Test Resource',
+          href: '#',
         },
         {
-          title: "GitHub",
-          href: "https://github.com",
+          title: 'GitHub',
+          href: 'https://github.com',
         },
         {
-          title: "Examples",
-          href: "#",
+          title: 'Examples',
+          href: '#',
         },
         {
-          title: "Community",
-          href: "#",
+          title: 'Community',
+          href: '#',
         },
       ],
     },
@@ -102,9 +102,7 @@ export default function NavBar() {
                           <div className="flex flex-col h-full justify-between">
                             <div className="flex flex-col">
                               <p className="text-base">{item.title}</p>
-                              <p className="text-muted-foreground text-sm">
-                                {item.description}
-                              </p>
+                              <p className="text-muted-foreground text-sm">{item.description}</p>
                             </div>
                             <Button size="sm" className="mt-10">
                               View Documentation
@@ -155,10 +153,7 @@ export default function NavBar() {
                 <div key={item.title}>
                   <div className="flex flex-col gap-2">
                     {item.href ? (
-                      <Link
-                        href={item.href}
-                        className="flex justify-between items-center"
-                      >
+                      <Link href={item.href} className="flex justify-between items-center">
                         <span className="text-lg">{item.title}</span>
                         <MoveRight className="w-4 h-4 stroke-1 text-muted-foreground" />
                       </Link>
@@ -172,9 +167,7 @@ export default function NavBar() {
                           href={subItem.href}
                           className="flex justify-between items-center"
                         >
-                          <span className="text-muted-foreground">
-                            {subItem.title}
-                          </span>
+                          <span className="text-muted-foreground">{subItem.title}</span>
                           <MoveRight className="w-4 h-4 stroke-1" />
                         </Link>
                       ))}
