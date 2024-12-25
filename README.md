@@ -2,14 +2,23 @@
 
 Easy-to-setup, fully-featured, and customizable Next.js Boilerplate.
 
+## Tech Stack
+
+- [Next.js](https://nextjs.org/) - Full-stack React framework
+- [Supabase](https://supabase.com/) - Store data in a managed database
+- [Clerk](https://clerk.com/) - Authenticate your Users
+- [Stripe](https://stripe.com/) - Collect Payments
+- [Plunk](https://useplunk.com/) - Send Emails
+- [Umami](https://umami.is/) - Analytics to understand your User Behavior
+- [UserJot](https://userjot.com/) - Public Roadmap and Feedback Board
+
 ## Prerequisites
 - Node.js and pnpm installed (See https://blueprint.codeandcreed.tech/pre-requisites)
 - Accounts and API keys for:
-  - [Supabase](https://supabase.com/) - Database
-  - [Stripe](https://stripe.com/) - Payments (if payments.enabled is true)
-  - [Clerk](https://clerk.com/) - Authentication (if auth.enabled is true)
-  - [Plunk](https://useplunk.com/) - Email (if email.enabled is true)
-  - [Umami](https://umami.is/) - Analytics
+  - [Supabase](https://supabase.com/)
+  - [Stripe](https://stripe.com/) - if payments.enabled is true
+  - [Clerk](https://clerk.com/) - if auth.enabled is true
+  - [Plunk](https://useplunk.com/) - if email.enabled is true
 
 ## Setup
 
