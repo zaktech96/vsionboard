@@ -19,16 +19,16 @@ export async function sendEmail({ to, subject, url }: SendEmailParams) {
   try {
     const emailComponent = React.createElement(Email, { url });
     const htmlBody = await render(emailComponent);
-    
+
     const result = await plunk.emails.send({
       to,
       subject,
       body: htmlBody,
     });
-    
+
     return { success: true, data: result };
   } catch (error) {
     console.error('Failed to send email:', error);
     return { success: false, error };
   }
-} 
+}

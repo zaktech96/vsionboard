@@ -8,7 +8,7 @@ const requiredEnvVars = {
 
 function checkEnvVars(feature: keyof typeof requiredEnvVars): boolean {
   const vars = requiredEnvVars[feature];
-  return vars.every(envVar => {
+  return vars.every((envVar) => {
     const value = process.env[envVar];
     return value !== undefined && value !== '';
   });
@@ -17,18 +17,18 @@ function checkEnvVars(feature: keyof typeof requiredEnvVars): boolean {
 export function validateConfig() {
   Object.entries(config).forEach(([feature, settings]) => {
     if (
-      feature in requiredEnvVars && 
-      settings.enabled && 
+      feature in requiredEnvVars &&
+      settings.enabled &&
       !checkEnvVars(feature as keyof typeof requiredEnvVars)
     ) {
       const missingVars = requiredEnvVars[feature as keyof typeof requiredEnvVars]
-        .filter(envVar => !process.env[envVar])
+        .filter((envVar) => !process.env[envVar])
         .join(', ');
-        
+
       throw new Error(
         `${feature} is enabled in config but missing required environment variables: ${missingVars}. ` +
-        `Please add them to your .env or .env.local file.`
+          `Please add them to your .env or .env.local file.`
       );
     }
   });
-} 
+}
