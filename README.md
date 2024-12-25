@@ -4,13 +4,12 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
 
 ## Tech Stack
 
-- [NextJS 15](https://nextjs.org/) - Full-stack React framework
-- [Supabase](https://supabase.com/) - Store data in a managed database
+- [NextJS 15](https://nextjs.org/) - Full-Stack React framework
+- [Supabase](https://supabase.com/) - Database
 - [Clerk](https://clerk.com/) - Authenticate your Users
 - [Stripe](https://stripe.com/) - Collect Payments
 - [Plunk](https://useplunk.com/) - Send Emails
-- [Umami](https://umami.is/) - Analytics to understand your User Behavior
-- [UserJot](https://userjot.com/) - Public Roadmap and Feedback Board
+- [Umami](https://umami.is/) - Analyze User Behavior
 
 ## Prerequisites
 - Node.js and pnpm installed (See https://blueprint.codeandcreed.tech/pre-requisites)

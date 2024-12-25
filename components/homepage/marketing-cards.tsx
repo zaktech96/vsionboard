@@ -16,28 +16,13 @@ const ProjectsData = [
   },
   {
     id: 2,
-    name: 'Tailwind CSS',
-    description: 'A utility-first CSS framework for building custom designs with ease.',
-    image: 'https://utfs.io/f/666774c0-dc3a-4d5a-84b7-cc96e682db61-bhgw4o.png',
-    url: 'https://tailwindui.com/',
-  },
-  {
-    id: 3,
-    name: 'Shadcn UI',
-    description: 'Beautifully designed components by Shadcn.',
-    image: 'https://utfs.io/f/bc4c7cdb-dc42-452c-8744-0ad2c3232e7f-exyul9.png',
-    imageDark: 'https://utfs.io/f/f9ae4f1b-76a1-4505-afc0-dfcbea05012d-62drog.png',
-    url: 'https://ui.shadcn.com',
-  },
-  {
-    id: 4,
     name: 'Clerk Authentication',
     description: 'Seamless and secure authentication service for web applications.',
     image: 'https://utfs.io/f/aee7360d-54f1-4ed1-a4b4-49a56b455bf4-1ker11.png',
     url: 'https://clerk.com/',
   },
   {
-    id: 5,
+    id: 3,
     name: 'Supabase (PostgreSQL)',
     description:
       'PostgreSQL-based open-source database with Supabase for building scalable applications.',
@@ -45,7 +30,7 @@ const ProjectsData = [
     url: 'https://supabase.com/',
   },
   {
-    id: 6,
+    id: 4,
     name: 'Prisma ORM',
     description:
       'Modern database toolkit for TypeScript and Node.js, simplifying database interactions.',
@@ -53,7 +38,7 @@ const ProjectsData = [
     url: 'https://prisma.io/',
   },
   {
-    id: 7,
+    id: 5,
     name: 'Stripe Subsctiptions & One-Time Payments',
     description:
       'Payment processing solution for handling subscriptions and one-off transactions securely.',
@@ -61,12 +46,26 @@ const ProjectsData = [
     url: 'https://stripe.com',
   },
   {
-    id: 8,
+    id: 6,
     name: 'Tanstack Query',
-    description: 'For client side fetching, caching, and revalidation.',
+    description: 'Powerful data fetching library that handles caching, background updates and stale data out of the box.',
     image: 'https://utfs.io/f/ee162388-f998-4740-bfc4-9d9a7050f485-90gb5l.png',
     url: 'https://tanstack.com/query/v5',
   },
+  {
+    id: 7,
+    name: 'Plunk',
+    description: 'Simple and powerful email service for sending transactional and marketing emails.',
+    image: 'https://utfs.io/f/e1JG3uPHb3VpAbyJ8vtmNbFTjE9L3wZGsJtzPhkDR7CrI6yf',
+    url: 'https://useplunk.com',
+  },
+  {
+    id: 8, 
+    name: 'Umami Analytics',
+    description: 'Privacy-focused, self-hosted web analytics solution for tracking user behavior.',
+    image: 'https://utfs.io/f/e1JG3uPHb3Vp53yq1RsSqnIOvk43btcCKi60G9ezWyQ1NUVP',
+    url: 'https://umami.is',
+  }
 ];
 
 const SpringAnimatedFeatures = () => {
