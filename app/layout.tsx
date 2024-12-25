@@ -6,11 +6,15 @@ import { Analytics } from "@vercel/analytics/react"
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next'
 import './globals.css'
+import { validateConfig } from '@/lib/config-validator';
+
+// Validate config on app initialization
+validateConfig();
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://titan.codeandcreed.tech"),
   title: {
-    default: 'Tian - Boilerplate',
+    default: 'Titan - Boilerplate',
     template: `%s | Boilerplate`
   },
   description: 'Kickstart your next project with minimal friction - so you can focus on building cool stuff',

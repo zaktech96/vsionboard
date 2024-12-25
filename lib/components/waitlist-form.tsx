@@ -1,8 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import config from '@/config';
 
 export function WaitlistForm() {
+  if (!config.email.enabled) {
+    return null;
+  }
+
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
