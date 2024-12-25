@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import { MacbookScroll } from '../ui/macbook-scroll';
 import { TITLE_TAILWIND_CLASS } from '@/utils/constants';
+import { Github } from 'lucide-react';
 
 export default function HeroSection() {
   return (
@@ -18,10 +19,18 @@ export default function HeroSection() {
         The Ultimate NextJS Boilerplate for quickly building your Startup - Focus on your Product.
       </p>
       <div className="flex justify-center items-center gap-3 mt-4">
-        <Link href="/dashboard" className="mt-5">
+        {/* <Link href="#" className="mt-5">
           <Button className="animate-buttonheartbeat rounded-md bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white">
             Purchase Now
           </Button>
+        </Link> */}
+        <Link
+            href="https://github.com/ObaidUr-Rahmaan/titan"
+            target='_blank'
+            className='animate-buttonheartbeat border p-2 rounded-full mt-5 hover:dark:bg-black hover:cursor-pointer'
+            aria-label="View NextJS 14 Starter Template on GitHub"
+        >
+            <Github className='w-5 h-5' aria-hidden="true" />
         </Link>
       </div>
       <div className="hidden md:block -mt-64">
@@ -30,6 +39,9 @@ export default function HeroSection() {
           showGradient
         />
       </div>
+      <div className="hidden md:block h-64" />
+      <div className="hidden md:block h-64" />
+      <div className="hidden md:block h-32" />
     </section>
   );
 }
