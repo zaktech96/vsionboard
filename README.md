@@ -11,15 +11,7 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
 - [Plunk](https://useplunk.com/) - Send Emails
 - [Umami](https://umami.is/) - Analyze User Behavior
 
-## Prerequisites
-- Node.js and pnpm installed (See https://blueprint.codeandcreed.tech/pre-requisites)
-- Accounts and API keys for:
-  - [Supabase](https://supabase.com/) (Important: When creating your database password, avoid special characters like # and & as they cause URL encoding issues. Find your connection strings in Supabase Dashboard under Connect > App Frameworks/ORMs)
-  - [Stripe](https://stripe.com/) - if payments.enabled is true
-  - [Clerk](https://clerk.com/) - if auth.enabled is true
-  - [Plunk](https://useplunk.com/) - if email.enabled is true
-
-## Setup
+## Quick Local Setup
 
 1. Clone the repository locally and open in Cursor:
    ```
@@ -45,7 +37,41 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
    pnpm i
    ```
 
-5. Set up environment variables:
+5. Start the development server:
+   ```
+   pnpm dev
+   ```
+
+6. Set up ngrok for local development:
+   ```
+   brew install ngrok  # on macOS
+   ngrok http 3000
+   ```
+   Open your browser and navigate to your ngrok URL (e.g. `https://abc123.ngrok.io`) to see your application running :raised_hands:
+
+
+## Setup Environment Variables
+- Node.js and pnpm installed (See https://blueprint.codeandcreed.tech/pre-requisites)
+- Accounts and API keys for:
+  - [Supabase](https://supabase.com/)
+
+```
+Important: When creating your database password, avoid special characters like # and & as they cause URL encoding issues. Find your connection strings in Supabase Dashboard under Connect > App Frameworks/ORMs
+```
+
+  - [Stripe](https://stripe.com/) - if payments.enabled is true
+
+``````
+- Install Stripe CLI and run:
+```
+stripe listen --forward-to <your-ngrok-url>/api/payments/webhook
+```
+``````
+
+  - [Clerk](https://clerk.com/) - if auth.enabled is true
+  - [Plunk](https://useplunk.com/) - if email.enabled is true
+
+1. Copy over the `.env.example` file to `.env` and fill in the values from your accounts above:
    Create a `.env` file in the root directory with the following variables (add only the ones you need based on enabled features):
    ```
    # Required for Supabase
@@ -69,7 +95,7 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
    PLUNK_API_KEY=<your-plunk-api-key>
    ```
 
-6. Enable features once you have your accounts and API keys:
+2. Enable features once you have your accounts and API keys:
    In `config.ts`, set the desired features. The app will validate that you have the required environment variables for each enabled feature:
    ```typescript
    const config = {
@@ -85,46 +111,33 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
    };
    ```
 
-7. Set up the remote database by running your first database migration:
+3. Run your first database migration to create the initial tables in Supabase:
    ```
    pnpm prisma migrate dev --name add-initial-tables
    ```
 
-8. Start the development server:
+You're now ready to start customizing the landing page, dashboard, and other components as needed - See [Landing Page Design](https://blueprint.codeandcreed.tech/product-development/landing-page)
+
+See our [MVP Development Guide](https://blueprint.codeandcreed.tech/company-building/mvp-development)
+
+## Future Database Migrations
+
+1) Modify the Prisma schema in `prisma/schema.prisma` when you need to add or change database structure.
+
+2) Run the following command to create a new database migration:
    ```
-   pnpm dev
+   pnpm prisma migrate dev --name <your-migration-name>
    ```
 
-9. Open your browser and navigate to your ngrok URL (e.g. `https://abc123.ngrok.io`) to see your application running :raised_hands:
-
-
-## Additional Configuration
-
-- Webhooks Setup:
-  1. Install and start ngrok for local webhook testing:
-     ```
-     brew install ngrok  # on macOS
-     ngrok http 3000
-     ```
-  2. Clerk Webhook (if using auth):
-     - Set up webhook at Clerk Dashboard
-     - Select event type: `user.created`
-     - Set webhook URL to: `<your-ngrok-url>/api/auth/webhook`
-  3. Stripe Webhook (if using payments):
-     - Install Stripe CLI and run:
-     ```
-     stripe listen --forward-to <your-ngrok-url>/api/payments/webhook
-     ```
-
-- Customize the landing page, dashboard, and other components as needed - See [Landing Page Design](https://blueprint.codeandcreed.tech/product-development/landing-page)
-- Modify the Prisma schema in `prisma/schema.prisma` if you need to change the database structure.
+3) Push the migration to the remote database:
+   ```
+   pnpm prisma db push
+   ```
 
 ## Important Security Notes
 
 - Enable Row Level Security (RLS) in your Supabase project to ensure data protection at the database level.
 - Always make Supabase calls on the server-side (in API routes or server components) to keep your service key secure.
-- Keep your Plunk secret API key secure by only using it in server-side code.
-- The app validates that all required environment variables are set for enabled features on startup.
 
 ## Learn More
 
