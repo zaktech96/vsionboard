@@ -14,7 +14,7 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
 ## Prerequisites
 - Node.js and pnpm installed (See https://blueprint.codeandcreed.tech/pre-requisites)
 - Accounts and API keys for:
-  - [Supabase](https://supabase.com/)
+  - [Supabase](https://supabase.com/) (Important: When creating your database password, avoid special characters like # and & as they cause URL encoding issues. Find your connection strings in Supabase Dashboard under Connect > App Frameworks/ORMs)
   - [Stripe](https://stripe.com/) - if payments.enabled is true
   - [Clerk](https://clerk.com/) - if auth.enabled is true
   - [Plunk](https://useplunk.com/) - if email.enabled is true
@@ -27,15 +27,11 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
    code -r <your-project-name>
    ```
 
-2. Set up your own git repository:
+2. In your terminal inside Cursor, run the following commands to set up your own git repository:
    ```
-   cd <your-project-name>
-   rm -rf .git
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
+   git remote remove origin
    git remote add origin <your-new-repository-url>
+   git branch -M main
    git push -u origin main
    ```
 
