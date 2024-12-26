@@ -120,14 +120,14 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
      stripe listen --forward-to <your-ngrok-url>/api/payments/webhook
      ```
 
-- Customize the landing page, dashboard, and other components as needed.
+- Customize the landing page, dashboard, and other components as needed - See [Landing Page Design](https://blueprint.codeandcreed.tech/product-development/landing-page)
 - Modify the Prisma schema in `prisma/schema.prisma` if you need to change the database structure.
 
 ## Important Security Notes
 
 - Enable Row Level Security (RLS) in your Supabase project to ensure data protection at the database level.
 - Always make Supabase calls on the server-side (in API routes or server components) to keep your service key secure.
-- Keep your Plunk API key secure by only using it in server-side code.
+- Keep your Plunk secret API key secure by only using it in server-side code.
 - The app validates that all required environment variables are set for enabled features on startup.
 
 ## Learn More
