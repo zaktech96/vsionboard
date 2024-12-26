@@ -10,6 +10,7 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
 - [Stripe](https://stripe.com/) - Collect Payments
 - [Plunk](https://useplunk.com/) - Send Emails
 - [Umami](https://umami.is/) - Analyze User Behavior
+- [Vercel](https://vercel.com/) - Deployments
 
 ## Quick Local Setup
 
@@ -115,6 +116,12 @@ stripe listen --forward-to <your-ngrok-url>/api/payments/webhook
    ```
    pnpm prisma migrate dev --name add-initial-tables
    ```
+
+## Deployment
+
+Deploy the first working version of your app to Vercel:
+
+Copy over the production env vars and set them in Vercel when deploying.
 
 You're now ready to start customizing the landing page, dashboard, and other components as needed - See [Landing Page Design](https://blueprint.codeandcreed.tech/product-development/landing-page)
 
