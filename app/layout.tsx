@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   },
   description:
     'Kickstart your next project with minimal friction - so you can focus on building cool stuff',
+  icons: [
+    { rel: 'icon', url: '/favicon.ico' },
+    { rel: 'icon', url: '/favicon.png', type: 'image/png' },
+    { rel: 'apple-touch-icon', url: '/favicon.png' },
+  ],
   openGraph: {
     description:
       'Kickstart your next project with minimal friction - so you can focus on building cool stuff',
@@ -46,6 +51,7 @@ export default function RootLayout({
     <AuthWrapper>
       <html lang="en" suppressHydrationWarning>
         <head>
+          <link rel="icon" type="image/png" href="/favicon.png" />
           <link
             rel="preload"
             href="https://utfs.io/f/31dba2ff-6c3b-4927-99cd-b928eaa54d5f-5w20ij.png"
