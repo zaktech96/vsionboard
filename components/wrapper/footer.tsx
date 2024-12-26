@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { TITLE_TAILWIND_CLASS } from '@/utils/constants';
 
 export const Footer = () => {
   const navigationItems = [
@@ -47,12 +48,12 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="w-full py-20 lg:py-40 border-t">
+    <footer className="w-full py-20 lg:py-12 border-t">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           <div className="flex gap-8 flex-col items-start">
             <div className="flex gap-2 flex-col">
-              <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
+              <h2 className={`${TITLE_TAILWIND_CLASS} tracking-tighter max-w-xl font-regular text-left`}>
                 Titan
               </h2>
               <p className="text-lg max-w-lg leading-relaxed tracking-tight text-muted-foreground text-left">
