@@ -27,17 +27,29 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
    code -r <your-project-name>
    ```
 
-2. Set Node Version:
+2. Set up your own git repository:
+   ```
+   cd <your-project-name>
+   rm -rf .git
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin <your-new-repository-url>
+   git push -u origin main
+   ```
+
+3. Set Node Version:
    ```
    nvm use
    ```
 
-3. Install Dependencies:
+4. Install Dependencies:
    ```
    pnpm i
    ```
 
-4. Set up environment variables:
+5. Set up environment variables:
    Create a `.env` file in the root directory with the following variables (add only the ones you need based on enabled features):
    ```
    # Required for Supabase
@@ -61,7 +73,7 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
    PLUNK_API_KEY=<your-plunk-api-key>
    ```
 
-5. Enable features once you have your accounts and API keys:
+6. Enable features once you have your accounts and API keys:
    In `config.ts`, set the desired features. The app will validate that you have the required environment variables for each enabled feature:
    ```typescript
    const config = {
@@ -77,22 +89,37 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
    };
    ```
 
-6. Set up the remote database by running your first database migration:
+7. Set up the remote database by running your first database migration:
    ```
    pnpm prisma migrate dev --name add-initial-tables
    ```
 
-7. Start the development server:
+8. Start the development server:
    ```
    pnpm dev
    ```
 
-8. Open your browser and navigate to `http://localhost:3000` to see your application running :raised_hands:
+9. Open your browser and navigate to your ngrok URL (e.g. `https://abc123.ngrok.io`) to see your application running :raised_hands:
 
 
 ## Additional Configuration
 
-- Webhooks: Set up webhooks for Clerk (if using auth) at `/api/auth/webhook` and for Stripe (if using payments) at `/api/payments/webhook`.
+- Webhooks Setup:
+  1. Install and start ngrok for local webhook testing:
+     ```
+     brew install ngrok  # on macOS
+     ngrok http 3000
+     ```
+  2. Clerk Webhook (if using auth):
+     - Set up webhook at Clerk Dashboard
+     - Select event type: `user.created`
+     - Set webhook URL to: `<your-ngrok-url>/api/auth/webhook`
+  3. Stripe Webhook (if using payments):
+     - Install Stripe CLI and run:
+     ```
+     stripe listen --forward-to <your-ngrok-url>/api/payments/webhook
+     ```
+
 - Customize the landing page, dashboard, and other components as needed.
 - Modify the Prisma schema in `prisma/schema.prisma` if you need to change the database structure.
 
