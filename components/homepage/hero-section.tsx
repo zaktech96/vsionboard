@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import { MacbookScroll } from '../ui/macbook-scroll';
 import { TITLE_TAILWIND_CLASS } from '@/utils/constants';
-import { Github } from 'lucide-react';
+import { ArrowRight, Github } from 'lucide-react';
 
 export default function HeroSection() {
   return (
@@ -30,7 +30,18 @@ export default function HeroSection() {
             aria-label="Access Only - Contact for Repository Access"
         >
             <Github className='w-5 h-5' aria-hidden="true" />
-            <span className="text-sm">Access Only - DM me on Discord/X for Link</span>
+            <span className="text-sm">Access Only</span>
+        </Link>
+        <Link
+            href="https://discord.gg/F6rUxWvKrV"
+            target='_blank'
+            className="mt-5"
+            aria-label="Join Discord (opens in a new tab)"
+        >
+            <Button variant="outline" className="flex gap-1">
+                Join Discord
+                <ArrowRight className='w-4 h-4' aria-hidden="true" />
+            </Button>
         </Link>
       </div>
       <div className="hidden md:block -mt-64">
