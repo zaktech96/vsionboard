@@ -25,9 +25,9 @@ export default function HeroSection() {
           </Button>
         </Link> */}
         <Link
-            href="https://x.com/_7obaid_"
+            href=""
             className='animate-buttonheartbeat border border-green-500 p-2 rounded-full mt-5 hover:bg-green-500/10 flex items-center gap-2'
-            aria-label="Access Only - Contact for Repository Access"
+            aria-label="Access Now"
         >
             <Github className='w-5 h-5' aria-hidden="true" />
             <span className="text-sm">Access Only</span>
