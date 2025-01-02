@@ -27,10 +27,10 @@ export default function HeroSection() {
         <Link
             href="https://github.com/ObaidUr-Rahmaan/titan"
             className='animate-buttonheartbeat border border-green-500 p-2 rounded-full mt-5 hover:bg-green-500/10 flex items-center gap-2'
-            aria-label="Access Now"
+            aria-label="Start Building"
         >
             <Github className='w-5 h-5' aria-hidden="true" />
-            <span className="text-sm">Access Only</span>
+            <span className="text-sm">Start Building</span>
         </Link>
         <Link
             href="https://discord.gg/F6rUxWvKrV"
