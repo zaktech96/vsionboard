@@ -25,7 +25,7 @@ export default function HeroSection() {
           </Button>
         </Link> */}
         <Link
-            href=""
+            href="https://github.com/ObaidUr-Rahmaan/titan"
             className='animate-buttonheartbeat border border-green-500 p-2 rounded-full mt-5 hover:bg-green-500/10 flex items-center gap-2'
             aria-label="Access Now"
         >
