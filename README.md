@@ -156,3 +156,12 @@ Refer to the documentation of the individual technologies used in this project f
 - [Clerk Documentation](https://clerk.dev/docs)
 - [Stripe Documentation](https://stripe.com/docs)
 - [Plunk Documentation](https://docs.useplunk.com/)
+
+## Contributing
+
+We welcome contributions to make this boilerplate the best it can be. Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
+
+Highest-priority features/improvements:
+- [ ] CLI support for local Titan setup with npx create-titan@latest.
+   - Make sure it clones the repo, clears git history, and sets up the project with the correct environment variables (Do you have a Stripe account setup? -> Yes/No -> Let them paste their keys)
+
