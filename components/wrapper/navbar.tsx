@@ -137,8 +137,11 @@ export default function NavBar() {
             <UserProfile />
           ) : (
             <>
-              <Button variant="outline">Sign in</Button>
-              <Button>Get started</Button>
+              {config?.auth?.enabled && (
+                <Button variant="outline" asChild>
+                  <Link href="/sign-in">Sign in</Link>
+                </Button>
+              )}
             </>
           )}
           <ModeToggle />
