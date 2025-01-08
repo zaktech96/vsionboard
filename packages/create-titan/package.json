@@ -1,6 +1,6 @@
 {
   "name": "@codeandcreed/create-titan",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "description": "CLI tool to create new Titan projects",
   "bin": {
     "create-titan": "dist/index.cjs"
@@ -42,4 +42,4 @@
     "tsup": "^7.2.0",
     "typescript": "^5.2.2"
   }
-} 
+}
