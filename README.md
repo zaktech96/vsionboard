@@ -44,7 +44,7 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
      - Create account at [Plunk](https://useplunk.com)
      - Copy your `PLUNK_API_KEY` from Project Settings > API Keys
 
-## 2. Quick Setup via CLI
+## 2. Setup via CLI
 
 1. Once you have your keys ready, create your project locally by running:
    ```bash
@@ -61,13 +61,14 @@ Done. Your project is now ready to start developing locally.
    pnpm dev
    ```
 
-## Local Development Specific
+## 3. Developing your app locally
 
 ### Setup ngrok
 
 1. Install ngrok
 2. Run `ngrok http http://localhost:3000`
-3. Copy the ngrok URL. You'll need this to test that your users are being saved to your database, and to test the payment flow.
+3. Copy the ngrok URL.
+4. Update the FRONTEND_URL environment variable in your `.env` file to the ngrok URL.
 
 ### Setup Clerk Webhook to Save Users to your Database
 1. Create a webhook in your Clerk Application
@@ -81,19 +82,34 @@ Done. Your project is now ready to start developing locally.
 3. Run `stripe listen --forward-to [your-ngrok-url]/api/webhooks/stripe`
 4. Done. Your site should now be able to receive webhooks from Stripe and you can test the payment flow locally.
 
-## Updating your Database Schema
+## Database Migrations (Optional - can do this later)
 
-1. Modify your database schema in `prisma/schema.prisma`
+If you need to update the Database Schema (to create new tables, columns, etc. specific to your app idea)
+
+1. Modify the database schema in `prisma/schema.prisma`
 2. Generate a new migration:
    ```bash
    pnpm prisma migrate dev --name <migration-name>
    ```
-3. Deploy the migration to your database:
+3. Deploy the changes to your database:
    ```bash
    pnpm prisma migrate deploy
    ```
 
-## Deploying to Production
+## 4. Updating the UI
+
+When you initally clone the project, the UI is a basic UI for Titan itself.
+
+But it's upto you to rip everything out and replace with your own designs. Likewise for the Dashboard.
+
+The following guides will help you customise the entire application UI to your liking:
+
+- [Landing Page Design](https://blueprint.codeandcreed.tech/product-development/landing-page)
+- [Rapid UI Prototyping](https://blueprint.codeandcreed.tech/product-development/rapid-ui-prototyping)
+
+Use Cursor to guide you efficiently through the process, add new features, fix bugs etc. See [Efficency](https://blueprint.codeandcreed.tech/product-development/efficiency)
+
+## 4. Deploying the App to Production
 
 1. Create a new repository on Github
 2. Push all your changes to the new repository
@@ -109,7 +125,7 @@ Done. Your project is now ready to start developing locally.
 
 Done. Your site is now live and ready to use. Users can now sign up, login, and pay for your product.
 
-## Analytics
+## 5. Setup Analytics
 
 Track your site visitors and get insights on how they interact with your site.
 
