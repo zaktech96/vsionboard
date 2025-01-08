@@ -136,13 +136,12 @@ export default function NavBar() {
           {userId ? (
             <UserProfile />
           ) : (
-            <>
-              {config?.auth?.enabled && (
-                <Button variant="outline" asChild>
-                  <Link href="/sign-in">Sign in</Link>
-                </Button>
-              )}
-            </>
+            <Button 
+              variant="outline"
+              disabled={!config?.auth?.enabled} 
+              onClick={() => config?.auth?.enabled && window.location.assign('/sign-in')}>
+              Sign in
+            </Button>
           )}
           <ModeToggle />
         </div>
