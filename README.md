@@ -109,7 +109,7 @@ The following guides will help you customise the entire application UI to your l
 
 Use Cursor to guide you efficiently through the process, add new features, fix bugs etc. See [Efficency](https://blueprint.codeandcreed.tech/product-development/efficiency)
 
-## 4. Deploying the App to Production
+## 5. Deploying the App to Production
 
 1. Create a new repository on Github
 2. Push all your changes to the new repository
