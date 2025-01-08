@@ -58,6 +58,18 @@ Done. Your project is now ready to start developing locally.
 3. Run `stripe listen --forward-to http://localhost:3000/api/webhooks/stripe`
 4. Done. Your site should now be able to receive webhooks from Stripe and you can test payments locally.
 
+## Updating your Database Schema
+
+1. Modify your database schema in `prisma/schema.prisma`
+2. Generate a new migration:
+   ```bash
+   npx prisma migrate dev --name <migration-name>
+   ```
+3. Deploy the migration to your database:
+   ```bash
+   npx prisma migrate deploy
+   ```
+
 ## Deploying to Production
 
 1. Create a new repository on Github
