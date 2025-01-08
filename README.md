@@ -14,7 +14,7 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
 
 ## Quick Setup
 
-First, gather your Development API keys from the following services:
+First, gather your API keys from the following services:
 
    - **Supabase** (Database)
      - Create account at [Supabase](https://supabase.com)
@@ -47,6 +47,14 @@ Done. Your project is now ready to start developing locally.
 
 ## Local Development
 
+### Prerequisites
+
+1. Install [nvm](https://github.com/nvm-sh/nvm)
+2. Install Node.js LTS version 22 using nvm:
+   ```bash
+   nvm install 22 --lts
+   ```
+
 ### Saving Users to your Database
 1. Create a webhook in your Clerk Application (Development)
 2. Set the webhook URL to `http://localhost:3000/api/webhooks/clerk`
@@ -63,11 +71,11 @@ Done. Your project is now ready to start developing locally.
 1. Modify your database schema in `prisma/schema.prisma`
 2. Generate a new migration:
    ```bash
-   npx prisma migrate dev --name <migration-name>
+   pnpm prisma migrate dev --name <migration-name>
    ```
 3. Deploy the migration to your database:
    ```bash
-   npx prisma migrate deploy
+   pnpm prisma migrate deploy
    ```
 
 ## Deploying to Production
