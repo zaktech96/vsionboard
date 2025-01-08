@@ -213,6 +213,19 @@ async function main() {
 export default config;
 `;
     await fs.writeFile(configPath, configContent);
+    spinner.start("Setting up database tables...");
+    try {
+      await execa("pnpm", ["prisma", "generate"], { cwd: projectDir });
+      await execa("pnpm", ["prisma", "migrate", "deploy"], { cwd: projectDir });
+      spinner.succeed("Database tables created successfully");
+    } catch (error) {
+      spinner.fail("Failed to create database tables");
+      console.error(chalk.red("Error running database migrations:"), error);
+      console.log(chalk.yellow("\nYou can try running the migrations manually:"));
+      console.log(chalk.cyan("  cd " + projectDir));
+      console.log(chalk.cyan("  pnpm prisma generate"));
+      console.log(chalk.cyan("  pnpm prisma migrate deploy"));
+    }
     spinner.succeed(chalk.green("Project configured successfully! \u{1F680}"));
     console.log("\nNext steps:");
     console.log(chalk.cyan(`  cd ${projectDir}`));
