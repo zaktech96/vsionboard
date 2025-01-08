@@ -28,7 +28,8 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
      - Create account at [Supabase](https://supabase.com)
      - Create a new project
      - Note: When creating your database password, avoid special characters like '#' and '&' as they cause URL encoding issues
-     - Copy your `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` from the 'Connect' Settings on the main Project Dashboard page and under 'App Frameworks'
+     - Copy your `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` from the 'Connect' modal on the main Project Dashboard page (click on the 'Connect' button) and under 'App Frameworks'
+     - Copy your `DATABASE_URL` and `DIRECT_URL` from the same 'Connect' modal under the 'ORMs' tab
 
    - **Clerk** (Authentication)
      - Create account at [Clerk](https://clerk.com)
