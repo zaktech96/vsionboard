@@ -45,6 +45,19 @@ First, gather your Development API keys from the following services:
 
 Done. Your project is now ready to start developing locally.
 
+## Local Development
+
+### Saving Users to your Database
+1. Create a webhook in your Clerk Application (Development)
+2. Set the webhook URL to `http://localhost:3000/api/webhooks/clerk`
+
+### Testing Payments with the Stripe CLI
+
+1. Install the Stripe CLI
+2. Run `stripe login`
+3. Run `stripe listen --forward-to http://localhost:3000/api/webhooks/stripe`
+4. Done. Your site should now be able to receive webhooks from Stripe and you can test payments locally.
+
 ## Deploying to Production
 
 1. Create a new repository on Github
