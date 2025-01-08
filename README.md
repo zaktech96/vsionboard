@@ -12,6 +12,14 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
 - [Umami](https://umami.is/) - Analyze User Behavior
 - [Vercel](https://vercel.com/) - Deployments
 
+## Prerequisites
+
+1. Install [nvm](https://github.com/nvm-sh/nvm)
+2. Install Node.js LTS version 22 using nvm:
+   ```bash
+   nvm install 22 --lts
+   ```
+
 ## Quick Setup
 
 First, gather your API keys from the following services:
@@ -46,14 +54,6 @@ First, gather your API keys from the following services:
 Done. Your project is now ready to start developing locally.
 
 ## Local Development
-
-### Prerequisites
-
-1. Install [nvm](https://github.com/nvm-sh/nvm)
-2. Install Node.js LTS version 22 using nvm:
-   ```bash
-   nvm install 22 --lts
-   ```
 
 ### Saving Users to your Database
 1. Create a webhook in your Clerk Application (Development)
