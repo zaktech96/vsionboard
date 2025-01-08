@@ -12,7 +12,9 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
 - [Umami](https://umami.is/) - Analyze User Behavior
 - [Vercel](https://vercel.com/) - Deployments
 
-## Prerequisites
+## 1. Prerequisites
+
+Some React + NextJS knowledge is assumed (just the basics is sufficient to get started).
 
 1. Install [nvm](https://github.com/nvm-sh/nvm)
 2. Install Node.js LTS version 22 using nvm:
@@ -20,9 +22,7 @@ Easy-to-setup, fully-featured, and customizable NextJS Boilerplate.
    nvm install 22 --lts
    ```
 
-## Quick Setup
-
-First, gather your API keys from the following services:
+3. Gather your API keys from the following services:
 
    - **Supabase** (Database)
      - Create account at [Supabase](https://supabase.com)
@@ -44,27 +44,42 @@ First, gather your API keys from the following services:
      - Create account at [Plunk](https://useplunk.com)
      - Copy your `PLUNK_API_KEY` from Project Settings > API Keys
 
+## 2. Quick Setup via CLI
+
 1. Once you have your keys ready, create your project locally by running:
    ```bash
    npx @codeandcreed/create-titan@latest my-app
    ```
 
-2. Follow the CLI prompts to configure your project with the API keys you've gathered.
+2. Follow the prompts to configure your project with the API keys you've gathered (from the previous section).
 
 Done. Your project is now ready to start developing locally.
 
-## Local Development
+3. Run the project:
+   ```bash
+   pnpm i
+   pnpm dev
+   ```
 
-### Saving Users to your Database
-1. Create a webhook in your Clerk Application (Development)
-2. Set the webhook URL to `http://localhost:3000/api/webhooks/clerk`
+## Local Development Specific
 
-### Testing Payments with the Stripe CLI
+### Setup ngrok
+
+1. Install ngrok
+2. Run `ngrok http http://localhost:3000`
+3. Copy the ngrok URL. You'll need this to test that your users are being saved to your database, and to test the payment flow.
+
+### Setup Clerk Webhook to Save Users to your Database
+1. Create a webhook in your Clerk Application
+2. Set the webhook URL to `[your-ngrok-url]/api/webhooks/clerk`
+3. Set the events to `user.created` and `user.updated`
+
+### Setup Stripe Webhook to Test Payments
 
 1. Install the Stripe CLI
 2. Run `stripe login`
-3. Run `stripe listen --forward-to http://localhost:3000/api/webhooks/stripe`
-4. Done. Your site should now be able to receive webhooks from Stripe and you can test payments locally.
+3. Run `stripe listen --forward-to [your-ngrok-url]/api/webhooks/stripe`
+4. Done. Your site should now be able to receive webhooks from Stripe and you can test the payment flow locally.
 
 ## Updating your Database Schema
 
@@ -82,7 +97,17 @@ Done. Your project is now ready to start developing locally.
 
 1. Create a new repository on Github
 2. Push all your changes to the new repository
-3. Deploy your site to Vercel with the equivalent 'Production' Environment Variables of all the above services
+4. Create a Production Instance of your Clerk Application
+   1. Copy your Production API Keys
+   2. Copy your Production Webhook URL (Setup exactly as you did for the test mode)
+5. Untoggle the test mode on your Stripe account (to use your production Stripe account)
+   1. Create a new product in your production Stripe account (or copy over your test mode product)
+   2. Copy your Production API Keys (PUBLIC and SECRET)
+   3. Copy your Production Price ID
+6. Set all your environment variables in Vercel
+7. Deploy your site to Vercel with all the above Production Environment Variables
+
+Done. Your site is now live and ready to use. Users can now sign up, login, and pay for your product.
 
 ## Analytics
 
