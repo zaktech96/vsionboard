@@ -4,6 +4,10 @@ A CLI for creating Full-Stack NextJS 15 Applications (Pre-configured with Auth, 
 
 ## Installation & Usage
 
+### Prerequisites
+1. Create a new empty GitHub repository for your project
+2. Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`)
+
 ```bash
 npx @codeandcreed/create-titan@latest my-app
 ```
@@ -32,12 +36,6 @@ Once you've made your changes:
 
 To update the package, make sure you are in the directory `packages/create-titan` and then run `pnpm version patch` to update the version number.
 
+Then build the package: `pnpm build`
+
 Then, run `pnpm publish --git-checks` to publish the new version to NPM.
-
-## ToDo
-
-- Install all dependencies automatically
-- Delete the `.env.template` file once all environment variables are set
-- Switch order for prompts for Stripe keys in CLI (public first, then secret)
-- Automatically open in Cursor (code -r [project-name])
-- Remind them in the README to push to their own Repo for initial commit

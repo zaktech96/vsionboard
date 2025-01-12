@@ -15,6 +15,9 @@ NOTE: You'll only want to use this repo if you want to create an App idea that n
 - [UserJot](https://userjot.com/) - User Feedback + Product Roadmap
 - [Vercel](https://vercel.com/) - Deployments
 
+> [!NOTE]
+> Video walkthrough coming soon...
+
 ## 1. Prerequisites
 
 Some React + NextJS knowledge is assumed (just the basics is sufficient to get started).
@@ -31,8 +34,9 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
      - Create account at [Supabase](https://supabase.com)
      - Create a new project
      - Note: When creating your database password, avoid special characters like '#' and '&' as they cause URL encoding issues
-     - Copy your `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` from the 'Connect' modal on the main Project Dashboard page (click on the 'Connect' button) and under 'App Frameworks'
-     - Copy your `DATABASE_URL` and `DIRECT_URL` from the same 'Connect' modal under the 'ORMs' tab
+     - Copy your database password and keep it safe (ideally in a password manager)
+     - Copy your `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` from the 'Connect' modal on the main Project Dashboard page (click on the 'Connect' button) and then go to the 'App Frameworks' tab
+     - Copy your `DATABASE_URL` and `DIRECT_URL` from the same 'Connect' modal under the 'ORMs' tab (without the quotations)
 
    - **Clerk** (Authentication)
      - Create account at [Clerk](https://clerk.com)

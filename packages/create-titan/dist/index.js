@@ -14,12 +14,18 @@ async function main() {
   const projectDir = program.args[0] || ".";
   let spinner;
   try {
-    const { projectName, useAuth, usePayments } = await prompts([
+    const { projectName, useAuth, usePayments, githubRepo } = await prompts([
       {
         type: "text",
         name: "projectName",
         message: "What is your project name?",
         initial: path.basename(path.resolve(projectDir))
+      },
+      {
+        type: "text",
+        name: "githubRepo",
+        message: "Enter your GitHub repository URL:",
+        validate: (value) => value.includes("github.com") ? true : "Please enter a valid GitHub repository URL"
       },
       {
         type: "confirm",
@@ -140,14 +146,14 @@ async function main() {
       spinner.stop();
       const paymentConfig = await prompts([
         {
-          type: "password",
-          name: "stripeSecretKey",
-          message: "Enter your Stripe Secret Key:"
-        },
-        {
           type: "text",
           name: "stripePublicKey",
           message: "Enter your Stripe Public Key:"
+        },
+        {
+          type: "password",
+          name: "stripeSecretKey",
+          message: "Enter your Stripe Secret Key:"
         },
         {
           type: "text",
@@ -197,6 +203,7 @@ async function main() {
     spinner.succeed("Email configured");
     spinner.start("Writing configuration files...");
     await fs.writeFile(path.join(projectDir, ".env"), envContent);
+    await fs.rm(path.join(projectDir, ".env.template"));
     const configPath = path.join(projectDir, "config.ts");
     const configContent = `const config = {
   auth: {
@@ -227,13 +234,26 @@ export default config;
       console.log(chalk.cyan("  pnpm prisma migrate deploy"));
     }
     spinner.succeed(chalk.green("Project configured successfully! \u{1F680}"));
-    console.log("\nNext steps:");
-    console.log(chalk.cyan(`  cd ${projectDir}`));
-    console.log(chalk.cyan("  pnpm install"));
-    console.log(chalk.cyan("  pnpm dev"));
+    spinner.start("Installing dependencies...");
+    await execa("pnpm", ["install"]);
+    spinner.succeed("Dependencies installed");
+    spinner.start("Setting up git repository...");
+    await execa("git", ["remote", "add", "origin", githubRepo]);
+    await execa("git", ["add", "."]);
+    await execa("git", ["commit", "-m", "Initial commit from Titan CLI"]);
+    await execa("git", ["push", "-u", "origin", "main"]);
+    spinner.succeed("Git repository setup complete");
+    spinner.start("Opening project in Cursor...");
+    try {
+      await execa("code", ["-r", "."]);
+      spinner.succeed("Project opened in Cursor");
+    } catch (error) {
+      spinner.warn("Could not open project in Cursor. Please open it manually.");
+    }
     console.log("\nMake sure to:");
     console.log("1. Review your .env file");
-    console.log("2. Check the documentation at https://github.com/ObaidUr-Rahmaan/titan");
+    console.log("2. Start the development server with: pnpm dev");
+    console.log("3. Check the documentation at https://github.com/ObaidUr-Rahmaan/titan");
   } catch (error) {
     if (spinner) {
       spinner.stop();
