@@ -37,6 +37,7 @@ Then, run `pnpm publish --git-checks` to publish the new version to NPM.
 ## ToDo
 
 - Install all dependencies automatically
-- Switch order for prompts for Stripe keys in CLI
+- Delete the `.env.template` file once all environment variables are set
+- Switch order for prompts for Stripe keys in CLI (public first, then secret)
 - Automatically open in Cursor (code -r [project-name])
 - Remind them in the README to push to their own Repo for initial commit
