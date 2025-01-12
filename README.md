@@ -138,6 +138,12 @@ Track your site visitors and get insights on how they interact with your site.
 3. Deploy your site
 4. Done. Real-time traffic data should now be being tracked.
 
+## 6. Gather User Feedback
+
+1. Create an account at [UserJot](https://userjot.com/)
+2. Create a new Workspace for the app
+3. Done. Go to 'My Board' to see your public feedback/roadmap board.
+
 ## Learn More
 
 Refer to the documentation of the individual technologies:
