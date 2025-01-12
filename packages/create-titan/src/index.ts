@@ -19,7 +19,7 @@ async function main() {
 
   try {
     // Project setup questions
-    const { projectName, useAuth, usePayments, githubRepo } = await prompts([
+    const { projectName, githubRepo } = await prompts([
       {
         type: 'text',
         name: 'projectName',
@@ -31,18 +31,6 @@ async function main() {
         name: 'githubRepo',
         message: 'Enter your GitHub repository URL:',
         validate: (value: string) => value.includes('github.com') ? true : 'Please enter a valid GitHub repository URL'
-      },
-      {
-        type: 'confirm',
-        name: 'useAuth',
-        message: 'Do you want to set up authentication with Clerk?',
-        initial: true,
-      },
-      {
-        type: 'confirm',
-        name: 'usePayments',
-        message: 'Do you want to set up payments with Stripe?',
-        initial: true,
       },
     ], {
       onCancel: () => {
@@ -71,40 +59,38 @@ async function main() {
     let envContent = '';
     
     // Auth Configuration
-    if (useAuth) {
-      spinner.stop();
-      const authConfig = await prompts([
-        {
-          type: 'password',
-          name: 'clerkPublishableKey',
-          message: 'Enter your Clerk Publishable Key:',
-        },
-        {
-          type: 'password',
-          name: 'clerkSecretKey',
-          message: 'Enter your Clerk Secret Key:',
-        },
-      ], {
-        onCancel: () => {
-          console.log('\nSetup cancelled');
-          process.exit(1);
-        }
-      });
-
-      if (!authConfig.clerkPublishableKey || !authConfig.clerkSecretKey) {
-        console.log(chalk.red('Clerk keys are required when auth is enabled'));
+    spinner.stop();
+    const authConfig = await prompts([
+      {
+        type: 'password',
+        name: 'clerkPublishableKey',
+        message: 'Enter your Clerk Publishable Key:',
+      },
+      {
+        type: 'password',
+        name: 'clerkSecretKey',
+        message: 'Enter your Clerk Secret Key:',
+      },
+    ], {
+      onCancel: () => {
+        console.log('\nSetup cancelled');
         process.exit(1);
       }
+    });
 
-      spinner.start('Configuring authentication...');
-      envContent += `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${authConfig.clerkPublishableKey}\n`;
-      envContent += `CLERK_SECRET_KEY=${authConfig.clerkSecretKey}\n\n`;
-      envContent += `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in\n`;
-      envContent += `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up\n`;
-      envContent += `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/\n`;
-      envContent += `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/\n\n`;
-      spinner.succeed('Authentication configured');
+    if (!authConfig.clerkPublishableKey || !authConfig.clerkSecretKey) {
+      console.log(chalk.red('Clerk keys are required'));
+      process.exit(1);
     }
+
+    spinner.start('Configuring authentication...');
+    envContent += `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${authConfig.clerkPublishableKey}\n`;
+    envContent += `CLERK_SECRET_KEY=${authConfig.clerkSecretKey}\n\n`;
+    envContent += `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in\n`;
+    envContent += `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up\n`;
+    envContent += `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/\n`;
+    envContent += `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/\n\n`;
+    spinner.succeed('Authentication configured');
 
     // Database Configuration
     spinner.stop();
@@ -127,7 +113,7 @@ async function main() {
       {
         type: 'text',
         name: 'directUrl',
-        message: 'Enter your Direct Database URL:',
+        message: 'Enter your Direct URL:',
       },
     ], {
       onCancel: () => {
@@ -150,42 +136,40 @@ async function main() {
     spinner.succeed('Database configured');
 
     // Payments Configuration
-    if (usePayments) {
-      spinner.stop();
-      const paymentConfig = await prompts([
-        {
-          type: 'text',
-          name: 'stripePublicKey',
-          message: 'Enter your Stripe Public Key:',
-        },
-        {
-          type: 'password',
-          name: 'stripeSecretKey',
-          message: 'Enter your Stripe Secret Key:',
-        },
-        {
-          type: 'text',
-          name: 'stripePriceId',
-          message: 'Enter your Stripe Price ID:',
-        },
-      ], {
-        onCancel: () => {
-          console.log('\nSetup cancelled');
-          process.exit(1);
-        }
-      });
-
-      if (!paymentConfig.stripeSecretKey || !paymentConfig.stripePublicKey || !paymentConfig.stripePriceId) {
-        console.log(chalk.red('All Stripe configuration values are required when payments are enabled'));
+    spinner.stop();
+    const paymentConfig = await prompts([
+      {
+        type: 'text',
+        name: 'stripePublicKey',
+        message: 'Enter your Stripe Public Key:',
+      },
+      {
+        type: 'password',
+        name: 'stripeSecretKey',
+        message: 'Enter your Stripe Secret Key:',
+      },
+      {
+        type: 'text',
+        name: 'stripePriceId',
+        message: 'Enter your Stripe Price ID:',
+      },
+    ], {
+      onCancel: () => {
+        console.log('\nSetup cancelled');
         process.exit(1);
       }
+    });
 
-      spinner.start('Configuring payments...');
-      envContent += `STRIPE_SECRET_KEY=${paymentConfig.stripeSecretKey}\n`;
-      envContent += `NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${paymentConfig.stripePublicKey}\n`;
-      envContent += `NEXT_PUBLIC_STRIPE_PRICE_ID=${paymentConfig.stripePriceId}\n\n`;
-      spinner.succeed('Payments configured');
+    if (!paymentConfig.stripeSecretKey || !paymentConfig.stripePublicKey || !paymentConfig.stripePriceId) {
+      console.log(chalk.red('All Stripe configuration values are required'));
+      process.exit(1);
     }
+
+    spinner.start('Configuring payments...');
+    envContent += `STRIPE_SECRET_KEY=${paymentConfig.stripeSecretKey}\n`;
+    envContent += `NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${paymentConfig.stripePublicKey}\n`;
+    envContent += `NEXT_PUBLIC_STRIPE_PRICE_ID=${paymentConfig.stripePriceId}\n\n`;
+    spinner.succeed('Payments configured');
 
     // Email Configuration
     spinner.stop();
@@ -220,10 +204,10 @@ async function main() {
     const configPath = path.join(projectDir, 'config.ts');
     const configContent = `const config = {
   auth: {
-    enabled: ${useAuth},
+    enabled: true,
   },
   payments: {
-    enabled: ${usePayments},
+    enabled: true,
   },
   email: {
     enabled: true,
