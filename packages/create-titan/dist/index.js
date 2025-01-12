@@ -215,16 +215,16 @@ export default config;
     await fs.writeFile(configPath, configContent);
     spinner.start("Setting up database tables...");
     try {
-      await execa("pnpm", ["prisma", "generate"], { cwd: projectDir });
-      await execa("pnpm", ["prisma", "migrate", "deploy"], { cwd: projectDir });
+      await execa("pnpm", ["dlx", "prisma", "generate"], { cwd: projectDir });
+      await execa("pnpm", ["dlx", "prisma", "db", "push"], { cwd: projectDir });
       spinner.succeed("Database tables created successfully");
     } catch (error) {
       spinner.fail("Failed to create database tables");
-      console.error(chalk.red("Error running database migrations:"), error);
-      console.log(chalk.yellow("\nYou can try running the migrations manually:"));
+      console.error(chalk.red("Error pushing database schema:"), error);
+      console.log(chalk.yellow("\nYou can try pushing the schema manually:"));
       console.log(chalk.cyan("  cd " + projectDir));
-      console.log(chalk.cyan("  pnpm prisma generate"));
-      console.log(chalk.cyan("  pnpm prisma migrate deploy"));
+      console.log(chalk.cyan("  pnpm dlx prisma generate"));
+      console.log(chalk.cyan("  pnpm dlx prisma db push"));
     }
     spinner.succeed(chalk.green("Project configured successfully! \u{1F680}"));
     console.log("\nNext steps:");
