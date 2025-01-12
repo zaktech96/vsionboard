@@ -8,10 +8,11 @@ NOTE: You'll only want to use this repo if you want to create an App idea that n
 
 - [NextJS 15](https://nextjs.org/) - Full-Stack React framework
 - [Supabase](https://supabase.com/) - Database
-- [Clerk](https://clerk.com/) - Authenticate your Users
+- [Clerk](https://clerk.com/) - Authentication
 - [Stripe](https://stripe.com/) - Collect Payments
 - [Plunk](https://useplunk.com/) - Send Emails
-- [Umami](https://umami.is/) - Analyze User Behavior
+- [Umami](https://umami.is/) - Analytics
+- [UserJot](https://userjot.com/) - User Feedback + Product Roadmap
 - [Vercel](https://vercel.com/) - Deployments
 
 ## 1. Prerequisites
