@@ -219,8 +219,15 @@ export default config;
     }
     spinner.succeed(chalk.green("Project configured successfully! \u{1F680}"));
     spinner.start("Installing dependencies...");
-    await execa("pnpm", ["install"]);
-    spinner.succeed("Dependencies installed");
+    try {
+      process.chdir(path.resolve(projectDir));
+      await execa("pnpm", ["install"], { stdio: "inherit" });
+      spinner.succeed("Dependencies installed");
+    } catch (error) {
+      spinner.fail("Failed to install dependencies");
+      console.error(chalk.red("Error installing dependencies:"), error);
+      process.exit(1);
+    }
     spinner.start("Setting up git repository...");
     await execa("git", ["remote", "add", "origin", githubRepo]);
     await execa("git", ["add", "."]);
