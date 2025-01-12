@@ -230,8 +230,8 @@ export default config;
     // Run initial database migration
     spinner.start('Setting up database tables...');
     try {
-      await execa('pnpm', ['prisma', 'generate'], { cwd: projectDir });
-      await execa('pnpm', ['prisma', 'db', 'push'], { cwd: projectDir });
+      await execa('pnpm', ['dlx', 'prisma', 'generate'], { cwd: projectDir });
+      await execa('pnpm', ['dlx', 'prisma', 'db', 'push'], { cwd: projectDir });
       spinner.succeed('Database tables created successfully');
     } catch (error) {
       spinner.fail('Failed to create database tables');
