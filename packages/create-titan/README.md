@@ -37,5 +37,5 @@ Then, run `pnpm publish --git-checks` to publish the new version to NPM.
 
 ## ToDo
 
-- Don't ask for if they want to use Clerk or Stripe, they have to
+- Don't ask for if they want to use Clerk or Stripe. Remove those questions. Enforce it. Just keep the config to true for everything.
 - Change 'Direct Database URL' to 'Direct URL'

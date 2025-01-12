@@ -68,13 +68,9 @@ Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`
 
 2. Follow the prompts to configure your project with the API keys you've gathered (from the previous section).
 
-Done. Your project is now ready to start developing locally.
+Done. Your project should've now been pushed to your github repo, and all the tables should've been created in Supabase ✅
 
-3. Run the project:
-   ```bash
-   pnpm i
-   pnpm dev
-   ```
+As a security measure, you should also go to your Supabase dashboard and enable RLS for all your tables.
 
 ## 3. Developing your app locally
 
