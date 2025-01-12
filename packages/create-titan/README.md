@@ -34,3 +34,8 @@ To update the package, make sure you are in the directory `packages/create-titan
 Then build the package: `pnpm build`
 
 Then, run `pnpm publish --git-checks` to publish the new version to NPM.
+
+## ToDo
+
+- Don't ask for if they want to use Clerk or Stripe, they have to
+- Change 'Direct Database URL' to 'Direct URL'
