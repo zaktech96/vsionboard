@@ -14,12 +14,17 @@ async function main() {
   const projectDir = program.args[0] || ".";
   let spinner;
   try {
-    const { projectName, githubRepo } = await prompts([
+    const { projectName, projectDescription, githubRepo } = await prompts([
       {
         type: "text",
         name: "projectName",
         message: "What is your project name?",
         initial: path.basename(path.resolve(projectDir))
+      },
+      {
+        type: "text",
+        name: "projectDescription",
+        message: "Describe your project in a few words:"
       },
       {
         type: "text",
@@ -235,6 +240,15 @@ export default config;
     await execa("git", ["branch", "-M", "main"]);
     await execa("git", ["push", "-u", "origin", "main"]);
     spinner.succeed("Git repository setup complete");
+    const readmeContent = `# ${projectName}
+
+${projectDescription}
+
+# ToDos
+
+- Add todos here...
+`;
+    await fs.writeFile(path.join(projectDir, "README.md"), readmeContent);
     spinner.start("Opening project in Cursor...");
     try {
       await execa("code", ["-r", "."]);
