@@ -14,7 +14,7 @@ async function main() {
   const projectDir = program.args[0] || ".";
   let spinner;
   try {
-    const { projectName, useAuth, usePayments, githubRepo } = await prompts([
+    const { projectName, githubRepo } = await prompts([
       {
         type: "text",
         name: "projectName",
@@ -26,18 +26,6 @@ async function main() {
         name: "githubRepo",
         message: "Enter your GitHub repository URL:",
         validate: (value) => value.includes("github.com") ? true : "Please enter a valid GitHub repository URL"
-      },
-      {
-        type: "confirm",
-        name: "useAuth",
-        message: "Do you want to set up authentication with Clerk?",
-        initial: true
-      },
-      {
-        type: "confirm",
-        name: "usePayments",
-        message: "Do you want to set up payments with Stripe?",
-        initial: true
       }
     ], {
       onCancel: () => {
@@ -55,46 +43,44 @@ async function main() {
     await execa("git", ["init"], { cwd: projectDir });
     spinner.succeed("Project cloned successfully!");
     let envContent = "";
-    if (useAuth) {
-      spinner.stop();
-      const authConfig = await prompts([
-        {
-          type: "password",
-          name: "clerkPublishableKey",
-          message: "Enter your Clerk Publishable Key:"
-        },
-        {
-          type: "password",
-          name: "clerkSecretKey",
-          message: "Enter your Clerk Secret Key:"
-        }
-      ], {
-        onCancel: () => {
-          console.log("\nSetup cancelled");
-          process.exit(1);
-        }
-      });
-      if (!authConfig.clerkPublishableKey || !authConfig.clerkSecretKey) {
-        console.log(chalk.red("Clerk keys are required when auth is enabled"));
+    spinner.stop();
+    const authConfig = await prompts([
+      {
+        type: "password",
+        name: "clerkPublishableKey",
+        message: "Enter your Clerk Publishable Key:"
+      },
+      {
+        type: "password",
+        name: "clerkSecretKey",
+        message: "Enter your Clerk Secret Key:"
+      }
+    ], {
+      onCancel: () => {
+        console.log("\nSetup cancelled");
         process.exit(1);
       }
-      spinner.start("Configuring authentication...");
-      envContent += `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${authConfig.clerkPublishableKey}
-`;
-      envContent += `CLERK_SECRET_KEY=${authConfig.clerkSecretKey}
-
-`;
-      envContent += `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-`;
-      envContent += `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-`;
-      envContent += `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
-`;
-      envContent += `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
-
-`;
-      spinner.succeed("Authentication configured");
+    });
+    if (!authConfig.clerkPublishableKey || !authConfig.clerkSecretKey) {
+      console.log(chalk.red("Clerk keys are required"));
+      process.exit(1);
     }
+    spinner.start("Configuring authentication...");
+    envContent += `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${authConfig.clerkPublishableKey}
+`;
+    envContent += `CLERK_SECRET_KEY=${authConfig.clerkSecretKey}
+
+`;
+    envContent += `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+`;
+    envContent += `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+`;
+    envContent += `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+`;
+    envContent += `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+
+`;
+    spinner.succeed("Authentication configured");
     spinner.stop();
     const dbConfig = await prompts([
       {
@@ -115,7 +101,7 @@ async function main() {
       {
         type: "text",
         name: "directUrl",
-        message: "Enter your Direct Database URL:"
+        message: "Enter your Direct URL:"
       }
     ], {
       onCancel: () => {
@@ -142,44 +128,42 @@ async function main() {
 
 `;
     spinner.succeed("Database configured");
-    if (usePayments) {
-      spinner.stop();
-      const paymentConfig = await prompts([
-        {
-          type: "text",
-          name: "stripePublicKey",
-          message: "Enter your Stripe Public Key:"
-        },
-        {
-          type: "password",
-          name: "stripeSecretKey",
-          message: "Enter your Stripe Secret Key:"
-        },
-        {
-          type: "text",
-          name: "stripePriceId",
-          message: "Enter your Stripe Price ID:"
-        }
-      ], {
-        onCancel: () => {
-          console.log("\nSetup cancelled");
-          process.exit(1);
-        }
-      });
-      if (!paymentConfig.stripeSecretKey || !paymentConfig.stripePublicKey || !paymentConfig.stripePriceId) {
-        console.log(chalk.red("All Stripe configuration values are required when payments are enabled"));
+    spinner.stop();
+    const paymentConfig = await prompts([
+      {
+        type: "text",
+        name: "stripePublicKey",
+        message: "Enter your Stripe Public Key:"
+      },
+      {
+        type: "password",
+        name: "stripeSecretKey",
+        message: "Enter your Stripe Secret Key:"
+      },
+      {
+        type: "text",
+        name: "stripePriceId",
+        message: "Enter your Stripe Price ID:"
+      }
+    ], {
+      onCancel: () => {
+        console.log("\nSetup cancelled");
         process.exit(1);
       }
-      spinner.start("Configuring payments...");
-      envContent += `STRIPE_SECRET_KEY=${paymentConfig.stripeSecretKey}
+    });
+    if (!paymentConfig.stripeSecretKey || !paymentConfig.stripePublicKey || !paymentConfig.stripePriceId) {
+      console.log(chalk.red("All Stripe configuration values are required"));
+      process.exit(1);
+    }
+    spinner.start("Configuring payments...");
+    envContent += `STRIPE_SECRET_KEY=${paymentConfig.stripeSecretKey}
 `;
-      envContent += `NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${paymentConfig.stripePublicKey}
+    envContent += `NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${paymentConfig.stripePublicKey}
 `;
-      envContent += `NEXT_PUBLIC_STRIPE_PRICE_ID=${paymentConfig.stripePriceId}
+    envContent += `NEXT_PUBLIC_STRIPE_PRICE_ID=${paymentConfig.stripePriceId}
 
 `;
-      spinner.succeed("Payments configured");
-    }
+    spinner.succeed("Payments configured");
     spinner.stop();
     const emailConfig = await prompts([
       {
@@ -207,10 +191,10 @@ async function main() {
     const configPath = path.join(projectDir, "config.ts");
     const configContent = `const config = {
   auth: {
-    enabled: ${useAuth},
+    enabled: true,
   },
   payments: {
-    enabled: ${usePayments},
+    enabled: true,
   },
   email: {
     enabled: true,
