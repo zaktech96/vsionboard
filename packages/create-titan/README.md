@@ -21,3 +21,15 @@ npx @codeandcreed/create-titan@latest my-app
 ## License
 
 MIT 
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a PR.
+
+## For Maintainers
+
+Once you've made your changes:
+
+To update the package, make sure you are in the directory `packages/create-titan` and then run `pnpm version patch` to update the version number.
+
+Then, run `pnpm publish --git-checks` to publish the new version to NPM.
