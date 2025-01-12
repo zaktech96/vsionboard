@@ -231,7 +231,7 @@ export default config;
     spinner.start('Setting up database tables...');
     try {
       await execa('pnpm', ['prisma', 'generate'], { cwd: projectDir });
-      await execa('pnpm', ['prisma', 'migrate', 'deploy'], { cwd: projectDir });
+      await execa('pnpm', ['prisma', 'db', 'push'], { cwd: projectDir });
       spinner.succeed('Database tables created successfully');
     } catch (error) {
       spinner.fail('Failed to create database tables');
