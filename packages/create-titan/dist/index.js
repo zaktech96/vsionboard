@@ -249,6 +249,10 @@ ${projectDescription}
 - Add todos here...
 `;
     await fs.writeFile(path.join(projectDir, "README.md"), readmeContent);
+    try {
+      await fs.rm(path.join(projectDir, "packages"), { recursive: true, force: true });
+    } catch (error) {
+    }
     spinner.start("Opening project in Cursor...");
     try {
       await execa("code", ["-r", "."]);

@@ -271,6 +271,13 @@ ${projectDescription}
 `;
     await fs.writeFile(path.join(projectDir, 'README.md'), readmeContent);
 
+    // Delete packages folder
+    try {
+      await fs.rm(path.join(projectDir, 'packages'), { recursive: true, force: true });
+    } catch (error) {
+      // Silently continue if folder doesn't exist or can't be deleted
+    }
+
     // Open in Cursor
     spinner.start('Opening project in Cursor...');
     try {
