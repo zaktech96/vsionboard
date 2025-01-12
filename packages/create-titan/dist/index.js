@@ -232,6 +232,7 @@ export default config;
     await execa("git", ["remote", "add", "origin", githubRepo]);
     await execa("git", ["add", "."]);
     await execa("git", ["commit", "-m", "Initial commit from Titan CLI"]);
+    await execa("git", ["branch", "-M", "main"]);
     await execa("git", ["push", "-u", "origin", "main"]);
     spinner.succeed("Git repository setup complete");
     spinner.start("Opening project in Cursor...");
