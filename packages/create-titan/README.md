@@ -3,11 +3,6 @@
 A CLI for creating Full-Stack NextJS 15 Applications (Pre-configured with Auth, Database, Payments, Emails, Analytics, and more).
 
 ## Installation & Usage
-
-### Prerequisites
-1. Create a new empty GitHub repository for your project
-2. Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`)
-
 ```bash
 npx @codeandcreed/create-titan@latest my-app
 ```
