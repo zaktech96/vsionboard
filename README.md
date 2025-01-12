@@ -28,11 +28,13 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
    nvm install 22 --lts
    ```
 
-3. Create a new empty GitHub repository for your project
+3. Buy a domain (Namecheap, porkbun, etc.)
+
+4. Create a new empty GitHub repository for your project
 
 Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`)
 
-4. Gather your API keys from the following services:
+5. Gather your API keys from the following services:
 
    - **Supabase** (Database)
      - Create account at [Supabase](https://supabase.com)
@@ -55,6 +57,7 @@ Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`
    - **Plunk** (Email)
      - Create account at [Plunk](https://useplunk.com)
      - Copy your `PLUNK_API_KEY` from Project Settings > API Keys
+     - Connect the domain you bought earlier (Project Settings -> Verified Domain)
 
 ## 2. Setup via CLI
 
