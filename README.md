@@ -118,19 +118,9 @@ If you're running a local supabase container, you can access your local Supabase
 3. Run `stripe listen --forward-to [your-ngrok-url]/api/webhooks/stripe`
 4. Done. Your site should now be able to receive webhooks from Stripe and you can test the payment flow locally.
 
-## Database Migrations (Optional - can do this later)
+## Database Migrations
 
-If you need to update the Database Schema (to create new tables, columns, etc. specific to your app idea)
-
-1. Modify the database schema in `prisma/schema.prisma`
-2. Generate a new migration:
-   ```bash
-   pnpm prisma migrate dev --name <migration-name>
-   ```
-3. Deploy the changes to your database:
-   ```bash
-   pnpm prisma migrate deploy
-   ```
+For detailed instructions on working with database migrations, schema changes, and Supabase CLI commands, see our [Database Operations Guide](docs/DATABASE.md).
 
 ## 4. Updating the UI
 
@@ -187,6 +177,7 @@ Track your site visitors and get insights on how they interact with your site.
 ## Learn More
 
 Refer to the documentation of the individual technologies:
+- [Database Operations Guide](docs/DATABASE.md) - Comprehensive guide for Supabase CLI and database operations
 - [NextJS Documentation](https://nextjs.org/docs)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Supabase Documentation](https://supabase.io/docs)
