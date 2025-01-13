@@ -13,8 +13,6 @@ var os = require("os");
 var isWindows = os.platform() === "win32";
 var is64Bit = os.arch() === "x64";
 var programFiles = is64Bit ? "C:\\Program Files" : "C:\\Program Files (x86)";
-var rmrf = isWindows ? ["cmd", ["/c", "rmdir", "/s", "/q"]] : ["rm", ["-rf"]];
-var gitInit = isWindows ? ["cmd", ["/c", "git", "init"]] : ["git", ["init"]];
 var program = new Command().name("create-titan").description("Create a new Titan project").argument("[directory]", "Directory to create the project in").version("0.1.0").parse();
 async function main() {
   const projectDir = program.args[0] || ".";
@@ -239,20 +237,12 @@ export default config;
     }
     spinner.start("Setting up git repository...");
     try {
-      await execa(...rmrf, [path.join(projectDir, ".git")]);
-      await execa(...gitInit, { cwd: projectDir });
-      const gitCommands = isWindows ? {
-        cmd: "cmd",
-        args: (args) => ["/c", "git", ...args]
-      } : {
-        cmd: "git",
-        args: (args) => args
-      };
-      await execa(gitCommands.cmd, gitCommands.args(["remote", "add", "origin", githubRepo]), { cwd: projectDir });
-      await execa(gitCommands.cmd, gitCommands.args(["add", "."]), { cwd: projectDir });
-      await execa(gitCommands.cmd, gitCommands.args(["commit", "-m", "Initial commit from Titan CLI"]), { cwd: projectDir });
-      await execa(gitCommands.cmd, gitCommands.args(["branch", "-M", "main"]), { cwd: projectDir });
-      await execa(gitCommands.cmd, gitCommands.args(["push", "-f", "origin", "main"]), { cwd: projectDir });
+      await execa("rm", ["-rf", ".git"]);
+      await execa("git", ["init"]);
+      await execa("git", ["add", "."]);
+      await execa("git", ["commit", "-m", "Initial commit from Titan CLI"]);
+      await execa("git", ["remote", "add", "origin", githubRepo]);
+      await execa("git", ["push", "-u", "origin", "main", "--force"]);
       spinner.succeed("Git repository setup complete");
     } catch (error) {
       spinner.fail("Failed to setup git repository");
@@ -285,10 +275,6 @@ ${projectDescription}
         spinner.warn("Could not open project in editor. Please open it manually.");
       }
     }
-    console.log("\nMake sure to:");
-    console.log("1. Review your .env file");
-    console.log("2. Start the development server with: pnpm dev");
-    console.log("3. Check the documentation at https://github.com/ObaidUr-Rahmaan/titan");
   } catch (error) {
     if (spinner) {
       spinner.stop();

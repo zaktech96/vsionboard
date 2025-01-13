@@ -272,24 +272,13 @@ export default config;
 
     spinner.start('Setting up git repository...');
     try {
-      // Remove the original titan repo git history
-      await execa(...rmrf, [path.join(projectDir, '.git')]);
-      await execa(...gitInit, { cwd: projectDir });
-      
-      // For Windows compatibility
-      const gitCommands = isWindows ? {
-        cmd: 'cmd',
-        args: (args: string[]) => ['/c', 'git', ...args]
-      } : {
-        cmd: 'git',
-        args: (args: string[]) => args
-      };
-      
-      await execa(gitCommands.cmd, gitCommands.args(['remote', 'add', 'origin', githubRepo]), { cwd: projectDir });
-      await execa(gitCommands.cmd, gitCommands.args(['add', '.']), { cwd: projectDir });
-      await execa(gitCommands.cmd, gitCommands.args(['commit', '-m', 'Initial commit from Titan CLI']), { cwd: projectDir });
-      await execa(gitCommands.cmd, gitCommands.args(['branch', '-M', 'main']), { cwd: projectDir });
-      await execa(gitCommands.cmd, gitCommands.args(['push', '-f', 'origin', 'main']), { cwd: projectDir });
+      // Simple git setup with fresh history
+      await execa('rm', ['-rf', '.git']);
+      await execa('git', ['init']);
+      await execa('git', ['add', '.']);
+      await execa('git', ['commit', '-m', 'Initial commit from Titan CLI']);
+      await execa('git', ['remote', 'add', 'origin', githubRepo]);
+      await execa('git', ['push', '-u', 'origin', 'main', '--force']);
       spinner.succeed('Git repository setup complete');
     } catch (error) {
       spinner.fail('Failed to setup git repository');
@@ -333,12 +322,6 @@ ${projectDescription}
         spinner.warn('Could not open project in editor. Please open it manually.');
       }
     }
-    
-    console.log('\nMake sure to:');
-    console.log('1. Review your .env file');
-    console.log('2. Start the development server with: pnpm dev');
-    console.log('3. Check the documentation at https://github.com/ObaidUr-Rahmaan/titan');
-    
   } catch (error) {
     if (spinner) {
       spinner.stop();
