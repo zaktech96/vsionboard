@@ -109,11 +109,9 @@ async function main() {
 
     // Database Configuration
     spinner.stop();
-    spinner.start('Setting up local Supabase...');
+    spinner.start('Starting local Supabase instance...');
     try {
-      await execa('supabase', ['init'], { cwd: projectDir });
-      spinner.succeed('Supabase initialized');
-      
+      // Start Supabase directly (skip init since it's already done)
       spinner.start('Starting Supabase (this might take a few minutes on first run)...');
       const { stdout } = await execa('supabase', ['start'], { cwd: projectDir });
       spinner.succeed('Supabase started');
