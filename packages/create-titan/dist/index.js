@@ -93,106 +93,68 @@ async function main() {
 `;
     spinner.succeed("Authentication configured");
     spinner.stop();
-    const dbMode = await prompts([
-      {
-        type: "select",
-        name: "mode",
-        message: "Choose database mode:",
-        choices: [
-          { title: "Local Development", value: "local" },
-          { title: "Production", value: "production" }
-        ]
+    spinner.start("Setting up local Supabase...");
+    try {
+      await execa("supabase", ["init"], { cwd: projectDir });
+      spinner.succeed("Supabase initialized");
+      spinner.start("Starting Supabase (this might take a few minutes on first run)...");
+      const { stdout } = await execa("supabase", ["start"], { cwd: projectDir });
+      spinner.succeed("Supabase started");
+      const serviceKeyMatch = stdout.match(/service_role key: (.*)/);
+      if (!serviceKeyMatch) {
+        throw new Error("Could not find service_role key in Supabase output");
       }
-    ], {
-      onCancel: () => {
-        console.log("\nSetup cancelled");
-        process.exit(1);
-      }
-    });
-    let dbConfig;
-    if (dbMode.mode === "local") {
-      spinner.start("Setting up local Supabase...");
+      const serviceKey = serviceKeyMatch[1].trim();
+      const dbConfig = {
+        supabaseUrl: "http://127.0.0.1:54321",
+        supabaseServiceKey: serviceKey,
+        databaseUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
+        directUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+      };
+      spinner.start("Setting up database tables and generating types...");
       try {
-        await execa("supabase", ["init"], { cwd: projectDir });
-        spinner.succeed("Supabase initialized");
-        spinner.start("Starting Supabase (this might take a few minutes on first run)...");
-        const { stdout } = await execa("supabase", ["start"], { cwd: projectDir });
-        spinner.succeed("Supabase started");
-        const serviceKeyMatch = stdout.match(/service_role key: (.*)/);
-        if (!serviceKeyMatch) {
-          throw new Error("Could not find service_role key in Supabase output");
-        }
-        const serviceKey = serviceKeyMatch[1].trim();
-        dbConfig = {
-          supabaseUrl: "http://127.0.0.1:54321",
-          supabaseServiceKey: serviceKey,
-          databaseUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
-          directUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
-        };
-        spinner.start("Syncing database schema...");
-        try {
-          await execa("supabase", ["db", "diff", "-f", "init"], { cwd: projectDir });
-          await execa("supabase", ["db", "reset"], { cwd: projectDir });
-          spinner.succeed("Database schema synced with Prisma schema");
-        } catch (error) {
-          spinner.warn("Failed to sync database schema automatically. Will try with Prisma instead.");
-          console.error(chalk.yellow("Supabase migration error:"), error);
-        }
-        console.log(chalk.green("\nCheck Docker/Orbstack. Your local Supabase instance is running! \u{1F680}"));
+        await execa("pnpm", ["dlx", "prisma", "generate"], { cwd: projectDir });
+        await execa("pnpm", ["dlx", "prisma", "db", "push"], { cwd: projectDir });
+        const { stdout: stdout2 } = await execa("supabase", ["gen", "types", "typescript", "--local"], {
+          cwd: projectDir,
+          stdio: "pipe"
+        });
+        await fs.writeFile(path.join(projectDir, "types", "supabase.ts"), stdout2);
+        spinner.succeed("Database tables created and types generated successfully");
       } catch (error) {
-        spinner.fail("Failed to setup local Supabase");
+        spinner.fail("Failed to setup database");
         console.error(chalk.red("Error:"), error);
         console.log(chalk.yellow("\nMake sure you have Docker running and try again."));
+        console.log(chalk.yellow("\nYou can try running these commands manually:"));
+        console.log(chalk.cyan("  cd " + projectDir));
+        console.log(chalk.cyan("  pnpm prisma generate"));
+        console.log(chalk.cyan("  pnpm prisma db push"));
+        console.log(chalk.cyan("  supabase gen types typescript --local > types/supabase.ts"));
         process.exit(1);
       }
-    } else {
-      dbConfig = await prompts([
-        {
-          type: "text",
-          name: "supabaseUrl",
-          message: "Enter your Supabase URL:"
-        },
-        {
-          type: "password",
-          name: "supabaseServiceKey",
-          message: "Enter your Supabase Service Key:"
-        },
-        {
-          type: "text",
-          name: "databaseUrl",
-          message: "Enter your Database URL (with pgbouncer):"
-        },
-        {
-          type: "text",
-          name: "directUrl",
-          message: "Enter your Direct URL:"
-        }
-      ], {
-        onCancel: () => {
-          console.log("\nSetup cancelled");
-          process.exit(1);
-        }
-      });
-    }
-    if (!dbConfig.supabaseUrl || !dbConfig.supabaseServiceKey || !dbConfig.databaseUrl || !dbConfig.directUrl) {
-      console.log(chalk.red("All database configuration values are required"));
+      spinner.start("Configuring database environment...");
+      envContent += `SUPABASE_URL=${dbConfig.supabaseUrl}
+`;
+      envContent += `SUPABASE_SERVICE_KEY=${dbConfig.supabaseServiceKey}
+
+`;
+      envContent += `DATABASE_URL="${dbConfig.databaseUrl}"
+`;
+      envContent += `DIRECT_URL="${dbConfig.directUrl}"
+
+`;
+      envContent += `FRONTEND_URL=http://localhost:3000
+
+`;
+      spinner.succeed("Database configured");
+      console.log(chalk.green("\nLocal Supabase is running! \u{1F680}"));
+      console.log(chalk.cyan("Access Supabase Studio at: http://127.0.0.1:54323"));
+    } catch (error) {
+      spinner.fail("Failed to setup local Supabase");
+      console.error(chalk.red("Error:"), error);
+      console.log(chalk.yellow("\nMake sure Docker/Orbstack is running and try again."));
       process.exit(1);
     }
-    spinner.start("Configuring database...");
-    envContent += `SUPABASE_URL=${dbConfig.supabaseUrl}
-`;
-    envContent += `SUPABASE_SERVICE_KEY=${dbConfig.supabaseServiceKey}
-
-`;
-    envContent += `DATABASE_URL="${dbConfig.databaseUrl}"
-`;
-    envContent += `DIRECT_URL="${dbConfig.directUrl}"
-
-`;
-    envContent += `FRONTEND_URL=http://localhost:3000
-
-`;
-    spinner.succeed("Database configured");
     spinner.stop();
     const paymentConfig = await prompts([
       {
