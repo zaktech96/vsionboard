@@ -29,17 +29,15 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
      nvm install 22 --lts
      ```
 
-3. Buy a domain (Namecheap, porkbun, etc.)
-
-4. Create a new empty GitHub repository for your project
+3. Create a new empty GitHub repository for your project
 
 Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`)
 
-5. If you want to run a local Supabase instance, you'll need to install Docker/Orbstack (depending on your OS):
+1. In order to run a local Supabase instance, you'll need to install Docker/Orbstack (depending on your OS):
    - **Windows**: Install [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
    - **Mac**: Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/) or [Orbstack](https://orbstack.dev/download)
 
-6. Install Supabase CLI:
+2. Install the Supabase CLI to interact with Supabase:
    - **Windows**: Install via [scoop](https://scoop.sh/):
      ```powershell
      # Install scoop first if you haven't:
@@ -54,7 +52,7 @@ Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`
      brew install supabase/tap/supabase
      ```
 
-7. Gather your Development API keys from the following services:
+3. Gather your Development API keys from the following services:
 
    - **Clerk** (Authentication)
      - Create account at [Clerk](https://clerk.com)
@@ -74,24 +72,30 @@ Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`
 
 ## 2. Setup via CLI
 
-1. Once you have your keys ready, create your project locally by running:
+1. Make sure Docker Desktop / Orbstack is running
+
+2. Using your previous saved info (github repo URL and API keys), create your project locally by running:
    ```bash
    npx @codeandcreed/create-titan@latest my-app
    ```
 
-2. Follow the prompts to configure your project:
-   - Choose between local development or production database
-   - If using local development, the CLI will:
-     1. Start a local Supabase instance
-     2. Sync the database schema with your Prisma schema
-     3. Set up all required tables and relationships
-   - If using production, enter your API keys as prompted and it will automatically create the tables in your production database
+3. Follow the prompts to configure your project. The CLI will:
+   1. Clone the project template
+   2. Initialize a local Supabase instance
+   3. Start the database (this might take a few minutes on first run)
+   4. Create all required database tables
+   5. Generate TypeScript types for your database schema
+   6. Configure your environment variables
 
-Done. Your project should've now been pushed to your github repo, and all the tables should've been created in Supabase ✅
+Done! Your project will be:
+- Pushed to your GitHub repo ✅
+- Your local Supabase instance should now be running ✅
+- You're ready for local development ✅
 
-As a security measure, you should also go to your Supabase dashboard and enable RLS for all your tables.
-
-If you're running a local supabase container, you can access your local Supabase Studio at http://127.0.0.1:54323 to view and play with your local test database to verify your app's features are working correctly.
+You can access your local Supabase Studio at http://127.0.0.1:54323 to:
+- View your database tables
+- Run SQL queries
+- Manage your data
 
 ## 3. Developing your app locally
 
@@ -147,6 +151,27 @@ Use Cursor to guide you efficiently through the process, add new features, fix b
      - Copy your `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` from the 'Connect' modal on the main Project Dashboard page (click on the 'Connect' button) and then go to the 'App Frameworks' tab
      - Copy your `DATABASE_URL` and `DIRECT_URL` from the same 'Connect' modal under the 'ORMs' tab (without the quotations)
      - You'll use these as the env vars when deploying to Vercel
+     - **IMPORTANT**: Enable Row Level Security (RLS) for all your tables in Supabase
+     - Apply your local migrations to production safely:
+       ```bash
+       # Link to your production project
+       supabase link --project-ref your-project-ref
+       
+       # First, backup your production database (safety first!)
+       supabase db dump --project-ref your-project-ref -f prod_backup.sql
+       
+       # Check what changes will be applied (review this carefully!)
+       prisma migrate diff \
+         --from-empty \
+         --to-schema-datamodel prisma/schema.prisma \
+         --shadow-database-url "$DATABASE_URL"
+
+       # If the changes look good, deploy migrations
+       # This will preserve existing data while applying schema changes
+       prisma migrate deploy
+       ```
+       > [!IMPORTANT]
+       > Always review the migration diff before applying to production. This ensures you understand what changes will be made and that they won't affect existing data.
 4. Create a Production Instance of your Clerk Application
    1. Copy your Production API Keys
    2. Copy your Production Webhook URL (Setup exactly as you did for the test mode)
