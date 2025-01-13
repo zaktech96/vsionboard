@@ -198,3 +198,7 @@ Refer to the documentation of the individual technologies:
 
 Any beneficial contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
+## ToDos
+
+- Update instructions on Database Migrations via Supabase CLI
+
