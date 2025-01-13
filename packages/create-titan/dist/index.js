@@ -87,26 +87,15 @@ async function main() {
 `;
     spinner.succeed("Authentication configured");
     spinner.stop();
-    const dbConfig = await prompts([
+    const dbMode = await prompts([
       {
-        type: "text",
-        name: "supabaseUrl",
-        message: "Enter your Supabase URL:"
-      },
-      {
-        type: "password",
-        name: "supabaseServiceKey",
-        message: "Enter your Supabase Service Key:"
-      },
-      {
-        type: "text",
-        name: "databaseUrl",
-        message: "Enter your Database URL (with pgbouncer):"
-      },
-      {
-        type: "text",
-        name: "directUrl",
-        message: "Enter your Direct URL:"
+        type: "select",
+        name: "mode",
+        message: "Choose database mode:",
+        choices: [
+          { title: "Local Development", value: "local" },
+          { title: "Production", value: "production" }
+        ]
       }
     ], {
       onCancel: () => {
@@ -114,6 +103,55 @@ async function main() {
         process.exit(1);
       }
     });
+    let dbConfig;
+    if (dbMode.mode === "local") {
+      const localConfig = await prompts([
+        {
+          type: "password",
+          name: "supabaseServiceKey",
+          message: "Enter your local Supabase service_role key (from supabase start output):"
+        }
+      ], {
+        onCancel: () => {
+          console.log("\nSetup cancelled");
+          process.exit(1);
+        }
+      });
+      dbConfig = {
+        supabaseUrl: "http://127.0.0.1:54321",
+        supabaseServiceKey: localConfig.supabaseServiceKey,
+        databaseUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
+        directUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+      };
+    } else {
+      dbConfig = await prompts([
+        {
+          type: "text",
+          name: "supabaseUrl",
+          message: "Enter your Supabase URL:"
+        },
+        {
+          type: "password",
+          name: "supabaseServiceKey",
+          message: "Enter your Supabase Service Key:"
+        },
+        {
+          type: "text",
+          name: "databaseUrl",
+          message: "Enter your Database URL (with pgbouncer):"
+        },
+        {
+          type: "text",
+          name: "directUrl",
+          message: "Enter your Direct URL:"
+        }
+      ], {
+        onCancel: () => {
+          console.log("\nSetup cancelled");
+          process.exit(1);
+        }
+      });
+    }
     if (!dbConfig.supabaseUrl || !dbConfig.supabaseServiceKey || !dbConfig.databaseUrl || !dbConfig.directUrl) {
       console.log(chalk.red("All database configuration values are required"));
       process.exit(1);

@@ -34,28 +34,42 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
 
 Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`)
 
-5. Gather your API keys from the following services:
+5. Install Docker Desktop (Windows) or Orbstack (Mac) - will be used to run the local Supabase instance
+
+6. Install Supabase CLI for local development:
+   ```bash
+   brew install supabase/tap/supabase
+   ```
+
+7. Start local Supabase:
+   ```bash
+   supabase init
+   supabase start
+   ```
+   This will give you local URLs and keys to use during development.
+
+   The very first time you run this, it will take a while. Be patient. Subsequent runs will be faster because the Docker images are cached.
+
+8. Gather your Development API keys from the following services:
 
    - **Supabase** (Database)
-     - Create account at [Supabase](https://supabase.com)
-     - Create a new project
-     - Note: When creating your database password, avoid special characters like '#' and '&' as they cause URL encoding issues
-     - Copy your database password and keep it safe (ideally in a password manager)
-     - Copy your `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` from the 'Connect' modal on the main Project Dashboard page (click on the 'Connect' button) and then go to the 'App Frameworks' tab
-     - Copy your `DATABASE_URL` and `DIRECT_URL` from the same 'Connect' modal under the 'ORMs' tab (without the quotations)
+     For local development:
+     - Use the URLs and keys provided by `supabase start`
+     - The keys will look like: `postgresql://postgres:postgres@localhost:54322/postgres`
 
    - **Clerk** (Authentication)
      - Create account at [Clerk](https://clerk.com)
-     - Create a new Application
+     - Create a new Application (It will create a Development app by default)
      - Copy your `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` from the 'API Keys' section
 
    - **Stripe** (Payments)
      - Create account at [Stripe](https://stripe.com)
+     - Make sure you're in test mode (toggle at the top right)
      - Copy your `STRIPE_SECRET_KEY` and `NEXT_PUBLIC_STRIPE_PUBLIC_KEY` from the 'API Keys' section
      - Create a product and get your `NEXT_PUBLIC_STRIPE_PRICE_ID`
 
    - **Plunk** (Email)
-     - Create account at [Plunk](https://useplunk.com)
+     - Create account at [Plunk](https://useplunk.com) (We don't care about the environment)
      - Copy your `PLUNK_API_KEY` from Project Settings > API Keys
      - Connect the domain you bought earlier (Project Settings -> Verified Domain)
 
@@ -66,11 +80,22 @@ Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`
    npx @codeandcreed/create-titan@latest my-app
    ```
 
-2. Follow the prompts to configure your project with the API keys you've gathered (from the previous section).
+2. Follow the prompts to configure your project:
+   - Choose between local development or production database
+   - If using local development, the CLI will use your local Supabase instance
+   - If using production, enter your API keys as prompted
 
 Done. Your project should've now been pushed to your github repo, and all the tables should've been created in Supabase ✅
 
 As a security measure, you should also go to your Supabase dashboard and enable RLS for all your tables.
+
+### Switching Between Local and Production
+
+To switch between local and production environments:
+
+1. Update your `.env` file with the appropriate database URLs and keys
+2. Run `pnpm prisma generate` to update the Prisma client
+3. Run `pnpm prisma db push` to sync your schema
 
 ## 3. Developing your app locally
 
@@ -124,9 +149,17 @@ Use Cursor to guide you efficiently through the process, add new features, fix b
 
 1. Create a new repository on Github
 2. Push all your changes to the new repository
+3. Setup your production database:
+     - Create account at Supabase
+     - Create a new project
+     - Note: When creating your database password, avoid special characters like '#' and '&' as they cause URL encoding issues
+     - Copy your database password and keep it safe (ideally in a password manager)
+     - Copy your `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` from the 'Connect' modal on the main Project Dashboard page (click on the 'Connect' button) and then go to the 'App Frameworks' tab
+     - Copy your `DATABASE_URL` and `DIRECT_URL` from the same 'Connect' modal under the 'ORMs' tab (without the quotations)
 4. Create a Production Instance of your Clerk Application
    1. Copy your Production API Keys
    2. Copy your Production Webhook URL (Setup exactly as you did for the test mode)
+   3. Follow the Clerk docs to setup Google Auth and connect your domain
 5. Untoggle the test mode on your Stripe account (to use your production Stripe account)
    1. Create a new product in your production Stripe account (or copy over your test mode product)
    2. Copy your Production API Keys (PUBLIC and SECRET)
