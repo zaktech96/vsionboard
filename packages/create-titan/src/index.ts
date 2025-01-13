@@ -132,7 +132,14 @@ async function main() {
       };
 
       // Write initial database env vars before running prisma commands
-      await fs.writeFile(path.join(projectDir, '.env'), `DATABASE_URL="${dbConfig.databaseUrl}"\nDIRECT_URL="${dbConfig.directUrl}"\n`);
+      envContent += `SUPABASE_URL=${dbConfig.supabaseUrl}\n`;
+      envContent += `SUPABASE_SERVICE_KEY=${dbConfig.supabaseServiceKey}\n\n`;
+      envContent += `DATABASE_URL="${dbConfig.databaseUrl}"\n`;
+      envContent += `DIRECT_URL="${dbConfig.directUrl}"\n\n`;
+      envContent += `FRONTEND_URL=http://localhost:3000\n\n`;
+      
+      // Write env file with current content before running prisma commands
+      await fs.writeFile(path.join(projectDir, '.env'), envContent);
 
       // Run initial database migration and generate types
       spinner.start('Setting up database tables and generating types...');
@@ -162,14 +169,6 @@ async function main() {
         console.log(chalk.cyan('  supabase gen types typescript --local > types/supabase.ts'));
         process.exit(1);
       }
-
-      spinner.start('Configuring database environment...');
-      envContent += `SUPABASE_URL=${dbConfig.supabaseUrl}\n`;
-      envContent += `SUPABASE_SERVICE_KEY=${dbConfig.supabaseServiceKey}\n\n`;
-      envContent += `DATABASE_URL="${dbConfig.databaseUrl}"\n`;
-      envContent += `DIRECT_URL="${dbConfig.directUrl}"\n\n`;
-      envContent += `FRONTEND_URL=http://localhost:3000\n\n`;
-      spinner.succeed('Database configured');
 
       console.log(chalk.green('\nLocal Supabase is running! 🚀'));
       console.log(chalk.cyan('Access Supabase Studio at: http://127.0.0.1:54323'));

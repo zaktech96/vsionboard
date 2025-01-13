@@ -109,9 +109,20 @@ async function main() {
         databaseUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
         directUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
       };
-      await fs.writeFile(path.join(projectDir, ".env"), `DATABASE_URL="${dbConfig.databaseUrl}"
-DIRECT_URL="${dbConfig.directUrl}"
-`);
+      envContent += `SUPABASE_URL=${dbConfig.supabaseUrl}
+`;
+      envContent += `SUPABASE_SERVICE_KEY=${dbConfig.supabaseServiceKey}
+
+`;
+      envContent += `DATABASE_URL="${dbConfig.databaseUrl}"
+`;
+      envContent += `DIRECT_URL="${dbConfig.directUrl}"
+
+`;
+      envContent += `FRONTEND_URL=http://localhost:3000
+
+`;
+      await fs.writeFile(path.join(projectDir, ".env"), envContent);
       spinner.start("Setting up database tables and generating types...");
       try {
         await execa("pnpm", ["dlx", "prisma", "generate"], { cwd: projectDir });
@@ -133,21 +144,6 @@ DIRECT_URL="${dbConfig.directUrl}"
         console.log(chalk.cyan("  supabase gen types typescript --local > types/supabase.ts"));
         process.exit(1);
       }
-      spinner.start("Configuring database environment...");
-      envContent += `SUPABASE_URL=${dbConfig.supabaseUrl}
-`;
-      envContent += `SUPABASE_SERVICE_KEY=${dbConfig.supabaseServiceKey}
-
-`;
-      envContent += `DATABASE_URL="${dbConfig.databaseUrl}"
-`;
-      envContent += `DIRECT_URL="${dbConfig.directUrl}"
-
-`;
-      envContent += `FRONTEND_URL=http://localhost:3000
-
-`;
-      spinner.succeed("Database configured");
       console.log(chalk.green("\nLocal Supabase is running! \u{1F680}"));
       console.log(chalk.cyan("Access Supabase Studio at: http://127.0.0.1:54323"));
     } catch (error) {
