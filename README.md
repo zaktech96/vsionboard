@@ -146,6 +146,7 @@ Use Cursor to guide you efficiently through the process, add new features, fix b
      - Copy your database password and keep it safe (ideally in a password manager)
      - Copy your `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` from the 'Connect' modal on the main Project Dashboard page (click on the 'Connect' button) and then go to the 'App Frameworks' tab
      - Copy your `DATABASE_URL` and `DIRECT_URL` from the same 'Connect' modal under the 'ORMs' tab (without the quotations)
+     - You'll use these as the env vars when deploying to Vercel
 4. Create a Production Instance of your Clerk Application
    1. Copy your Production API Keys
    2. Copy your Production Webhook URL (Setup exactly as you did for the test mode)
