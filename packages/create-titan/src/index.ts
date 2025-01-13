@@ -278,6 +278,10 @@ export default config;
 
     spinner.start('Setting up git repository...');
     try {
+      // Remove old git directory and create a fresh one
+      await execa(...rmrf, [path.join(projectDir, '.git')]);
+      await execa(...gitInit, { cwd: projectDir });
+      
       // Try to add remote, if it fails because it exists, continue
       try {
         await execa('git', ['remote', 'add', 'origin', githubRepo]);
@@ -286,10 +290,11 @@ export default config;
         await execa('git', ['remote', 'set-url', 'origin', githubRepo]);
       }
       
-      await execa('git', ['add', '.']);
-      await execa('git', ['commit', '-m', 'Initial commit from Titan CLI']);
-      await execa('git', ['branch', '-M', 'main']);
-      await execa('git', ['push', '-u', 'origin', 'main']);
+      // Force create new branch and commit
+      await execa('git', ['checkout', '--orphan', 'main'], { cwd: projectDir });
+      await execa('git', ['add', '.'], { cwd: projectDir });
+      await execa('git', ['commit', '-m', 'Initial commit from Titan CLI'], { cwd: projectDir });
+      await execa('git', ['push', '-f', 'origin', 'main'], { cwd: projectDir });
       spinner.succeed('Git repository setup complete');
     } catch (error) {
       spinner.fail('Failed to setup git repository');
