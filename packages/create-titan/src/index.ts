@@ -63,12 +63,6 @@ async function main() {
       projectDir,
     ]);
 
-    // Remove git history
-    await execa(...rmrf, [path.join(projectDir, '.git')]);
-    
-    // Initialize new git repository
-    await execa(...gitInit, { cwd: projectDir });
-
     spinner.succeed('Project cloned successfully!');
 
     let envContent = '';
@@ -278,22 +272,13 @@ export default config;
 
     spinner.start('Setting up git repository...');
     try {
-      // Remove old git directory and create a fresh one
+      // Remove the original titan repo git history
       await execa(...rmrf, [path.join(projectDir, '.git')]);
-      await execa(...gitInit, { cwd: projectDir });
-      
-      // Try to add remote, if it fails because it exists, continue
-      try {
-        await execa('git', ['remote', 'add', 'origin', githubRepo]);
-      } catch (error) {
-        // If remote exists, update its URL instead
-        await execa('git', ['remote', 'set-url', 'origin', githubRepo]);
-      }
-      
-      // Force create new branch and commit
-      await execa('git', ['checkout', '--orphan', 'main'], { cwd: projectDir });
+      await execa('git', ['init'], { cwd: projectDir });
+      await execa('git', ['remote', 'add', 'origin', githubRepo], { cwd: projectDir });
       await execa('git', ['add', '.'], { cwd: projectDir });
       await execa('git', ['commit', '-m', 'Initial commit from Titan CLI'], { cwd: projectDir });
+      await execa('git', ['branch', '-M', 'main'], { cwd: projectDir });
       await execa('git', ['push', '-f', 'origin', 'main'], { cwd: projectDir });
       spinner.succeed('Git repository setup complete');
     } catch (error) {
