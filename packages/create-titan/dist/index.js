@@ -9,6 +9,12 @@ var ora = require("ora");
 var prompts = require("prompts");
 var fs = require("fs/promises");
 var path = require("path");
+var os = require("os");
+var isWindows = os.platform() === "win32";
+var is64Bit = os.arch() === "x64";
+var programFiles = is64Bit ? "C:\\Program Files" : "C:\\Program Files (x86)";
+var rmrf = isWindows ? ["cmd", ["/c", "rmdir", "/s", "/q"]] : ["rm", ["-rf"]];
+var gitInit = isWindows ? ["cmd", ["/c", "git", "init"]] : ["git", ["init"]];
 var program = new Command().name("create-titan").description("Create a new Titan project").argument("[directory]", "Directory to create the project in").version("0.1.0").parse();
 async function main() {
   const projectDir = program.args[0] || ".";
@@ -44,8 +50,8 @@ async function main() {
       "https://github.com/ObaidUr-Rahmaan/titan.git",
       projectDir
     ]);
-    await execa("rm", ["-rf", ".git"], { cwd: projectDir });
-    await execa("git", ["init"], { cwd: projectDir });
+    await execa(...rmrf, [path.join(projectDir, ".git")]);
+    await execa(...gitInit, { cwd: projectDir });
     spinner.succeed("Project cloned successfully!");
     let envContent = "";
     spinner.stop();
@@ -105,24 +111,40 @@ async function main() {
     });
     let dbConfig;
     if (dbMode.mode === "local") {
-      const localConfig = await prompts([
-        {
-          type: "password",
-          name: "supabaseServiceKey",
-          message: "Enter your local Supabase service_role key (from supabase start output):"
+      spinner.start("Setting up local Supabase...");
+      try {
+        await execa("supabase", ["init"], { cwd: projectDir });
+        spinner.succeed("Supabase initialized");
+        spinner.start("Starting Supabase (this might take a few minutes on first run)...");
+        const { stdout } = await execa("supabase", ["start"], { cwd: projectDir });
+        spinner.succeed("Supabase started");
+        const serviceKeyMatch = stdout.match(/service_role key: (.*)/);
+        if (!serviceKeyMatch) {
+          throw new Error("Could not find service_role key in Supabase output");
         }
-      ], {
-        onCancel: () => {
-          console.log("\nSetup cancelled");
-          process.exit(1);
+        const serviceKey = serviceKeyMatch[1].trim();
+        dbConfig = {
+          supabaseUrl: "http://127.0.0.1:54321",
+          supabaseServiceKey: serviceKey,
+          databaseUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
+          directUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+        };
+        spinner.start("Syncing database schema...");
+        try {
+          await execa("supabase", ["db", "diff", "-f", "init"], { cwd: projectDir });
+          await execa("supabase", ["db", "reset"], { cwd: projectDir });
+          spinner.succeed("Database schema synced with Prisma schema");
+        } catch (error) {
+          spinner.warn("Failed to sync database schema automatically. Will try with Prisma instead.");
+          console.error(chalk.yellow("Supabase migration error:"), error);
         }
-      });
-      dbConfig = {
-        supabaseUrl: "http://127.0.0.1:54321",
-        supabaseServiceKey: localConfig.supabaseServiceKey,
-        databaseUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
-        directUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
-      };
+        console.log(chalk.green("\nCheck Docker/Orbstack. Your local Supabase instance is running! \u{1F680}"));
+      } catch (error) {
+        spinner.fail("Failed to setup local Supabase");
+        console.error(chalk.red("Error:"), error);
+        console.log(chalk.yellow("\nMake sure you have Docker running and try again."));
+        process.exit(1);
+      }
     } else {
       dbConfig = await prompts([
         {
@@ -291,12 +313,18 @@ ${projectDescription}
       await fs.rm(path.join(projectDir, "packages"), { recursive: true, force: true });
     } catch (error) {
     }
-    spinner.start("Opening project in Cursor...");
+    spinner.start("Opening project in editor...");
     try {
-      await execa("code", ["-r", "."]);
-      spinner.succeed("Project opened in Cursor");
+      const editor = isWindows ? path.join(programFiles, "Microsoft VS Code", "bin", "code.cmd") : "code";
+      await execa(editor, ["-r", "."]);
+      spinner.succeed("Project opened in editor");
     } catch (error) {
-      spinner.warn("Could not open project in Cursor. Please open it manually.");
+      try {
+        await execa(isWindows ? "code.cmd" : "code", ["-r", "."]);
+        spinner.succeed("Project opened in editor");
+      } catch (fallbackError) {
+        spinner.warn("Could not open project in editor. Please open it manually.");
+      }
     }
     console.log("\nMake sure to:");
     console.log("1. Review your .env file");

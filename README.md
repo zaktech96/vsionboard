@@ -91,21 +91,7 @@ Done. Your project should've now been pushed to your github repo, and all the ta
 
 As a security measure, you should also go to your Supabase dashboard and enable RLS for all your tables.
 
-### Switching Between Local and Production
-
-To switch between local and production environments:
-
-1. Update your `.env` file with the appropriate database URLs and keys
-2. If using local:
-   ```bash
-   supabase start    # Start local instance
-   supabase db reset # Reset to match Prisma schema
-   ```
-3. If using production:
-   ```bash
-   pnpm prisma generate
-   pnpm prisma db push
-   ```
+If you're running a local supabase container, you can access your local Supabase Studio at http://127.0.0.1:54323 to view and play with your local test database to verify your app's features are working correctly.
 
 ## 3. Developing your app locally
 
@@ -119,7 +105,7 @@ To switch between local and production environments:
 4. Update the FRONTEND_URL environment variable in your `.env` file to the ngrok URL.
 
 ### Setup Clerk Webhook to Save Users to your Database
-1. Create a webhook in your Clerk Application
+1. Create a webhook in your Clerk 'Development' Application
 2. Set the webhook URL to `[your-ngrok-url]/api/webhooks/clerk`
 3. Set the events to `user.created` and `user.updated`
 
