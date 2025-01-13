@@ -131,6 +131,9 @@ async function main() {
         directUrl: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres'
       };
 
+      // Write initial database env vars before running prisma commands
+      await fs.writeFile(path.join(projectDir, '.env'), `DATABASE_URL="${dbConfig.databaseUrl}"\nDIRECT_URL="${dbConfig.directUrl}"\n`);
+
       // Run initial database migration and generate types
       spinner.start('Setting up database tables and generating types...');
       try {

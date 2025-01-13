@@ -109,6 +109,9 @@ async function main() {
         databaseUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
         directUrl: "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
       };
+      await fs.writeFile(path.join(projectDir, ".env"), `DATABASE_URL="${dbConfig.databaseUrl}"
+DIRECT_URL="${dbConfig.directUrl}"
+`);
       spinner.start("Setting up database tables and generating types...");
       try {
         await execa("pnpm", ["dlx", "prisma", "generate"], { cwd: projectDir });
