@@ -218,5 +218,4 @@ Any beneficial contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## ToDos
 
-- Update instructions on Database Migrations via Supabase CLI
-- Generate types with the Supabase CLI (Titan CLI)
+- ...
