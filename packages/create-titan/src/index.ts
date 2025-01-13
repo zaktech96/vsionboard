@@ -118,25 +118,50 @@ async function main() {
 
     let dbConfig;
     if (dbMode.mode === 'local') {
-      const localConfig = await prompts([
-        {
-          type: 'password',
-          name: 'supabaseServiceKey',
-          message: 'Enter your local Supabase service_role key (from supabase start output):',
+      spinner.start('Setting up local Supabase...');
+      try {
+        await execa('supabase', ['init'], { cwd: projectDir });
+        spinner.succeed('Supabase initialized');
+        
+        spinner.start('Starting Supabase (this might take a few minutes on first run)...');
+        const { stdout } = await execa('supabase', ['start'], { cwd: projectDir });
+        spinner.succeed('Supabase started');
+        
+        // Parse the service_role key from stdout
+        const serviceKeyMatch = stdout.match(/service_role key: (.*)/);
+        if (!serviceKeyMatch) {
+          throw new Error('Could not find service_role key in Supabase output');
         }
-      ], {
-        onCancel: () => {
-          console.log('\nSetup cancelled');
-          process.exit(1);
-        }
-      });
+        
+        const serviceKey = serviceKeyMatch[1].trim();
+        
+        dbConfig = {
+          supabaseUrl: 'http://127.0.0.1:54321',
+          supabaseServiceKey: serviceKey,
+          databaseUrl: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
+          directUrl: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres'
+        };
 
-      dbConfig = {
-        supabaseUrl: 'http://127.0.0.1:54321',
-        supabaseServiceKey: localConfig.supabaseServiceKey,
-        databaseUrl: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
-        directUrl: 'postgresql://postgres:postgres@127.0.0.1:54322/postgres'
-      };
+        // Generate and apply Supabase migrations from Prisma schema
+        spinner.start('Syncing database schema...');
+        try {
+          // Generate migration from current state to match Prisma schema
+          await execa('supabase', ['db', 'diff', '-f', 'init'], { cwd: projectDir });
+          // Apply the migration
+          await execa('supabase', ['db', 'reset'], { cwd: projectDir });
+          spinner.succeed('Database schema synced with Prisma schema');
+        } catch (error) {
+          spinner.warn('Failed to sync database schema automatically. Will try with Prisma instead.');
+          console.error(chalk.yellow('Supabase migration error:'), error);
+        }
+        
+        console.log(chalk.green('\nCheck Docker/Orbstack. Your local Supabase instance is running! 🚀'));
+      } catch (error) {
+        spinner.fail('Failed to setup local Supabase');
+        console.error(chalk.red('Error:'), error);
+        console.log(chalk.yellow('\nMake sure you have Docker running and try again.'));
+        process.exit(1);
+      }
     } else {
       dbConfig = await prompts([
         {
