@@ -1,6 +1,6 @@
 {
   "name": "@codeandcreed/create-titan",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "description": "CLI tool to create new Titan projects",
   "bin": {
     "create-titan": "dist/index.cjs"

@@ -93,10 +93,8 @@ async function main() {
 `;
     spinner.succeed("Authentication configured");
     spinner.stop();
-    spinner.start("Setting up local Supabase...");
+    spinner.start("Starting local Supabase instance...");
     try {
-      await execa("supabase", ["init"], { cwd: projectDir });
-      spinner.succeed("Supabase initialized");
       spinner.start("Starting Supabase (this might take a few minutes on first run)...");
       const { stdout } = await execa("supabase", ["start"], { cwd: projectDir });
       spinner.succeed("Supabase started");
