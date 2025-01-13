@@ -306,7 +306,7 @@ ${projectDescription}
 
 - Add todos here...
 `;
-    await fs.writeFile(path.join(path.resolve(projectDir), 'README.md'), readmeContent);
+    await fs.writeFile('README.md', readmeContent);
 
     // Delete packages folder
     try {
