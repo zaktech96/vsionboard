@@ -133,9 +133,17 @@ ALWAYS follow these steps:
 ### "Help! I Messed Up My Local Database!"
 No worries! Your local database can be easily reset:
 ```bash
+# Option 1: Manual reset
 # Stop and reset everything
 supabase stop --no-backup
 supabase start
+
+# Option 2: Use the reset script
+./reset-db.sh    # This will:
+                 # 1. Stop Supabase services
+                 # 2. Start fresh instance
+                 # 3. Reset Prisma schema
+                 # 4. Regenerate all types
 ```
 
 ### "I Need to Start Fresh"

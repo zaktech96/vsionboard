@@ -54,7 +54,7 @@ async function main() {
       }
     });
 
-    spinner = ora('Creating your Titan project...').start();
+    spinner = ora('Creating your project...').start();
 
     // Clone the repository
     await execa('git', [
@@ -261,21 +261,6 @@ async function main() {
 export default config;
 `;
     await fs.writeFile(configPath, configContent);
-
-    // Run initial database migration
-    spinner.start('Setting up database tables...');
-    try {
-      await execa('pnpm', ['dlx', 'prisma', 'generate'], { cwd: projectDir });
-      await execa('pnpm', ['dlx', 'prisma', 'db', 'push'], { cwd: projectDir });
-      spinner.succeed('Database tables created successfully');
-    } catch (error) {
-      spinner.fail('Failed to create database tables');
-      console.error(chalk.red('Error running database migrations:'), error);
-      console.log(chalk.yellow('\nYou can try running the migrations manually:'));
-      console.log(chalk.cyan('  cd ' + projectDir));
-      console.log(chalk.cyan('  pnpm prisma generate'));
-      console.log(chalk.cyan('  pnpm prisma migrate deploy'));
-    }
 
     spinner.succeed(chalk.green('Project configured successfully! 🚀'));
     
