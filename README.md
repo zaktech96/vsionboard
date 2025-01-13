@@ -35,7 +35,7 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
 
 Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`)
 
-5. If you want to run a local Supabase instance, install Docker/Orbstack (depending on your OS):
+5. If you want to run a local Supabase instance, you'll need to install Docker/Orbstack (depending on your OS):
    - **Windows**: Install [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
    - **Mac**: Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/) or [Orbstack](https://orbstack.dev/download)
 
