@@ -240,12 +240,22 @@ export default config;
       process.exit(1);
     }
     spinner.start("Setting up git repository...");
-    await execa("git", ["remote", "add", "origin", githubRepo]);
-    await execa("git", ["add", "."]);
-    await execa("git", ["commit", "-m", "Initial commit from Titan CLI"]);
-    await execa("git", ["branch", "-M", "main"]);
-    await execa("git", ["push", "-u", "origin", "main"]);
-    spinner.succeed("Git repository setup complete");
+    try {
+      try {
+        await execa("git", ["remote", "add", "origin", githubRepo]);
+      } catch (error) {
+        await execa("git", ["remote", "set-url", "origin", githubRepo]);
+      }
+      await execa("git", ["add", "."]);
+      await execa("git", ["commit", "-m", "Initial commit from Titan CLI"]);
+      await execa("git", ["branch", "-M", "main"]);
+      await execa("git", ["push", "-u", "origin", "main"]);
+      spinner.succeed("Git repository setup complete");
+    } catch (error) {
+      spinner.fail("Failed to setup git repository");
+      console.error(chalk.red("Error setting up git:"), error);
+      process.exit(1);
+    }
     const readmeContent = `# ${projectName}
 
 ${projectDescription}
