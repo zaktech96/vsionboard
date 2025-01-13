@@ -264,7 +264,7 @@ ${projectDescription}
 
 - Add todos here...
 `;
-    await fs.writeFile(path.join(projectDir, "README.md"), readmeContent);
+    await fs.writeFile(path.join(path.resolve(projectDir), "README.md"), readmeContent);
     try {
       await fs.rm(path.join(projectDir, "packages"), { recursive: true, force: true });
     } catch (error) {
