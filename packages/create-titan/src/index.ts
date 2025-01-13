@@ -5,6 +5,16 @@ const ora = require('ora');
 const prompts = require('prompts');
 const fs = require('fs/promises');
 const path = require('path');
+const os = require('os');
+
+// Cross-platform command helpers
+const isWindows = os.platform() === 'win32';
+const is64Bit = os.arch() === 'x64';
+
+// Windows-specific paths
+const programFiles = is64Bit ? 'C:\\Program Files' : 'C:\\Program Files (x86)';
+const rmrf = isWindows ? ['cmd', ['/c', 'rmdir', '/s', '/q']] : ['rm', ['-rf']];
+const gitInit = isWindows ? ['cmd', ['/c', 'git', 'init']] : ['git', ['init']];
 
 const program = new Command()
   .name('create-titan')
@@ -54,10 +64,10 @@ async function main() {
     ]);
 
     // Remove git history
-    await execa('rm', ['-rf', '.git'], { cwd: projectDir });
+    await execa(...rmrf, [path.join(projectDir, '.git')]);
     
     // Initialize new git repository
-    await execa('git', ['init'], { cwd: projectDir });
+    await execa(...gitInit, { cwd: projectDir });
 
     spinner.succeed('Project cloned successfully!');
 
@@ -343,13 +353,22 @@ ${projectDescription}
       // Silently continue if folder doesn't exist or can't be deleted
     }
 
-    // Open in Cursor
-    spinner.start('Opening project in Cursor...');
+    // Open in editor (try both code and cursor)
+    spinner.start('Opening project in editor...');
     try {
-      await execa('code', ['-r', '.']);
-      spinner.succeed('Project opened in Cursor');
+      const editor = isWindows 
+        ? path.join(programFiles, 'Microsoft VS Code', 'bin', 'code.cmd')
+        : 'code';
+      await execa(editor, ['-r', '.']);
+      spinner.succeed('Project opened in editor');
     } catch (error) {
-      spinner.warn('Could not open project in Cursor. Please open it manually.');
+      try {
+        // Fallback to PATH-based code command
+        await execa(isWindows ? 'code.cmd' : 'code', ['-r', '.']);
+        spinner.succeed('Project opened in editor');
+      } catch (fallbackError) {
+        spinner.warn('Could not open project in editor. Please open it manually.');
+      }
     }
     
     console.log('\nMake sure to:');

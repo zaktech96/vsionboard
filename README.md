@@ -22,11 +22,12 @@ NOTE: You'll only want to use this repo if you want to create an App idea that n
 
 Some React + NextJS knowledge is assumed (just the basics is sufficient to get started).
 
-1. Install [nvm](https://github.com/nvm-sh/nvm)
-2. Install Node.js LTS version 22 using nvm:
-   ```bash
-   nvm install 22 --lts
-   ```
+1. Install Node.js:
+   - **Windows**: Download and install 64-bit version from [nodejs.org](https://nodejs.org/) (LTS version 22)
+   - **Mac/Linux**: Install via [nvm](https://github.com/nvm-sh/nvm):
+     ```bash
+     nvm install 22 --lts
+     ```
 
 3. Buy a domain (Namecheap, porkbun, etc.)
 
@@ -34,12 +35,24 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
 
 Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`)
 
-5. Install [Docker Desktop](https://docs.docker.com/desktop/#:~:text=a%20secure%20repository.-,Install%20Docker%20Desktop,-Install%20Docker%20Desktop) or [Orbstack](https://orbstack.dev/download) (Mac-only) - will be used to run the local Supabase instance
+5. Install Docker:
+   - **Windows**: Install [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
+   - **Mac**: Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/) or [Orbstack](https://orbstack.dev/download)
 
-6. Install Supabase CLI for local development:
-   ```bash
-   brew install supabase/tap/supabase
-   ```
+6. Install Supabase CLI:
+   - **Windows**: Install via [scoop](https://scoop.sh/):
+     ```powershell
+     # Install scoop first if you haven't:
+     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+     irm get.scoop.sh | iex
+     # Then install Supabase CLI (64-bit):
+     scoop bucket add supabase https://github.com/supabase/scoop-bucket.git
+     scoop install supabase
+     ```
+   - **Mac**: Install via Homebrew:
+     ```bash
+     brew install supabase/tap/supabase
+     ```
 
 7. Gather your Development API keys from the following services:
 
@@ -98,7 +111,9 @@ To switch between local and production environments:
 
 ### Setup ngrok
 
-1. Install ngrok
+1. Install ngrok:
+   - **Windows**: Download from [ngrok.com](https://ngrok.com/download) or install via scoop: `scoop install ngrok`
+   - **Mac**: Install via Homebrew: `brew install ngrok`
 2. Run `ngrok http http://localhost:3000`
 3. Copy the ngrok URL.
 4. Update the FRONTEND_URL environment variable in your `.env` file to the ngrok URL.
@@ -110,7 +125,9 @@ To switch between local and production environments:
 
 ### Setup Stripe Webhook to Test Payments
 
-1. Install the Stripe CLI
+1. Install the Stripe CLI:
+   - **Windows**: Download 64-bit version from [Stripe CLI releases](https://github.com/stripe/stripe-cli/releases/latest) or install via scoop: `scoop install stripe`
+   - **Mac**: Install via Homebrew: `brew install stripe/stripe-cli/stripe`
 2. Run `stripe login`
 3. Run `stripe listen --forward-to [your-ngrok-url]/api/webhooks/stripe`
 4. Done. Your site should now be able to receive webhooks from Stripe and you can test the payment flow locally.
