@@ -274,12 +274,16 @@ export default config;
     try {
       // Remove the original titan repo git history
       await execa(...rmrf, [path.join(projectDir, '.git')]);
-      await execa('git', ['init'], { cwd: projectDir });
-      await execa('git', ['remote', 'add', 'origin', githubRepo], { cwd: projectDir });
-      await execa('git', ['add', '.'], { cwd: projectDir });
-      await execa('git', ['commit', '-m', 'Initial commit from Titan CLI'], { cwd: projectDir });
-      await execa('git', ['branch', '-M', 'main'], { cwd: projectDir });
-      await execa('git', ['push', '-f', 'origin', 'main'], { cwd: projectDir });
+      await execa(...gitInit, { cwd: projectDir });
+      
+      // For Windows compatibility, use cmd /c for git commands
+      const gitCmd = isWindows ? ['cmd', ['/c', 'git']] : ['git', []];
+      
+      await execa(...gitCmd, [...gitCmd[1], 'remote', 'add', 'origin', githubRepo], { cwd: projectDir });
+      await execa(...gitCmd, [...gitCmd[1], 'add', '.'], { cwd: projectDir });
+      await execa(...gitCmd, [...gitCmd[1], 'commit', '-m', 'Initial commit from Titan CLI'], { cwd: projectDir });
+      await execa(...gitCmd, [...gitCmd[1], 'branch', '-M', 'main'], { cwd: projectDir });
+      await execa(...gitCmd, [...gitCmd[1], 'push', '-f', 'origin', 'main'], { cwd: projectDir });
       spinner.succeed('Git repository setup complete');
     } catch (error) {
       spinner.fail('Failed to setup git repository');

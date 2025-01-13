@@ -14,6 +14,7 @@ var isWindows = os.platform() === "win32";
 var is64Bit = os.arch() === "x64";
 var programFiles = is64Bit ? "C:\\Program Files" : "C:\\Program Files (x86)";
 var rmrf = isWindows ? ["cmd", ["/c", "rmdir", "/s", "/q"]] : ["rm", ["-rf"]];
+var gitInit = isWindows ? ["cmd", ["/c", "git", "init"]] : ["git", ["init"]];
 var program = new Command().name("create-titan").description("Create a new Titan project").argument("[directory]", "Directory to create the project in").version("0.1.0").parse();
 async function main() {
   const projectDir = program.args[0] || ".";
@@ -239,12 +240,13 @@ export default config;
     spinner.start("Setting up git repository...");
     try {
       await execa(...rmrf, [path.join(projectDir, ".git")]);
-      await execa("git", ["init"], { cwd: projectDir });
-      await execa("git", ["remote", "add", "origin", githubRepo], { cwd: projectDir });
-      await execa("git", ["add", "."], { cwd: projectDir });
-      await execa("git", ["commit", "-m", "Initial commit from Titan CLI"], { cwd: projectDir });
-      await execa("git", ["branch", "-M", "main"], { cwd: projectDir });
-      await execa("git", ["push", "-f", "origin", "main"], { cwd: projectDir });
+      await execa(...gitInit, { cwd: projectDir });
+      const gitCmd = isWindows ? ["cmd", ["/c", "git"]] : ["git", []];
+      await execa(...gitCmd, [...gitCmd[1], "remote", "add", "origin", githubRepo], { cwd: projectDir });
+      await execa(...gitCmd, [...gitCmd[1], "add", "."], { cwd: projectDir });
+      await execa(...gitCmd, [...gitCmd[1], "commit", "-m", "Initial commit from Titan CLI"], { cwd: projectDir });
+      await execa(...gitCmd, [...gitCmd[1], "branch", "-M", "main"], { cwd: projectDir });
+      await execa(...gitCmd, [...gitCmd[1], "push", "-f", "origin", "main"], { cwd: projectDir });
       spinner.succeed("Git repository setup complete");
     } catch (error) {
       spinner.fail("Failed to setup git repository");
