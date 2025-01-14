@@ -218,4 +218,4 @@ Any beneficial contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## ToDos
 
-- ...
+- Implement stronger security rules with ArcJet (Bot detection, Rate limiting, Data Redaction, Email Validation, Application-level DDoS protection, etc.) - https://docs.arcjet.com/get-started?f=next-js
