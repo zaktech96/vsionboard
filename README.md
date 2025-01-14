@@ -28,10 +28,22 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
      ```bash
      nvm install 22 --lts
      ```
+
+   Verify Node.js is installed:
+   ```bash
+   node -v
+   ```
+   Should return something like `v22.x.y`
+
 2. Install latest version of pnpm:
    ```bash
    curl -fsSL https://get.pnpm.io/install.sh | sh -
    ```
+   Verify pnpm is installed:
+   ```bash
+   pnpm -v
+   ```
+   Should return something like `9.x.y`
 
 3. Create a new empty GitHub repository for your project
 
