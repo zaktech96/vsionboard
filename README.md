@@ -28,16 +28,20 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
      ```bash
      nvm install 22 --lts
      ```
+2. Install pnpm:
+   ```bash
+   curl -fsSL https://get.pnpm.io/install.sh | sh -
+   ```
 
 3. Create a new empty GitHub repository for your project
 
 Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`)
 
-1. In order to run a local Supabase instance, you'll need to install Docker/Orbstack (depending on your OS):
+4. In order to run a local Supabase instance, you'll need to install Docker/Orbstack (depending on your OS):
    - **Windows**: Install [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
    - **Mac**: Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/) or [Orbstack](https://orbstack.dev/download)
 
-2. Install the Supabase CLI to interact with Supabase:
+5. Install the Supabase CLI to interact with Supabase:
    - **Windows**: Install via [scoop](https://scoop.sh/):
      ```powershell
      # Install scoop first if you haven't:
@@ -52,7 +56,7 @@ Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`
      brew install supabase/tap/supabase
      ```
 
-3. Gather your Development API keys from the following services:
+6. Gather your Development API keys from the following services:
 
    - **Clerk** (Authentication)
      - Create account at [Clerk](https://clerk.com)
@@ -76,7 +80,7 @@ Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`
 
 2. Using your previous saved info (github repo URL and API keys), create your project locally by running:
    ```bash
-   npx @codeandcreed/create-titan@latest my-app
+   pnpm dlx @codeandcreed/create-titan@latest my-app
    ```
 
 3. Follow the prompts to configure your project. The CLI will:
