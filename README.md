@@ -28,7 +28,7 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
      ```bash
      nvm install 22 --lts
      ```
-2. Install pnpm:
+2. Install latest version of pnpm:
    ```bash
    curl -fsSL https://get.pnpm.io/install.sh | sh -
    ```
