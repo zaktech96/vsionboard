@@ -232,6 +232,13 @@ Refer to the documentation of the individual technologies:
 
 Any beneficial contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
+## Common issues
+
+- If you have issues installing 3rd party components with 21.dev, try first running:
+```bash
+ln -s tailwind.config.ts tailwind.config.js
+```
+
 ## ToDos
 
 - Implement stronger security rules with ArcJet (Bot detection, Rate limiting, Data Redaction, Email Validation, Application-level DDoS protection, etc.) - https://docs.arcjet.com/get-started?f=next-js
