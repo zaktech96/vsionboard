@@ -1,11 +1,12 @@
 {
   "name": "@codeandcreed/create-titan",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "CLI tool to create new Titan projects",
-  "main": "dist/index.cjs",
+  "type": "commonjs",
+  "main": "dist/index.js",
   "bin": {
-    "create-titan": "dist/index.cjs",
-    "@codeandcreed/create-titan": "dist/index.cjs"
+    "create-titan": "dist/index.js",
+    "@codeandcreed/create-titan": "dist/index.js"
   },
   "files": [
     "dist"
