@@ -56,14 +56,35 @@ async function main() {
 
     spinner = ora('Creating your project...').start();
 
-    // Clone the repository
-    await execa('git', [
-      'clone',
-      'https://github.com/ObaidUr-Rahmaan/titan.git',
-      projectDir,
-    ]);
-
-    spinner.succeed('Project cloned successfully!');
+    // Clone the repository with retries
+    const maxRetries = 3;
+    let retryCount = 0;
+    
+    while (retryCount < maxRetries) {
+      try {
+        await execa('git', [
+          'clone',
+          '--depth=1',
+          '--single-branch',
+          'https://github.com/ObaidUr-Rahmaan/titan.git',
+          projectDir,
+        ]);
+        spinner.succeed('Project cloned successfully!');
+        break;
+      } catch (error) {
+        retryCount++;
+        if (retryCount === maxRetries) {
+          spinner.fail('Failed to clone repository');
+          console.error(chalk.red('\nError cloning repository. Please try:'));
+          console.log(chalk.cyan('1. Check your internet connection'));
+          console.log(chalk.cyan('2. Try again in a few minutes'));
+          console.log(chalk.cyan('3. Clone manually: git clone --depth=1 https://github.com/ObaidUr-Rahmaan/titan.git ' + projectDir));
+          process.exit(1);
+        }
+        spinner.text = `Retrying clone (${retryCount}/${maxRetries})...`;
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2s between retries
+      }
+    }
 
     let envContent = '';
     
