@@ -43,7 +43,7 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
    ```bash
    pnpm -v
    ```
-   Should return something like `9.x.y`
+   Should return something like `10.x.y`
 
 3. Create a new empty GitHub repository for your project
 
