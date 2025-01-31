@@ -18,6 +18,26 @@ var program = new Command().name("create-titan").description("Create a new Titan
 async function main() {
   let spinner;
   try {
+    console.log(chalk.cyan("\n\u{1F680} Welcome to Titan CLI!\n"));
+    console.log(chalk.yellow("Pre-requisites check:"));
+    console.log(chalk.yellow("1. Docker/Orbstack must be running"));
+    console.log(chalk.yellow("2. Supabase CLI must be installed"));
+    console.log(chalk.yellow("3. SSH key must be set up with GitHub"));
+    console.log(chalk.yellow("4. The following API keys ready:"));
+    console.log(chalk.yellow("   - Clerk (Publishable Key & Secret Key)"));
+    console.log(chalk.yellow("   - Stripe (Public Key, Secret Key & Price ID)"));
+    console.log(chalk.yellow("   - Plunk API Key\n"));
+    const { proceed } = await prompts({
+      type: "confirm",
+      name: "proceed",
+      message: "Do you have all pre-requisites ready?",
+      initial: false
+    });
+    if (!proceed) {
+      console.log(chalk.cyan("\nPlease set up the pre-requisites and try again."));
+      console.log(chalk.cyan("For detailed setup instructions, visit: https://github.com/ObaidUr-Rahmaan/titan#prerequisites"));
+      process.exit(0);
+    }
     const { projectName, projectDescription, githubRepo } = await prompts([
       {
         type: "text",
@@ -191,8 +211,14 @@ Error: Directory ${projectName} already exists. Please choose a different name o
       console.log(chalk.cyan("Access Supabase Studio at: http://127.0.0.1:54323"));
     } catch (error) {
       spinner.fail("Failed to setup local Supabase");
-      console.error(chalk.red("Error:"), error);
-      console.log(chalk.yellow("\nMake sure Docker/Orbstack is running and try again."));
+      console.error(chalk.red("\nError: Docker is not running."));
+      console.log(chalk.yellow("\nPlease:"));
+      console.log(chalk.cyan("1. Install Docker/Orbstack if not installed:"));
+      console.log(chalk.cyan("   - Mac: https://docs.docker.com/desktop/install/mac-install/"));
+      console.log(chalk.cyan("   - Windows: https://docs.docker.com/desktop/install/windows-install/"));
+      console.log(chalk.cyan("2. Start Docker/Orbstack"));
+      console.log(chalk.cyan("3. Wait a few seconds for Docker to be ready"));
+      console.log(chalk.cyan("4. Run this command again\n"));
       process.exit(1);
     }
     spinner.stop();
