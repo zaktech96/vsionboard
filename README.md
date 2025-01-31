@@ -94,7 +94,7 @@ Make sure it's the SSH URL, not the HTTPS URL!
 
 2. Using your previous saved info (github repo URL and API keys), create your project locally by running:
    ```bash
-   pnpm dlx @codeandcreed/create-titan@latest my-app
+   pnpm dlx @codeandcreed/create-titan@latest
    ```
 
 3. Follow the prompts to configure your project. The CLI will:
