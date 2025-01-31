@@ -343,7 +343,7 @@ ${projectDescription}
       await fs.rm(path.join(projectDir, "packages"), { recursive: true, force: true });
     } catch (error) {
     }
-    spinner.start("Initializing git repository...");
+    spinner.start("Initializing and pushing to git repository...");
     await execa(...rmrf, [path.join(projectDir, ".git")]);
     await execa(...gitInit, [], { cwd: projectDir });
     spinner.succeed("Git repository initialized");
