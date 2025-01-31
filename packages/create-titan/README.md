@@ -4,7 +4,7 @@ A CLI for creating Full-Stack NextJS 15 Applications (Pre-configured with Auth, 
 
 ## Installation & Usage
 ```bash
-pnpm dlx @codeandcreed/create-titan@latest my-app
+pnpm dlx @codeandcreed/create-titan@latest
 ```
 
 ## Tech Stack
