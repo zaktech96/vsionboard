@@ -12,10 +12,11 @@ var path = require("path");
 var os = require("os");
 var isWindows = os.platform() === "win32";
 var is64Bit = os.arch() === "x64";
-var programFiles = is64Bit ? "C:\\Program Files" : "C:\\Program Files (x86)";
-var program = new Command().name("create-titan").description("Create a new Titan project").argument("[directory]", "Directory to create the project in").version("0.1.0").parse();
+var rmrf = isWindows ? ["cmd", ["/c", "rmdir", "/s", "/q"]] : ["rm", ["-rf"]];
+var gitInit = isWindows ? ["cmd", ["/c", "git", "init"]] : ["git", ["init"]];
+var program = new Command().name("create-titan").description("Create a new Titan project").version("0.1.0").parse();
 async function main() {
-  const projectDir = program.args[0] || ".";
+  const projectDir = ".";
   let spinner;
   try {
     const { projectName, projectDescription, githubRepo } = await prompts([
@@ -283,24 +284,20 @@ ${projectDescription}
       await fs.rm(path.join(projectDir, "packages"), { recursive: true, force: true });
     } catch (error) {
     }
-    spinner.start("Opening project in editor...");
-    try {
-      const editor = isWindows ? path.join(programFiles, "Microsoft VS Code", "bin", "code.cmd") : "code";
-      await execa(editor, ["-r", "."]);
-      spinner.succeed("Project opened in editor");
-    } catch (error) {
-      try {
-        await execa(isWindows ? "code.cmd" : "code", ["-r", "."]);
-        spinner.succeed("Project opened in editor");
-      } catch (fallbackError) {
-        spinner.warn("Could not open project in editor. Please open it manually.");
-      }
-    }
+    spinner.start("Initializing git repository...");
+    await execa(...rmrf, [path.join(projectDir, ".git")]);
+    await execa(...gitInit, [], { cwd: projectDir });
+    spinner.succeed("Git repository initialized");
+    await fs.writeFile(path.join(projectDir, ".env"), envContent);
+    console.log(chalk.green("\n\u2728 Project created and pushed to GitHub successfully! \u2728"));
+    console.log(chalk.cyan("\nNext steps:"));
+    console.log(chalk.cyan("1. cd into your project"));
+    console.log(chalk.cyan("2. Run pnpm install"));
+    console.log(chalk.cyan("3. Run pnpm dev to start the development server"));
   } catch (error) {
-    if (spinner) {
-      spinner.stop();
-    }
-    console.error(chalk.red("Failed to create project:"), error);
+    if (spinner)
+      spinner.fail("Failed to create project");
+    console.error(chalk.red("Error:"), error);
     process.exit(1);
   }
 }
