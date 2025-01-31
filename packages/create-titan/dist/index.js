@@ -58,6 +58,7 @@ async function main() {
     let retryCount = 0;
     while (retryCount < maxRetries) {
       try {
+        spinner.text = "Cloning template repository...";
         await execa("git", [
           "clone",
           "--depth=1",
@@ -71,10 +72,16 @@ async function main() {
         retryCount++;
         if (retryCount === maxRetries) {
           spinner.fail("Failed to clone repository");
-          console.error(chalk.red("\nError cloning repository. Please try:"));
-          console.log(chalk.cyan("1. Check your internet connection"));
-          console.log(chalk.cyan("2. Try again in a few minutes"));
-          console.log(chalk.cyan("3. Clone manually: git clone --depth=1 git@github.com:ObaidUr-Rahmaan/titan.git " + projectDir));
+          console.error(chalk.red("\nError cloning repository. Please check:"));
+          console.log(chalk.cyan("1. Your SSH key is set up correctly:"));
+          console.log(chalk.cyan("   Run: ssh -T git@github.com"));
+          console.log(chalk.cyan("   If it fails, follow: https://docs.github.com/en/authentication/connecting-to-github-with-ssh"));
+          console.log(chalk.cyan("\n2. The repository exists on GitHub:"));
+          console.log(chalk.cyan("   - Go to GitHub"));
+          console.log(chalk.cyan('   - Create repository named "your-repo-name"'));
+          console.log(chalk.cyan("   - Don't initialize with any files"));
+          console.log(chalk.cyan("\n3. Try cloning manually to verify:"));
+          console.log(chalk.cyan(`   git clone --depth=1 git@github.com:ObaidUr-Rahmaan/titan.git ${projectDir}`));
           process.exit(1);
         }
         spinner.text = `Retrying clone (${retryCount}/${maxRetries})...`;
