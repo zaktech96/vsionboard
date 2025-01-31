@@ -43,8 +43,21 @@ async function main() {
       {
         type: 'text',
         name: 'githubRepo',
-        message: 'Enter your GitHub repository URL:',
-        validate: (value: string) => value.includes('github.com') ? true : 'Please enter a valid GitHub repository URL'
+        message: 'Enter your GitHub repository URL (SSH format: git@github.com:username/repo.git):',
+        validate: (value: string) => {
+          const sshFormat = /^git@github\.com:.+\/.+\.git$/;
+          const httpsFormat = /^https:\/\/github\.com\/.+\/.+\.git$/;
+          
+          if (sshFormat.test(value)) return true;
+          if (httpsFormat.test(value)) {
+            // Convert HTTPS to SSH format for display
+            const sshUrl = value
+              .replace('https://github.com/', 'git@github.com:')
+              .replace(/\.git$/, '.git');
+            return `Please use the SSH URL format instead: ${sshUrl}`;
+          }
+          return 'Please enter a valid GitHub SSH URL (format: git@github.com:username/repo.git)';
+        }
       },
     ], {
       onCancel: () => {
