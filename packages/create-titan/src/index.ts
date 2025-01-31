@@ -23,7 +23,6 @@ const program = new Command()
   .parse();
 
 async function main() {
-  const projectDir = '.';
   let spinner;
 
   try {
@@ -33,7 +32,7 @@ async function main() {
         type: 'text',
         name: 'projectName',
         message: 'What is your project name?',
-        initial: path.basename(path.resolve(projectDir)),
+        initial: 'my-titan-app',
       },
       {
         type: 'text',
@@ -50,7 +49,6 @@ async function main() {
           
           if (sshFormat.test(value)) return true;
           if (httpsFormat.test(value)) {
-            // Convert HTTPS to SSH format for display
             const sshUrl = value
               .replace('https://github.com/', 'git@github.com:')
               .replace(/\.git$/, '.git');
@@ -65,6 +63,19 @@ async function main() {
         process.exit(1);
       }
     });
+
+    // Create project directory
+    const projectDir = path.join(process.cwd(), projectName);
+    
+    // Check if directory exists
+    try {
+      await fs.access(projectDir);
+      console.error(chalk.red(`\nError: Directory ${projectName} already exists. Please choose a different name or delete the existing directory.`));
+      process.exit(1);
+    } catch {
+      // Directory doesn't exist, we can proceed
+      await fs.mkdir(projectDir);
+    }
 
     spinner = ora('Creating your project...').start();
 
@@ -375,5 +386,5 @@ process.on('SIGINT', () => {
 
 main().catch((error) => {
   console.error(error);
-  process.exit(1);
+  process.exit(1); 
 }); 

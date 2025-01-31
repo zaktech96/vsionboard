@@ -16,7 +16,6 @@ var rmrf = isWindows ? ["cmd", ["/c", "rmdir", "/s", "/q"]] : ["rm", ["-rf"]];
 var gitInit = isWindows ? ["cmd", ["/c", "git", "init"]] : ["git", ["init"]];
 var program = new Command().name("create-titan").description("Create a new Titan project").version("0.1.0").parse();
 async function main() {
-  const projectDir = ".";
   let spinner;
   try {
     const { projectName, projectDescription, githubRepo } = await prompts([
@@ -24,7 +23,7 @@ async function main() {
         type: "text",
         name: "projectName",
         message: "What is your project name?",
-        initial: path.basename(path.resolve(projectDir))
+        initial: "my-titan-app"
       },
       {
         type: "text",
@@ -53,6 +52,15 @@ async function main() {
         process.exit(1);
       }
     });
+    const projectDir = path.join(process.cwd(), projectName);
+    try {
+      await fs.access(projectDir);
+      console.error(chalk.red(`
+Error: Directory ${projectName} already exists. Please choose a different name or delete the existing directory.`));
+      process.exit(1);
+    } catch {
+      await fs.mkdir(projectDir);
+    }
     spinner = ora("Creating your project...").start();
     const maxRetries = 3;
     let retryCount = 0;
