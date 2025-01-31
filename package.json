@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome lint .",
     "format": "biome format . --write",
-    "check": "biome check --apply ."
+    "check": "biome check --apply .",
+    "publish-titan": "./publish.sh"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.7",
