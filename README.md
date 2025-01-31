@@ -47,7 +47,9 @@ Some React + NextJS knowledge is assumed (just the basics is sufficient to get s
 
 3. Create a new empty GitHub repository for your project
 
-Have the repository URL ready (e.g., `https://github.com/username/repo-name.git`)
+Have the SSH repository URL ready (e.g., `git@github.com:username/repo-name.git`)
+
+Make sure it's the SSH URL, not the HTTPS URL!
 
 4. In order to run a local Supabase instance, you'll need to install Docker/Orbstack (depending on your OS):
    - **Windows**: Install [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
