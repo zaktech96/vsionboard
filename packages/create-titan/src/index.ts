@@ -398,7 +398,7 @@ ${projectDescription}
     }
 
     // Remove .git folder and initialize new git repository
-    spinner.start('Initializing git repository...');
+    spinner.start('Initializing and pushing to git repository...');
     await execa(...rmrf, [path.join(projectDir, '.git')]);
     await execa(...gitInit, [], { cwd: projectDir });
     spinner.succeed('Git repository initialized');
@@ -412,6 +412,94 @@ ${projectDescription}
     console.log(chalk.cyan('2. Run pnpm install'));
     console.log(chalk.cyan('3. Run pnpm dev to start the development server'));
     
+    // Update layout.tsx with project-specific content
+    spinner.start('Customizing application layout...');
+    const layoutPath = path.join(projectDir, 'app', 'layout.tsx');
+
+    // Format project name to title case (e.g., 'qalam-travels' -> 'Qalam Travels')
+    const formatProjectName = (name: string) => {
+      return name
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    };
+
+    const formattedProjectName = formatProjectName(projectName);
+    
+    const layoutContent = `import Provider from '@/app/provider';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
+import AuthWrapper from '@/components/wrapper/auth-wrapper';
+import { Analytics } from '@vercel/analytics/react';
+import { GeistSans } from 'geist/font/sans';
+import type { Metadata } from 'next';
+import './globals.css';
+import { validateConfig } from '@/lib/config-validator';
+
+// Validate config on app initialization
+validateConfig();
+
+export const metadata: Metadata = {
+  metadataBase: new URL('http://localhost:3000'),
+  title: {
+    default: '${formattedProjectName}',
+    template: \`%s | ${formattedProjectName}\`,
+  },
+  description: '${projectDescription}',
+  icons: [
+    { rel: 'icon', url: '/favicon.ico' },
+    { rel: 'icon', url: '/favicon.png', type: 'image/png' },
+    { rel: 'apple-touch-icon', url: '/favicon.png' },
+  ],
+  openGraph: {
+    description: '${projectDescription}',
+    images: [''],
+    url: '',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '${formattedProjectName}',
+    description: '${projectDescription}',
+    siteId: '',
+    creator: '',
+    creatorId: '',
+    images: [''],
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <AuthWrapper>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <link rel="icon" type="image/png" href="/favicon.png" />
+        </head>
+        <body className={GeistSans.className}>
+          <Provider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </Provider>
+          <Analytics />
+        </body>
+      </html>
+    </AuthWrapper>
+  );
+}`;
+
+    await fs.writeFile(layoutPath, layoutContent);
+    spinner.succeed('Application layout customized');
+
   } catch (error) {
     if (spinner) spinner.fail('Failed to create project');
     console.error(chalk.red('Error:'), error);
