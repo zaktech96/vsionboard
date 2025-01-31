@@ -78,7 +78,7 @@ async function main() {
           'clone',
           '--depth=1',
           '--single-branch',
-          'https://github.com/ObaidUr-Rahmaan/titan.git',
+          'git@github.com:ObaidUr-Rahmaan/titan.git',
           projectDir,
         ]);
         spinner.succeed('Project cloned successfully!');
@@ -90,7 +90,7 @@ async function main() {
           console.error(chalk.red('\nError cloning repository. Please try:'));
           console.log(chalk.cyan('1. Check your internet connection'));
           console.log(chalk.cyan('2. Try again in a few minutes'));
-          console.log(chalk.cyan('3. Clone manually: git clone --depth=1 https://github.com/ObaidUr-Rahmaan/titan.git ' + projectDir));
+          console.log(chalk.cyan('3. Clone manually: git clone --depth=1 git@github.com:ObaidUr-Rahmaan/titan.git ' + projectDir));
           process.exit(1);
         }
         spinner.text = `Retrying clone (${retryCount}/${maxRetries})...`;
