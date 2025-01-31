@@ -352,19 +352,31 @@ export default config;
 
     spinner.start('Setting up git repository...');
     try {
-      // Simple git setup with fresh history
+      // Fresh git setup
       await execa('rm', ['-rf', '.git']);
       await execa('git', ['init']);
       await execa('git', ['add', '.']);
       await execa('git', ['commit', '-m', 'Initial commit from Titan CLI']);
+      await execa('git', ['branch', '-M', 'main']); // Ensure we're on main branch
       await execa('git', ['remote', 'add', 'origin', githubRepo]);
-      await execa('git', ['push', '-u', 'origin', 'main', '--force']);
+      
+      // Try to push to main branch
+      try {
+        await execa('git', ['push', '-u', 'origin', 'main', '--force']);
+      } catch (pushError) {
+        // If main push fails, try master branch
+        await execa('git', ['branch', '-M', 'master']);
+        await execa('git', ['push', '-u', 'origin', 'master', '--force']);
+      }
+      
       spinner.succeed('Git repository setup complete');
     } catch (error) {
-      spinner.fail('Failed to setup git repository');
-      console.error(chalk.red('Error setting up git:'), error);
-      // Don't exit on git failure, allow the rest of setup to complete
-      console.log(chalk.yellow('\nGit setup failed but continuing with project creation...'));
+      spinner.warn('Git setup had some issues');
+      console.log(chalk.yellow('\nTo push your code to GitHub manually:'));
+      console.log(chalk.cyan('1. git remote add origin ' + githubRepo));
+      console.log(chalk.cyan('2. git branch -M main'));
+      console.log(chalk.cyan('3. git push -u origin main --force'));
+      // Continue with project creation
     }
 
     // Update README

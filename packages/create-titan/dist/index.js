@@ -314,13 +314,21 @@ export default config;
       await execa("git", ["init"]);
       await execa("git", ["add", "."]);
       await execa("git", ["commit", "-m", "Initial commit from Titan CLI"]);
+      await execa("git", ["branch", "-M", "main"]);
       await execa("git", ["remote", "add", "origin", githubRepo]);
-      await execa("git", ["push", "-u", "origin", "main", "--force"]);
+      try {
+        await execa("git", ["push", "-u", "origin", "main", "--force"]);
+      } catch (pushError) {
+        await execa("git", ["branch", "-M", "master"]);
+        await execa("git", ["push", "-u", "origin", "master", "--force"]);
+      }
       spinner.succeed("Git repository setup complete");
     } catch (error) {
-      spinner.fail("Failed to setup git repository");
-      console.error(chalk.red("Error setting up git:"), error);
-      console.log(chalk.yellow("\nGit setup failed but continuing with project creation..."));
+      spinner.warn("Git setup had some issues");
+      console.log(chalk.yellow("\nTo push your code to GitHub manually:"));
+      console.log(chalk.cyan("1. git remote add origin " + githubRepo));
+      console.log(chalk.cyan("2. git branch -M main"));
+      console.log(chalk.cyan("3. git push -u origin main --force"));
     }
     const readmeContent = `# ${projectName}
 
