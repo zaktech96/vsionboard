@@ -137,7 +137,7 @@ You can access your local Supabase Studio at http://127.0.0.1:54323 to:
    - **Windows**: Download 64-bit version from [Stripe CLI releases](https://github.com/stripe/stripe-cli/releases/latest) or install via scoop: `scoop install stripe`
    - **Mac**: Install via Homebrew: `brew install stripe/stripe-cli/stripe`
 2. Run `stripe login`
-3. Run `stripe listen --forward-to [your-ngrok-url]/api/webhooks/stripe`
+3. Run `stripe listen --forward-to [your-ngrok-url]/api/payments/webhook`
 4. Done. Your site should now be able to receive webhooks from Stripe and you can test the payment flow locally.
 
 ## Database Migrations
