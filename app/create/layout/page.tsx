@@ -132,27 +132,29 @@ export default function ChooseLayout() {
         </div>
 
         <div className="flex justify-center">
-          <Button
-            onClick={() => {
-              if (selectedTemplate) {
-                router.push(`/create/content?name=${encodeURIComponent(boardName)}&template=${selectedTemplate}`);
-              }
-            }}
-            disabled={!selectedTemplate}
-            className="w-full max-w-[400px] mx-auto block
-                     bg-[#F7B7D0] hover:bg-[#F7B7D0]/90 
-                     text-white font-medium text-[18px]
-                     py-6 px-8 rounded-[32px]
-                     disabled:opacity-50 disabled:cursor-not-allowed
-                     transition-all duration-300 ease-in-out
-                     shadow-[0_2px_8px_rgba(247,183,208,0.25)]
-                     hover:shadow-[0_4px_12px_rgba(247,183,208,0.35)]"
-          >
-            <div className="flex items-center justify-center gap-2">
-              Use This Template
-              <span className="text-xl leading-none relative top-[1px]">→</span>
-            </div>
-          </Button>
+         <Button
+  onClick={() => {
+    if (selectedTemplate && boardName) {
+      router.push(
+        `/create/content?name=${encodeURIComponent(boardName)}&template=${selectedTemplate}`
+      );
+    }
+  }}
+  disabled={!selectedTemplate || !boardName}
+  className="w-full max-w-[400px] mx-auto block
+           bg-[#F7B7D0] hover:bg-[#F7B7D0]/90 
+           text-white font-medium text-[18px]
+           py-6 px-8 rounded-[32px]
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-300 ease-in-out
+           shadow-[0_2px_8px_rgba(247,183,208,0.25)]
+           hover:shadow-[0_4px_12px_rgba(247,183,208,0.35)]"
+>
+  <div className="flex items-center justify-center gap-2">
+    Use This Template
+    <span className="text-xl leading-none relative top-[1px]">→</span>
+  </div>
+</Button>
         </div>
       </div>
     </div>

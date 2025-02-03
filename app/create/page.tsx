@@ -113,7 +113,7 @@ export default function CreateBoard() {
                      disabled:opacity-50 disabled:cursor-not-allowed
                      text-base font-medium shadow-lg shadow-[#FF1B7C]/10"
           >
-            Continue to Layout →
+            Continue to Template →
           </Button>
         </div>
       </div>
