@@ -30,7 +30,7 @@ export default function CreateBoard() {
 
   const handleNext = () => {
     if (boardName.trim()) {
-      router.push(`/create/layout?name=${encodeURIComponent(boardName)}`);
+      router.push(`/create/template?name=${encodeURIComponent(boardName)}`);
     }
   };
 
