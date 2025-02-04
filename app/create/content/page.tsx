@@ -3,13 +3,22 @@
 import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, Suspense } from 'react';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import Image from 'next/image';
 
 function ContentEditor() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const boardName = searchParams.get('name');
-  const template = searchParams.get('template');
-  const [currentStep, setCurrentStep] = useState(3);
+  const templateId = searchParams.get('template');
+  const layoutId = searchParams.get('layout');
+  const [currentStep, setCurrentStep] = useState(4);
+  const [selectedContentType, setSelectedContentType] = useState<string | null>(null);
+  const [showDialog, setShowDialog] = useState(false);
+  const [text, setText] = useState('');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const steps = [
     { number: 1, title: 'Name Your Board' },
@@ -99,6 +108,144 @@ function ContentEditor() {
     )
   };
 
+  // Content type handlers
+  const handleContentTypeClick = (type: string) => {
+    setSelectedContentType(type);
+    setShowDialog(true);
+  };
+
+  const handleAddContent = () => {
+    // Here you would add the content to the canvas
+    // For now, we'll just close the dialog
+    setShowDialog(false);
+    setText('');
+    setSelectedImage(null);
+  };
+
+  // Dialog content based on content type
+  const getDialogContent = () => {
+    switch (selectedContentType) {
+      case 'image':
+        return (
+          <>
+            <DialogHeader>
+              <DialogTitle>Upload Image</DialogTitle>
+            </DialogHeader>
+            <div className="p-6">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setSelectedImage(reader.result as string);
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+                className="mb-4"
+              />
+              {selectedImage && (
+                <div className="w-full aspect-video relative rounded-lg overflow-hidden">
+                  <Image src={selectedImage} alt="Preview" fill className="object-cover" />
+                </div>
+              )}
+              <Button 
+                onClick={handleAddContent}
+                className="w-full mt-4 bg-[#E6156F] hover:bg-[#D11463]"
+              >
+                Add Image
+              </Button>
+            </div>
+          </>
+        );
+      case 'text':
+        return (
+          <>
+            <DialogHeader>
+              <DialogTitle>Add Text</DialogTitle>
+            </DialogHeader>
+            <div className="p-6">
+              <Textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Enter your text..."
+                className="min-h-[150px] mb-4"
+              />
+              <Button 
+                onClick={handleAddContent}
+                className="w-full bg-[#E6156F] hover:bg-[#D11463]"
+              >
+                Add Text
+              </Button>
+            </div>
+          </>
+        );
+      case 'sticker':
+        return (
+          <>
+            <DialogHeader>
+              <DialogTitle>Choose Sticker</DialogTitle>
+            </DialogHeader>
+            <div className="p-6 grid grid-cols-4 gap-4">
+              {['⭐', '❤️', '🌟', '✨', '🎯', '💫', '🌈', '🎨'].map((sticker) => (
+                <button
+                  key={sticker}
+                  onClick={() => {
+                    // Add sticker to canvas
+                    handleAddContent();
+                  }}
+                  className="text-4xl p-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800
+                           transition-colors duration-200"
+                >
+                  {sticker}
+                </button>
+              ))}
+            </div>
+          </>
+        );
+      case 'shape':
+        return (
+          <>
+            <DialogHeader>
+              <DialogTitle>Choose Shape</DialogTitle>
+            </DialogHeader>
+            <div className="p-6 grid grid-cols-3 gap-4">
+              {['square', 'circle', 'triangle'].map((shape) => (
+                <button
+                  key={shape}
+                  onClick={() => {
+                    // Add shape to canvas
+                    handleAddContent();
+                  }}
+                  className="aspect-square rounded-xl border-2 border-gray-200 dark:border-gray-700
+                           hover:border-[#E6156F] transition-colors duration-200"
+                >
+                  {/* Add shape SVG or icon here */}
+                </button>
+              ))}
+            </div>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
+  // Add navigation handler
+  const handleSave = () => {
+    // Add save logic here
+    router.push('/dashboard'); // or wherever you want to go after saving
+  };
+
+  // Add function to handle content placement
+  const handleContentPlacement = (type: string) => {
+    handleContentTypeClick(type);
+    // Will expand this later to place content at clicked position
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Progress Bar */}
@@ -128,52 +275,82 @@ function ContentEditor() {
       </div>
 
       {/* Content */}
-      <div className="max-w-[1200px] mx-auto px-6 py-16">
+      <div className="max-w-[1400px] mx-auto px-6 py-16">
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold text-[#15192C] dark:text-white mb-3">
-            Add Content to Your Board
+            Design Your Vision Board
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Customize "{boardName}" with your personal content
+            Click anywhere on the canvas to add content
           </p>
         </div>
 
-        {/* Content Type Selection */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-          {contentTypes.map((type) => (
-            <button
-              key={type.id}
-              className="p-6 rounded-2xl border-2 border-gray-200 dark:border-gray-800 
-                       hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10
-                       transition-all duration-300 text-center group"
-            >
-              <div className="text-4xl mb-4">{type.icon}</div>
-              <h3 className="text-lg font-semibold mb-2 text-[#15192C] dark:text-white
-                           group-hover:text-[#E6156F]">
-                {type.name}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
-                {type.description}
-              </p>
-            </button>
-          ))}
+        <div className="flex gap-6">
+          {/* Content Type Sidebar */}
+          <div className="w-64 space-y-4">
+            {contentTypes.map((type) => (
+              <button
+                key={type.id}
+                onClick={() => handleContentTypeClick(type.id)}
+                className="w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-800 
+                         hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10
+                         text-left transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{type.icon}</span>
+                  <div>
+                    <div className="font-medium text-[#15192C] dark:text-white">
+                      {type.name}
+                    </div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      {type.description}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Canvas Area */}
+          <div 
+            className="flex-1 aspect-video rounded-2xl border-2 
+                     border-gray-200 dark:border-gray-800
+                     bg-white dark:bg-gray-900
+                     overflow-hidden p-6 cursor-pointer"
+            onClick={(e) => {
+              // Get click coordinates for content placement
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+              console.log('Clicked at:', x, y);
+              if (selectedContentType) {
+                handleContentPlacement(selectedContentType);
+              } else {
+                setShowDialog(true);
+              }
+            }}
+          >
+            {templateId && templates[templateId as keyof typeof templates] ? (
+              <div className="relative w-full h-full">
+                {templates[templateId as keyof typeof templates]}
+                {/* Content items will be positioned absolutely here */}
+              </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <p className="text-gray-400 dark:text-gray-600">
+                  Template not found: {templateId}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Canvas Area */}
-        <div className="aspect-video w-full rounded-2xl border-2 
-                       border-gray-200 dark:border-gray-800 mb-8
-                       bg-white dark:bg-gray-900
-                       overflow-hidden p-6">
-          {template && templates[template as keyof typeof templates] ? (
-            templates[template as keyof typeof templates]
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <p className="text-gray-400 dark:text-gray-600">
-                Template not found
-              </p>
-            </div>
-          )}
-        </div>
+        {/* Dialog for content editing */}
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+          <DialogContent>
+            {getDialogContent()}
+          </DialogContent>
+        </Dialog>
 
         {/* Action Buttons */}
         <div className="flex justify-between gap-4">
@@ -186,13 +363,11 @@ function ContentEditor() {
             Back
           </Button>
           <Button
-            onClick={() => {
-              // Handle save and continue
-            }}
+            onClick={handleSave}
             className="px-8 py-4 rounded-xl bg-[#E6156F] hover:bg-[#D11463]
                      text-white font-medium"
           >
-            Save & Continue
+            Save Vision Board
           </Button>
         </div>
       </div>

@@ -12,8 +12,9 @@ export default function CreateBoard() {
 
   const steps = [
     { number: 1, title: 'Name Your Board' },
-    { number: 2, title: 'Choose Layout' },
-    { number: 3, title: 'Add Content' },
+    { number: 2, title: 'Choose Template' },
+    { number: 3, title: 'Choose Layout' },
+    { number: 4, title: 'Add Content' },
   ];
 
   const placeholders = [

@@ -9,7 +9,7 @@ function TemplateContent() {
   const searchParams = useSearchParams();
   const boardName = searchParams.get('name');
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(2);
 
   const steps = [
     { number: 1, title: 'Name Your Board' },
@@ -91,28 +91,46 @@ function TemplateContent() {
     }
   ];
 
+  // Add navigation handler
+  const handleContinue = () => {
+    if (selectedTemplate) {
+      router.push(`/create/layout?name=${encodeURIComponent(boardName || '')}&template=${selectedTemplate}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Progress Bar */}
       <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
         <div className="max-w-[1400px] mx-auto px-6 py-4">
-          <div className="flex items-center justify-between relative">
-            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] bg-gray-200 dark:bg-gray-700" />
-            
-            {steps.map((step) => (
-              <div key={step.number} className="relative z-10 flex flex-col items-center gap-2 bg-gray-50 dark:bg-gray-900 px-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-medium
-                  ${currentStep >= step.number 
-                    ? 'bg-[#FF1B7C] text-white' 
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}>
-                  {step.number}
+          <div className="flex items-center justify-between">
+            {steps.map((step, index) => (
+              <div key={step.number} className="flex items-center">
+                {index > 0 && (
+                  <div 
+                    className={`h-[2px] w-[100px] mx-4 ${
+                      currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
+                    }`}
+                  />
+                )}
+                <div className="flex items-center gap-3">
+                  <div 
+                    className={`w-8 h-8 rounded-full flex items-center justify-center font-medium
+                    ${currentStep >= step.number 
+                      ? 'bg-[#FF1B7C] text-white' 
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                    }`}
+                  >
+                    {step.number}
+                  </div>
+                  <span className={`text-sm font-medium ${
+                    currentStep >= step.number 
+                      ? 'text-[#15192C] dark:text-white' 
+                      : 'text-gray-500 dark:text-gray-400'
+                  }`}>
+                    {step.title}
+                  </span>
                 </div>
-                <span className={`text-sm font-medium whitespace-nowrap
-                  ${currentStep >= step.number 
-                    ? 'text-[#15192C] dark:text-white' 
-                    : 'text-gray-400 dark:text-gray-500'}`}>
-                  {step.title}
-                </span>
               </div>
             ))}
           </div>
@@ -159,12 +177,8 @@ function TemplateContent() {
 
         <div className="flex justify-center">
           <Button
-            onClick={() => {
-              if (selectedTemplate && boardName) {
-                router.push(`/create/layout?name=${encodeURIComponent(boardName)}&template=${selectedTemplate}`);
-              }
-            }}
-            disabled={!selectedTemplate || !boardName}
+            onClick={handleContinue}
+            disabled={!selectedTemplate}
             className="w-full max-w-[400px] mx-auto
                      bg-[#E6156F]
                      text-white text-xl font-medium
