@@ -2,9 +2,10 @@
 
 import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 
-export default function ChooseLayout() {
+// Create a component to handle the search params
+function LayoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const boardName = searchParams.get('name');
@@ -135,28 +136,51 @@ export default function ChooseLayout() {
          <Button
   onClick={() => {
     if (selectedTemplate && boardName) {
-      router.push(
-        `/create/content?name=${encodeURIComponent(boardName)}&template=${selectedTemplate}`
-      );
+      router.push(`/create/content?name=${encodeURIComponent(boardName)}&template=${selectedTemplate}`);
     }
   }}
   disabled={!selectedTemplate || !boardName}
-  className="w-full max-w-[400px] mx-auto block
-           bg-[#F7B7D0] hover:bg-[#F7B7D0]/90 
-           text-white font-medium text-[18px]
-           py-6 px-8 rounded-[32px]
+  className="w-full max-w-[400px] mx-auto
+           bg-[#E6156F]
+           text-white text-xl font-medium
+           py-4 rounded-2xl
            disabled:opacity-50 disabled:cursor-not-allowed
-           transition-all duration-300 ease-in-out
-           shadow-[0_2px_8px_rgba(247,183,208,0.25)]
-           hover:shadow-[0_4px_12px_rgba(247,183,208,0.35)]"
+           transition-all duration-300
+           shadow-[0_8px_30px_rgb(230,21,111,0.2)]
+           hover:shadow-[0_8px_30px_rgb(230,21,111,0.4)]
+           hover:bg-[#D11463]
+           active:scale-[0.99]"
 >
-  <div className="flex items-center justify-center gap-2">
-    Use This Template
-    <span className="text-xl leading-none relative top-[1px]">→</span>
+  <div className="flex items-center justify-center gap-3">
+    <span>Use This Template</span>
+    <svg 
+      width="20" 
+      height="20" 
+      viewBox="0 0 20 20" 
+      fill="none" 
+      className="transition-transform group-hover:translate-x-1"
+    >
+      <path 
+        d="M4.166 10h11.667M11.666 5l4.167 5-4.167 5" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      />
+    </svg>
   </div>
 </Button>
         </div>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function ChooseLayout() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LayoutContent />
+    </Suspense>
   );
 } 

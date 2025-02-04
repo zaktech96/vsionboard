@@ -14,11 +14,11 @@ validateConfig();
 export const metadata: Metadata = {
   metadataBase: new URL('https://titan.codeandcreed.tech'),
   title: {
-    default: 'Titan - Boilerplate',
-    template: `%s | Boilerplate`,
+    default: 'Vision Board - Create Your Dreams',
+    template: `%s | Vision Board`
   },
   description:
-    'Kickstart your next project with minimal friction - so you can focus on building cool stuff',
+    'Create stunning vision boards that inspire action. Transform your goals from imagination to reality with our powerful, intuitive design tools.',
   icons: [
     { rel: 'icon', url: '/favicon.ico' },
     { rel: 'icon', url: '/favicon.png', type: 'image/png' },
@@ -26,15 +26,15 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     description:
-      'Kickstart your next project with minimal friction - so you can focus on building cool stuff',
+      'Create stunning vision boards that inspire action. Transform your goals from imagination to reality.',
     images: ['https://utfs.io/f/8a428f85-ae83-4ca7-9237-6f8b65411293-eun6ii.png'],
     url: 'titan.codeandcreed.tech',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Titan Boilerplate',
+    title: 'Vision Board',
     description:
-      'Kickstart your next project with minimal friction - so you can focus on building cool stuff',
+      'Create stunning vision boards that inspire action. Transform your goals from imagination to reality.',
     siteId: '',
     creator: '@_7obaid_',
     creatorId: '',
