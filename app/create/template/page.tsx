@@ -148,12 +148,12 @@ function TemplateContent() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
           {templates.map((template) => (
             <button
               key={template.id}
               onClick={() => setSelectedTemplate(template.id)}
-              className={`group p-6 rounded-2xl border-2 transition-all duration-300 text-center
+              className={`group p-4 md:p-6 rounded-2xl border-2 transition-all duration-300 text-center
                 ${selectedTemplate === template.id 
                   ? 'border-[#E6156F] bg-[#FFE7F1]/20' 
                   : 'border-gray-200 dark:border-gray-800 hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10'}`}

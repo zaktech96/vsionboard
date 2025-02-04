@@ -38,8 +38,8 @@ export default function CreateBoard() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Progress Bar */}
-      <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
-        <div className="max-w-[1400px] mx-auto px-6 py-4">
+      <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800 overflow-x-auto">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-4 min-w-[600px]">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => (
               <div key={step.number} className="flex items-center">
@@ -75,7 +75,7 @@ export default function CreateBoard() {
       </div>
 
       {/* Content */}
-      <div className="max-w-[800px] mx-auto px-6 py-16">
+      <div className="max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-16">
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold text-[#15192C] dark:text-white mb-3">
             Name Your Vision Board
@@ -92,11 +92,12 @@ export default function CreateBoard() {
               placeholder={randomPlaceholder}
               value={boardName}
               onChange={(e) => setBoardName(e.target.value)}
-              className="w-full text-lg py-7 px-6 rounded-2xl border-2 border-gray-200/80 dark:border-gray-800
-                       focus:border-[#FF1B7C] dark:focus:border-[#FF1B7C]
-                       bg-white dark:bg-gray-900 shadow-sm
-                       placeholder:text-gray-400 dark:placeholder:text-gray-600
-                       placeholder:italic"
+              className="w-full text-base sm:text-lg py-5 sm:py-7 px-4 sm:px-6 rounded-xl sm:rounded-2xl 
+                         border-2 border-gray-200/80 dark:border-gray-800
+                         focus:border-[#FF1B7C] dark:focus:border-[#FF1B7C]
+                         bg-white dark:bg-gray-900 shadow-sm
+                         placeholder:text-gray-400 dark:placeholder:text-gray-600
+                         placeholder:italic"
             />
             {boardName && (
               <div className="absolute right-4 top-1/2 -translate-y-1/2">

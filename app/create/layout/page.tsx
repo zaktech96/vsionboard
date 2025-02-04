@@ -117,12 +117,12 @@ function LayoutContent() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12">
           {templates.map((template) => (
             <button
               key={template.id}
               onClick={() => setSelectedTemplate(template.id)}
-              className={`group p-6 rounded-2xl border-2 transition-all duration-300 text-left
+              className={`group p-4 md:p-6 rounded-2xl border-2 transition-all duration-300 text-left
                 ${selectedTemplate === template.id 
                   ? 'border-[#FF1B7C] bg-[#FFE7F1]/10' 
                   : 'border-gray-200 dark:border-gray-800 hover:border-[#FF1B7C]/30 hover:bg-[#FFE7F1]/5'

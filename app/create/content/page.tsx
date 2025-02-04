@@ -285,14 +285,14 @@ function ContentEditor() {
           </p>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex flex-col lg:flex-row gap-6">
           {/* Content Type Sidebar */}
-          <div className="w-64 space-y-4">
+          <div className="w-full lg:w-64 flex lg:block gap-4 overflow-x-auto lg:overflow-x-visible">
             {contentTypes.map((type) => (
               <button
                 key={type.id}
                 onClick={() => handleContentTypeClick(type.id)}
-                className="w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-800 
+                className="flex-shrink-0 w-full lg:w-auto p-4 rounded-xl border-2 border-gray-200 dark:border-gray-800 
                          hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10
                          text-left transition-all"
               >
@@ -312,11 +312,10 @@ function ContentEditor() {
           </div>
 
           {/* Canvas Area */}
-          <div 
-            className="flex-1 aspect-video rounded-2xl border-2 
-                     border-gray-200 dark:border-gray-800
-                     bg-white dark:bg-gray-900
-                     overflow-hidden p-6 cursor-pointer"
+          <div className="flex-1 min-h-[500px] lg:min-h-[600px] rounded-2xl border-2 border-dashed 
+                        border-gray-200 dark:border-gray-800
+                        bg-white dark:bg-gray-900
+                        overflow-hidden p-6 cursor-pointer"
             onClick={(e) => {
               // Get click coordinates for content placement
               const rect = e.currentTarget.getBoundingClientRect();
@@ -352,11 +351,11 @@ function ContentEditor() {
           </DialogContent>
         </Dialog>
 
-        {/* Action Buttons */}
-        <div className="flex justify-between gap-4">
+        {/* Action Buttons - Make them stack on mobile */}
+        <div className="flex flex-col sm:flex-row justify-between gap-4 mt-6">
           <Button
             onClick={() => router.back()}
-            className="px-8 py-4 rounded-xl border-2 border-gray-200 dark:border-gray-800
+            className="w-full sm:w-auto px-8 py-4 rounded-xl border-2 border-gray-200 dark:border-gray-800
                      hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10
                      text-gray-600 dark:text-gray-400"
           >
@@ -364,7 +363,7 @@ function ContentEditor() {
           </Button>
           <Button
             onClick={handleSave}
-            className="px-8 py-4 rounded-xl bg-[#E6156F] hover:bg-[#D11463]
+            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#E6156F] hover:bg-[#D11463]
                      text-white font-medium"
           >
             Save Vision Board
