@@ -102,32 +102,26 @@ function TemplateContent() {
     <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Progress Bar */}
       <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
-        <div className="max-w-[1400px] mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-4 overflow-x-auto">
+          <div className="flex items-center justify-between min-w-[600px] md:min-w-0">
             {steps.map((step, index) => (
               <div key={step.number} className="flex items-center">
                 {index > 0 && (
-                  <div 
-                    className={`h-[2px] w-[100px] mx-4 ${
-                      currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
-                    }`}
-                  />
+                  <div className={`h-[2px] w-[60px] md:w-[100px] mx-2 md:mx-4 ${
+                    currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
+                  }`} />
                 )}
-                <div className="flex items-center gap-3">
-                  <div 
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-medium
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
                     ${currentStep >= step.number 
                       ? 'bg-[#FF1B7C] text-white' 
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                    }`}
-                  >
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}>
                     {step.number}
                   </div>
-                  <span className={`text-sm font-medium ${
+                  <span className={`text-xs md:text-sm font-medium whitespace-nowrap ${
                     currentStep >= step.number 
                       ? 'text-[#15192C] dark:text-white' 
-                      : 'text-gray-500 dark:text-gray-400'
-                  }`}>
+                      : 'text-gray-500 dark:text-gray-400'}`}>
                     {step.title}
                   </span>
                 </div>
@@ -138,76 +132,52 @@ function TemplateContent() {
       </div>
 
       {/* Content */}
-      <div className="max-w-[1200px] mx-auto px-6 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-[#15192C] dark:text-white mb-3">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-16">
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#15192C] dark:text-white mb-2 md:mb-3">
             Choose a Starting Point
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
             Select a template for "{boardName}" or start from scratch
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8 md:mb-12">
           {templates.map((template) => (
             <button
               key={template.id}
               onClick={() => setSelectedTemplate(template.id)}
-              className={`group p-4 md:p-6 rounded-2xl border-2 transition-all duration-300 text-center
+              className={`group p-3 md:p-6 rounded-xl md:rounded-2xl border-2 transition-all duration-300 text-center
                 ${selectedTemplate === template.id 
                   ? 'border-[#E6156F] bg-[#FFE7F1]/20' 
                   : 'border-gray-200 dark:border-gray-800 hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10'}`}
             >
-              <div className="mb-6 aspect-square w-full overflow-hidden rounded-xl
+              <div className="mb-4 md:mb-6 aspect-square w-full overflow-hidden rounded-lg md:rounded-xl
                            group-hover:border-[#FF1B7C]/20">
                 {template.preview}
               </div>
-              <h3 className={`text-xl font-semibold mb-3 transition-colors
+              <h3 className={`text-lg md:text-xl font-semibold mb-2 md:mb-3 transition-colors
                 ${selectedTemplate === template.id 
                   ? 'text-[#E6156F]' 
                   : 'text-[#15192C] dark:text-white group-hover:text-[#E6156F]'}`}>
                 {template.name}
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mx-auto max-w-[90%]">
+              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mx-auto max-w-[90%]">
                 {template.description}
               </p>
             </button>
           ))}
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-end px-4 sm:px-0">
           <Button
             onClick={handleContinue}
             disabled={!selectedTemplate}
-            className="w-full max-w-[400px] mx-auto
-                     bg-[#E6156F]
-                     text-white text-xl font-medium
-                     py-4 rounded-2xl
-                     disabled:opacity-50 disabled:cursor-not-allowed
-                     transition-all duration-300
-                     shadow-[0_8px_30px_rgb(230,21,111,0.2)]
-                     hover:shadow-[0_8px_30px_rgb(230,21,111,0.4)]
-                     hover:bg-[#D11463]
-                     active:scale-[0.99]"
+            className="w-full sm:w-auto px-6 md:px-8 py-4 md:py-5 rounded-xl text-sm md:text-base
+                     bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white
+                     disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <div className="flex items-center justify-center gap-3">
-              <span>Continue to Layout</span>
-              <svg 
-                width="20" 
-                height="20" 
-                viewBox="0 0 20 20" 
-                fill="none" 
-                className="transition-transform group-hover:translate-x-1"
-              >
-                <path 
-                  d="M4.166 10h11.667M11.666 5l4.167 5-4.167 5" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+            Continue to Layout →
           </Button>
         </div>
       </div>
