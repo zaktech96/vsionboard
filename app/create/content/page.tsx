@@ -294,7 +294,10 @@ function ContentEditor() {
               <button
                 key={type.id}
                 onClick={() => handleContentTypeClick(type.id)}
-                className="flex-shrink-0 w-[180px] lg:w-full p-3 md:p-4 rounded-xl"
+                className="flex-shrink-0 w-full lg:w-auto p-4 rounded-xl border-2 
+                         border-gray-200 dark:border-gray-800 
+                         hover:border-[#FF1B7C]/40 hover:bg-[#FFE7F1]/10
+                         text-left transition-all duration-300"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{type.icon}</span>
@@ -355,13 +358,18 @@ function ContentEditor() {
         <div className="flex flex-col sm:flex-row justify-between gap-3 mt-6">
           <Button
             onClick={() => router.back()}
-            className="w-full sm:w-auto order-2 sm:order-1"
+            className="w-full sm:w-auto order-2 sm:order-1
+                     border-2 border-[#FF1B7C] text-[#FF1B7C] hover:bg-[#FFE7F1]/20
+                     transition-all duration-300"
           >
             Back
           </Button>
           <Button
             onClick={handleSave}
-            className="w-full sm:w-auto order-1 sm:order-2"
+            className="w-full sm:w-auto order-1 sm:order-2
+                     bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white
+                     transition-all duration-300
+                     shadow-[0_8px_30px_rgb(230,21,111,0.2)]"
           >
             Save Vision Board
           </Button>

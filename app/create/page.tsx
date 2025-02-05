@@ -97,7 +97,11 @@ export default function CreateBoard() {
           <Button
             onClick={handleNext}
             disabled={!boardName.trim()}
-            className="w-full py-4 md:py-6 rounded-xl text-base md:text-lg font-medium"
+            className="w-full py-4 md:py-6 rounded-xl text-base md:text-lg font-medium
+                     bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     transition-all duration-300
+                     shadow-[0_8px_30px_rgb(230,21,111,0.2)]"
           >
             Continue to Template →
           </Button>

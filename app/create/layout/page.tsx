@@ -123,7 +123,10 @@ function LayoutContent() {
             <button
               key={template.id}
               onClick={() => setSelectedTemplate(template.id)}
-              className="p-4 md:p-6 rounded-xl border-2 transition-all"
+              className={`p-4 md:p-6 rounded-xl border-2 transition-all duration-300
+                ${selectedTemplate === template.id 
+                  ? 'border-[#FF1B7C] bg-[#FFE7F1]/20' 
+                  : 'border-gray-200 dark:border-gray-800 hover:border-[#FF1B7C]/40 hover:bg-[#FFE7F1]/10'}`}
             >
               <div className="aspect-square mb-4 md:mb-6">
                 {template.preview}
@@ -138,12 +141,16 @@ function LayoutContent() {
           ))}
         </div>
 
-        {/* Action Button - Centered and responsive */}
+        {/* Action Button */}
         <div className="flex justify-center">
           <Button
             onClick={handleContinue}
             disabled={!selectedTemplate}
-            className="w-full sm:w-auto min-w-[200px] py-4 md:py-6 px-6 md:px-8 rounded-xl"
+            className="w-full sm:w-auto min-w-[200px] py-4 md:py-6 px-6 md:px-8 rounded-xl
+                     bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     transition-all duration-300
+                     shadow-[0_8px_30px_rgb(230,21,111,0.2)]"
           >
             Continue to Content →
           </Button>
