@@ -275,26 +275,26 @@ function ContentEditor() {
       </div>
 
       {/* Content */}
-      <div className="max-w-[1400px] mx-auto px-6 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-[#15192C] dark:text-white mb-3">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-8 md:py-16">
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-3">
             Design Your Vision Board
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
             Click anywhere on the canvas to add content
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Content Type Sidebar */}
-          <div className="w-full lg:w-64 flex lg:block gap-4 overflow-x-auto lg:overflow-x-visible">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
+          {/* Sidebar - Horizontal scroll on mobile */}
+          <div className="w-full lg:w-64 flex lg:flex-col gap-3 
+                        overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 
+                        scrollbar-hide">
             {contentTypes.map((type) => (
               <button
                 key={type.id}
                 onClick={() => handleContentTypeClick(type.id)}
-                className="flex-shrink-0 w-full lg:w-auto p-4 rounded-xl border-2 border-gray-200 dark:border-gray-800 
-                         hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10
-                         text-left transition-all"
+                className="flex-shrink-0 w-[180px] lg:w-full p-3 md:p-4 rounded-xl"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{type.icon}</span>
@@ -311,8 +311,8 @@ function ContentEditor() {
             ))}
           </div>
 
-          {/* Canvas Area */}
-          <div className="flex-1 min-h-[500px] lg:min-h-[600px] rounded-2xl border-2 border-dashed 
+          {/* Canvas Area - Responsive height */}
+          <div className="flex-1 min-h-[400px] lg:min-h-[600px] rounded-xl border-2 border-dashed 
                         border-gray-200 dark:border-gray-800
                         bg-white dark:bg-gray-900
                         overflow-hidden p-6 cursor-pointer"
@@ -351,20 +351,17 @@ function ContentEditor() {
           </DialogContent>
         </Dialog>
 
-        {/* Action Buttons - Make them stack on mobile */}
-        <div className="flex flex-col sm:flex-row justify-between gap-4 mt-6">
+        {/* Action Buttons - Stack on mobile */}
+        <div className="flex flex-col sm:flex-row justify-between gap-3 mt-6">
           <Button
             onClick={() => router.back()}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl border-2 border-gray-200 dark:border-gray-800
-                     hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10
-                     text-gray-600 dark:text-gray-400"
+            className="w-full sm:w-auto order-2 sm:order-1"
           >
             Back
           </Button>
           <Button
             onClick={handleSave}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#E6156F] hover:bg-[#D11463]
-                     text-white font-medium"
+            className="w-full sm:w-auto order-1 sm:order-2"
           >
             Save Vision Board
           </Button>

@@ -37,10 +37,10 @@ export default function CreateBoard() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
-      {/* Progress Bar */}
-      <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800 overflow-x-auto">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-4 min-w-[600px]">
-          <div className="flex items-center justify-between">
+      {/* Progress Bar - Make scrollable on mobile */}
+      <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-4 overflow-x-auto">
+          <div className="flex items-center justify-between min-w-[600px] md:min-w-0">
             {steps.map((step, index) => (
               <div key={step.number} className="flex items-center">
                 {index > 0 && (
@@ -74,46 +74,30 @@ export default function CreateBoard() {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-[#15192C] dark:text-white mb-3">
+      {/* Content - Better mobile spacing */}
+      <div className="max-w-[600px] mx-auto px-4 md:px-6 py-8 md:py-16">
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#15192C] dark:text-white mb-2 md:mb-3">
             Name Your Vision Board
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
             Give your vision board a meaningful name that inspires you
           </p>
         </div>
 
-        <div className="space-y-8">
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder={randomPlaceholder}
-              value={boardName}
-              onChange={(e) => setBoardName(e.target.value)}
-              className="w-full text-base sm:text-lg py-5 sm:py-7 px-4 sm:px-6 rounded-xl sm:rounded-2xl 
-                         border-2 border-gray-200/80 dark:border-gray-800
-                         focus:border-[#FF1B7C] dark:focus:border-[#FF1B7C]
-                         bg-white dark:bg-gray-900 shadow-sm
-                         placeholder:text-gray-400 dark:placeholder:text-gray-600
-                         placeholder:italic"
-            />
-            {boardName && (
-              <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                <div className="w-6 h-6 rounded-full bg-[#FFE7F1] flex items-center justify-center">
-                  <span className="text-[#FF1B7C] text-sm">✓</span>
-                </div>
-              </div>
-            )}
-          </div>
-
+        <div className="space-y-6">
+          <Input
+            type="text"
+            placeholder={randomPlaceholder}
+            value={boardName}
+            onChange={(e) => setBoardName(e.target.value)}
+            className="w-full text-base md:text-lg py-4 md:py-6 px-4 md:px-6 rounded-xl 
+                     border-2 border-gray-200/80 dark:border-gray-800"
+          />
           <Button
             onClick={handleNext}
             disabled={!boardName.trim()}
-            className="w-full bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white py-7 rounded-2xl
-                     disabled:opacity-50 disabled:cursor-not-allowed
-                     text-base font-medium shadow-lg shadow-[#FF1B7C]/10"
+            className="w-full py-4 md:py-6 rounded-xl text-base md:text-lg font-medium"
           >
             Continue to Template →
           </Button>

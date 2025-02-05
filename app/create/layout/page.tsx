@@ -107,80 +107,46 @@ function LayoutContent() {
       </div>
 
       {/* Content */}
-      <div className="max-w-[1200px] mx-auto px-6 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-[#15192C] dark:text-white mb-3">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-16">
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-3">
             Choose Your Vision Board Layout
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Select a template that best represents your vision for "{boardName}"
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
+            Select a template that best represents your vision
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12">
+        {/* Layout Grid - Responsive columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
           {templates.map((template) => (
             <button
               key={template.id}
               onClick={() => setSelectedTemplate(template.id)}
-              className={`group p-4 md:p-6 rounded-2xl border-2 transition-all duration-300 text-left
-                ${selectedTemplate === template.id 
-                  ? 'border-[#FF1B7C] bg-[#FFE7F1]/10' 
-                  : 'border-gray-200 dark:border-gray-800 hover:border-[#FF1B7C]/30 hover:bg-[#FFE7F1]/5'
-                }`}
+              className="p-4 md:p-6 rounded-xl border-2 transition-all"
             >
-              <div className="mb-6 aspect-square w-full overflow-hidden rounded-xl border-2 border-dashed
-                           border-gray-200/60 dark:border-gray-700/60 p-4
-                           group-hover:border-[#FF1B7C]/20">
+              <div className="aspect-square mb-4 md:mb-6">
                 {template.preview}
               </div>
-              <h3 className={`text-xl font-semibold mb-2 transition-colors
-                ${selectedTemplate === template.id 
-                  ? 'text-[#FF1B7C]' 
-                  : 'text-[#15192C] dark:text-white group-hover:text-[#FF1B7C]'
-                }`}>
+              <h3 className="text-lg md:text-xl font-semibold mb-2">
                 {template.name}
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 {template.description}
               </p>
             </button>
           ))}
         </div>
 
+        {/* Action Button - Centered and responsive */}
         <div className="flex justify-center">
-         <Button
-  onClick={handleContinue}
-  disabled={!selectedTemplate}
-  className="w-full max-w-[400px] mx-auto
-           bg-[#E6156F]
-           text-white text-xl font-medium
-           py-4 rounded-2xl
-           disabled:opacity-50 disabled:cursor-not-allowed
-           transition-all duration-300
-           shadow-[0_8px_30px_rgb(230,21,111,0.2)]
-           hover:shadow-[0_8px_30px_rgb(230,21,111,0.4)]
-           hover:bg-[#D11463]
-           active:scale-[0.99]"
->
-  <div className="flex items-center justify-center gap-3">
-    <span>Continue to Content</span>
-    <svg 
-      width="20" 
-      height="20" 
-      viewBox="0 0 20 20" 
-      fill="none" 
-      className="transition-transform group-hover:translate-x-1"
-    >
-      <path 
-        d="M4.166 10h11.667M11.666 5l4.167 5-4.167 5" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
-        strokeLinejoin="round"
-      />
-    </svg>
-  </div>
-</Button>
+          <Button
+            onClick={handleContinue}
+            disabled={!selectedTemplate}
+            className="w-full sm:w-auto min-w-[200px] py-4 md:py-6 px-6 md:px-8 rounded-xl"
+          >
+            Continue to Content →
+          </Button>
         </div>
       </div>
     </div>
