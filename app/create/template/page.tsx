@@ -134,7 +134,7 @@ function TemplateContent() {
       </div>
 
       {/* Content */}
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-16">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-12 md:py-24">
         <div className="text-center mb-8 md:mb-12">
           <h1 className="text-2xl md:text-3xl font-bold text-[#15192C] dark:text-white mb-2 md:mb-3">
             Choose a Starting Point
