@@ -202,59 +202,69 @@ export function LandingPage() {
       </section>
 
       {/* Journey Steps Section */}
-      <section className="px-6 py-24 bg-gradient-to-b from-white to-[#F9FAFB]">
+      <section className="px-4 sm:px-6 py-12 sm:py-16 md:py-24 bg-gradient-to-b from-white to-[#F9FAFB]">
         <div className="max-w-[1400px] mx-auto">
-          <div className="flex gap-24">
+          <div className="flex flex-col lg:flex-row gap-8 sm:gap-12 lg:gap-24">
             {/* Left Side - Steps */}
             <div className="flex-1">
-              <h2 className="text-[40px] font-bold text-[#15192C] mb-16">
+              <h2 className="text-2xl sm:text-3xl md:text-[40px] font-bold text-[#15192C] mb-8 sm:mb-12 md:mb-16">
                 Your Vision Board Journey
               </h2>
 
-              <div className="flex flex-col gap-16 relative">
+              <div className="flex flex-col gap-8 sm:gap-12 md:gap-16 relative">
                 {/* Connecting line between steps */}
-                <div className="absolute left-6 top-6 w-[2px] h-[calc(100%-48px)] bg-gradient-to-b from-[#FFE7F1] to-transparent" />
+                <div className="absolute left-6 sm:left-8 top-[28px] w-[2px] h-[calc(100%-56px)] 
+                             bg-gradient-to-b from-[#FFE7F1] to-transparent" />
 
                 {/* Step 1 */}
-                <div className="flex gap-8 group">
-                  <div className="w-12 h-12 rounded-full bg-[#FFE7F1] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#FFE7F1]/30 relative z-10">
-                    <span className="text-[#FF1B7C] font-semibold text-lg">1</span>
+                <div className="flex gap-4 sm:gap-6 relative group">
+                  <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-[#FFE7F1] rounded-2xl 
+                               flex items-center justify-center text-xl sm:text-2xl text-[#FF1B7C]
+                               group-hover:bg-[#FF1B7C] group-hover:text-white
+                               transition-all duration-300">
+                    1
                   </div>
-                  <div className="pt-1">
-                    <h3 className="text-2xl font-semibold text-[#15192C] mb-3 group-hover:text-[#FF1B7C] transition-colors">
+                  <div className="group-hover:translate-x-2 transition-transform duration-300">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#15192C] mb-2 sm:mb-3 group-hover:text-[#FF1B7C] transition-colors duration-300">
                       Create Your Space
                     </h3>
-                    <p className="text-[#6B7280] text-lg leading-relaxed">
+                    <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                       Start with a blank canvas and choose from multiple layouts that suit your vision
                     </p>
                   </div>
                 </div>
 
                 {/* Step 2 */}
-                <div className="flex gap-8 group">
-                  <div className="w-12 h-12 rounded-full bg-[#FFE7F1] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#FFE7F1]/30 relative z-10">
-                    <span className="text-[#FF1B7C] font-semibold text-lg">2</span>
+                <div className="flex gap-4 sm:gap-6 relative group">
+                  <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-[#FFE7F1] rounded-2xl 
+                               flex items-center justify-center text-xl sm:text-2xl text-[#FF1B7C]
+                               group-hover:bg-[#FF1B7C] group-hover:text-white
+                               transition-all duration-300">
+                    2
                   </div>
-                  <div className="pt-1">
-                    <h3 className="text-2xl font-semibold text-[#15192C] mb-3 group-hover:text-[#FF1B7C] transition-colors">
+                  <div className="group-hover:translate-x-2 transition-transform duration-300">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#15192C] mb-2 sm:mb-3 group-hover:text-[#FF1B7C] transition-colors duration-300">
                       Add Your Dreams
                     </h3>
-                    <p className="text-[#6B7280] text-lg leading-relaxed">
+                    <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                       Upload images, add text, and customize every element to match your goals
                     </p>
                   </div>
                 </div>
 
                 {/* Step 3 */}
-                <div className="flex gap-8 group">
-                  <div className="w-12 h-12 rounded-full bg-[#FFE7F1] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#FFE7F1]/30 relative z-10">
-                    <span className="text-[#FF1B7C] font-semibold text-lg">3</span>
+                <div className="flex gap-4 sm:gap-6 relative group">
+                  <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-[#FFE7F1] rounded-2xl 
+                               flex items-center justify-center text-xl sm:text-2xl text-[#FF1B7C]
+                               group-hover:bg-[#FF1B7C] group-hover:text-white
+                               transition-all duration-300">
+                    3
                   </div>
-                  <div className="pt-1">
-                    <h3 className="text-2xl font-semibold text-[#15192C] mb-3 group-hover:text-[#FF1B7C] transition-colors">
+                  <div className="group-hover:translate-x-2 transition-transform duration-300">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#15192C] mb-2 sm:mb-3 group-hover:text-[#FF1B7C] transition-colors duration-300">
                       Track Progress
                     </h3>
-                    <p className="text-[#6B7280] text-lg leading-relaxed">
+                    <p className="text-sm sm:text-base text-gray-600 leading-relaxed ">
                       Set deadlines, track achievements, and celebrate your journey to success
                     </p>
                   </div>
@@ -263,19 +273,22 @@ export function LandingPage() {
             </div>
 
             {/* Right Side - Preview */}
-            <div className="flex-1">
-              <div className="bg-white rounded-[32px] p-8 shadow-xl relative overflow-hidden group">
+            <div className="flex-1 mt-8 lg:mt-0">
+              <div className="bg-white dark:bg-gray-900 rounded-[32px] p-6 sm:p-8 shadow-xl relative overflow-hidden group">
                 {/* Multiple gradient effects */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#FFE7F1]/40 via-transparent to-[#FFE7F1]/30 opacity-100 group-hover:opacity-70 transition-opacity duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-bl from-[#FFE7F1]/30 via-transparent to-[#FFE7F1]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#FFE7F1]/40 via-transparent to-[#FFE7F1]/30 
+                              opacity-100 group-hover:opacity-70 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-bl from-[#FFE7F1]/30 via-transparent to-[#FFE7F1]/20 
+                              opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
-                <div className="grid grid-cols-2 gap-4 relative z-10">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 relative z-10">
                   {[...Array(4)].map((_, i) => (
                     <div 
                       key={i} 
                       className="aspect-square rounded-xl border-2 border-dashed border-gray-200/60 
-                               bg-white/50 backdrop-blur-sm
+                               bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm
                                hover:border-[#FF1B7C]/30 hover:bg-[#FFE7F1]/20
+                               dark:hover:bg-[#FFE7F1]/5
                                group-hover:shadow-lg
                                transition-all duration-300"
                     />

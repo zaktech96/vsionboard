@@ -246,6 +246,24 @@ function ContentEditor() {
     // Will expand this later to place content at clicked position
   };
 
+  // Add handleStepClick function
+  const handleStepClick = (stepNumber: number) => {
+    // Only allow going backwards
+    if (stepNumber >= currentStep) return;
+    
+    switch (stepNumber) {
+      case 1:
+        router.push('/create');
+        break;
+      case 2:
+        router.push(`/create/template?name=${encodeURIComponent(boardName || '')}`);
+        break;
+      case 3:
+        router.push(`/create/layout?name=${encodeURIComponent(boardName || '')}&template=${templateId}`);
+        break;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Progress Bar */}
@@ -256,10 +274,15 @@ function ContentEditor() {
             
             {steps.map((step) => (
               <div key={step.number} className="relative z-10 flex flex-col items-center gap-2 bg-gray-50 dark:bg-gray-900 px-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-medium
-                  ${currentStep >= step.number 
-                    ? 'bg-[#FF1B7C] text-white' 
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}>
+                <div 
+                  onClick={() => handleStepClick(step.number)}
+                  className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
+                    ${currentStep >= step.number 
+                      ? 'bg-[#FF1B7C] text-white' 
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
+                    ${step.number < currentStep ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}
+                    transition-all duration-300`}
+                >
                   {step.number}
                 </div>
                 <span className={`text-sm font-medium whitespace-nowrap
@@ -275,29 +298,26 @@ function ContentEditor() {
       </div>
 
       {/* Content */}
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-8 md:py-16">
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-3">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-16">
+        <div className="text-center mb-6 sm:mb-8 md:mb-12">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3">
             Design Your Vision Board
           </h1>
-          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
+          <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400">
             Click anywhere on the canvas to add content
           </p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
           {/* Sidebar - Horizontal scroll on mobile */}
-          <div className="w-full lg:w-64 flex lg:flex-col gap-3 
-                        overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 
+          <div className="w-full lg:w-64 flex lg:flex-col gap-2 sm:gap-3 
+                        overflow-x-auto lg:overflow-x-visible pb-3 lg:pb-0 
                         scrollbar-hide">
             {contentTypes.map((type) => (
               <button
                 key={type.id}
                 onClick={() => handleContentTypeClick(type.id)}
-                className="flex-shrink-0 w-full lg:w-auto p-4 rounded-xl border-2 
-                         border-gray-200 dark:border-gray-800 
-                         hover:border-[#FF1B7C]/40 hover:bg-[#FFE7F1]/10
-                         text-left transition-all duration-300"
+                className="flex-shrink-0 w-[140px] sm:w-[160px] lg:w-full p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{type.icon}</span>
@@ -314,8 +334,8 @@ function ContentEditor() {
             ))}
           </div>
 
-          {/* Canvas Area - Responsive height */}
-          <div className="flex-1 min-h-[400px] lg:min-h-[600px] rounded-xl border-2 border-dashed 
+          {/* Canvas Area - Better height handling */}
+          <div className="flex-1 min-h-[300px] sm:min-h-[400px] lg:min-h-[600px] rounded-lg sm:rounded-xl border-2 border-dashed 
                         border-gray-200 dark:border-gray-800
                         bg-white dark:bg-gray-900
                         overflow-hidden p-6 cursor-pointer"
@@ -354,8 +374,8 @@ function ContentEditor() {
           </DialogContent>
         </Dialog>
 
-        {/* Action Buttons - Stack on mobile */}
-        <div className="flex flex-col sm:flex-row justify-between gap-3 mt-6">
+        {/* Action Buttons - Better stacking */}
+        <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-3 mt-4 sm:mt-6">
           <Button
             onClick={() => router.back()}
             className="w-full sm:w-auto order-2 sm:order-1

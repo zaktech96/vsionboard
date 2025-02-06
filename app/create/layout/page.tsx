@@ -67,6 +67,21 @@ function LayoutContent() {
     }
   };
 
+  // Add handleStepClick function
+  const handleStepClick = (stepNumber: number) => {
+    // Only allow going backwards
+    if (stepNumber >= currentStep) return;
+    
+    switch (stepNumber) {
+      case 1:
+        router.push('/create');
+        break;
+      case 2:
+        router.push(`/create/template?name=${encodeURIComponent(boardName || '')}`);
+        break;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Progress Bar */}
@@ -84,11 +99,13 @@ function LayoutContent() {
                 )}
                 <div className="flex items-center gap-3">
                   <div 
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-medium
-                    ${currentStep >= step.number 
-                      ? 'bg-[#FF1B7C] text-white' 
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                    }`}
+                    onClick={() => handleStepClick(step.number)}
+                    className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
+                      ${currentStep >= step.number 
+                        ? 'bg-[#FF1B7C] text-white' 
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
+                      ${step.number < currentStep ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}
+                      transition-all duration-300`}
                   >
                     {step.number}
                   </div>

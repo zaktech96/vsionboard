@@ -112,10 +112,12 @@ function TemplateContent() {
                   }`} />
                 )}
                 <div className="flex items-center gap-2 md:gap-3">
-                  <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
-                    ${currentStep >= step.number 
-                      ? 'bg-[#FF1B7C] text-white' 
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}>
+                  <div 
+                    className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
+                      ${currentStep >= step.number 
+                        ? 'bg-[#FF1B7C] text-white' 
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
+                      transition-all duration-300`}>
                     {step.number}
                   </div>
                   <span className={`text-xs md:text-sm font-medium whitespace-nowrap ${
