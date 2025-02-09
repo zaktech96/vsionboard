@@ -2,35 +2,34 @@ import { Button } from '@/components/ui/button';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import PageWrapper from '@/components/wrapper/page-wrapper';
-import { VideoPlayer } from '@/components/video-player';
 import ModeToggle from '@/components/mode-toggle';
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://titan.codeandcreed.tech'),
-  keywords: [''],
-  title: 'Marketing page',
-  openGraph: {
-    description: 'Put description of the page.',
-    images: [''],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Marketing page',
-    description: 'Put description of the page.',
-    siteId: '',
-    creator: '@_7obaid_',
-    creatorId: '',
-    images: [''],
-  },
-};
+// export const metadata: Metadata = {
+//   metadataBase: new URL('https://titan.codeandcreed.tech'),
+//   keywords: [''],
+//   title: 'Marketing page',
+//   openGraph: {
+//     description: 'Put description of the page.',
+//     images: [''],
+//   },
+//   twitter: {
+//     card: 'summary_large_image',
+//     title: 'Marketing page',
+//     description: 'Put description of the page.',
+//     siteId: '',
+//     creator: '@_7obaid_',
+//     creatorId: '',
+//     images: [''],
+//   },
+// };
 
 export default async function MarketingPage() {
   return (
     <PageWrapper>
       <div className="flex flex-col items-center gap-2">
-        <div className="flex flex-col items-center gap-2 relative w-full">
-          <h1 className="scroll-m-20 text-5xl font-bold tracking-tight">Add Content</h1>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2">
+        <div className="flex flex-col items-center w-full mb-6">
+          <div className="w-full flex items-center justify-between px-4 md:px-8 max-w-[900px]">
+            <h1 className="scroll-m-20 text-5xl font-bold tracking-tight">Add Content</h1>
             <ModeToggle />
           </div>
         </div>
@@ -48,15 +47,13 @@ export default async function MarketingPage() {
             </Button>
           </Link>
         </div>
-        <div className="mb-3 mt-[1.5rem] max-w-[900px] w-full">
-          <VideoPlayer videoSrc="https://utfs.io/f/08b0a37f-afd7-4623-b5cc-e85184528fce-1f02.mp4" />
-        </div>
-        <div className="flex flex-col min-h-screen max-w-[900px] items-center mb-[2rem]">
+      
+        <div className="flex flex-col max-w-[900px] w-full items-center mb-[2rem]">
           <article className="w-full mx-auto pb-8">
             <h1 className="text-3xl lg:text-4xl font-bold mb-6">Lorem ipsum dolor sit amet</h1>
 
             <section className="mb-8">
-              <p className="text-md leading-relaxed">
+              <p className="text-md leading-relaxed" spellCheck="false">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
                 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
                 exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

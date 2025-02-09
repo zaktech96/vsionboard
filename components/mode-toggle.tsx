@@ -4,26 +4,43 @@ import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
+import { Button } from '@/components/ui/button';
+
 export default function ModeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  // After mounting, we have access to the theme
   useEffect(() => setMounted(true), []);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    // Render nothing on the server and until the theme is mounted
+    return null;
+  }
 
   return (
-    <button
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[#FFE7F1] to-[#FFE7F1]/50 dark:from-gray-800 dark:to-gray-900 transition-all duration-300 hover:scale-110"
-      aria-label="Toggle theme"
-    >
+    <div>
       {theme === 'dark' ? (
-        <Sun className="h-4 w-4 text-[#FF1B7C] transition-all" />
+        <Button
+          variant="ghost"
+          className="hover:bg-inherit border-zinc-900 bg-[#0c0c0d]"
+          size="icon"
+          onClick={() => setTheme('light')}
+        >
+          <Sun className="w-5 h-5" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
       ) : (
-        <Moon className="h-4 w-4 text-[#FF1B7C] transition-all" />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hover:bg-inherit border-zinc-100 bg-inherit"
+          onClick={() => setTheme('dark')}
+        >
+          <Moon className="w-5 h-5" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
       )}
-      <span className="sr-only">Toggle theme</span>
-    </button>
+    </div>
   );
 }
