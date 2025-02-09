@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import PageWrapper from '@/components/wrapper/page-wrapper';
 import { VideoPlayer } from '@/components/video-player';
+import ModeToggle from '@/components/mode-toggle';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://titan.codeandcreed.tech'),
@@ -26,10 +27,13 @@ export const metadata: Metadata = {
 export default async function MarketingPage() {
   return (
     <PageWrapper>
-      <div className="flex flex-col min-h-screen items-center mt-[2.5rem] p-3 w-full">
-        <h1 className="scroll-m-20 max-w-[600px] text-5xl font-bold tracking-tight text-center">
-          Example Marketing Page with Video & CTA
-        </h1>
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 relative w-full">
+          <h1 className="scroll-m-20 text-5xl font-bold tracking-tight">Add Content</h1>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2">
+            <ModeToggle />
+          </div>
+        </div>
         <p className="mx-auto max-w-[600px] text-gray-500 md:text-lg text-center mt-2 dark:text-gray-400">
           Use this static page to have an explainer video with CTA and some copy. Great for
           marketing your product and getting sales.
