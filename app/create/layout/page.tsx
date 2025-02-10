@@ -87,43 +87,45 @@ function LayoutContent() {
     <div className="min-h-screen bg-white dark:bg-gray-950">
       <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
         <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-4">
-          <div className="flex items-center justify-between">
-            {steps.map((step, index) => (
-              <div key={step.number} className="flex items-center">
-                {index === 0 ? (
-                  <button
-                    onClick={() => router.back()}
-                    className="flex items-center gap-2 text-[#FF1B7C] hover:opacity-80
-                             transition-colors duration-200 mr-4"
-                    aria-label="Go back"
-                  >
-                    <ArrowLeft className="w-5 h-5" />
-                  </button>
-                ) : (
-                  <div className={`h-[2px] w-[100px] mx-4 ${
-                    currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
-                  }`} />
-                )}
-                <div className="flex items-center gap-2 md:gap-3">
-                  <div 
-                    className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
-                      ${currentStep >= step.number 
-                        ? 'bg-[#FF1B7C] text-white' 
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
-                      transition-all duration-300`}
-                  >
-                    {step.number}
+          <div className="flex items-center">
+            <button
+              onClick={() => router.back()}
+              className="flex items-center gap-2 text-[#FF1B7C] hover:opacity-80
+                       transition-colors duration-200 mr-8"
+              aria-label="Go back"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            
+            <div className="flex items-center justify-between flex-1">
+              {steps.map((step, index) => (
+                <div key={step.number} className="flex items-center">
+                  {index > 0 && (
+                    <div className={`h-[2px] w-[100px] mx-4 ${
+                      currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
+                    }`} />
+                  )}
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div 
+                      className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
+                        ${currentStep >= step.number 
+                          ? 'bg-[#FF1B7C] text-white' 
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
+                        transition-all duration-300`}
+                    >
+                      {step.number}
+                    </div>
+                    <span className={`text-xs md:text-sm font-medium whitespace-nowrap ${
+                      currentStep >= step.number 
+                        ? 'text-[#15192C] dark:text-white' 
+                        : 'text-gray-500 dark:text-gray-400'}`}
+                    >
+                      {step.title}
+                    </span>
                   </div>
-                  <span className={`text-xs md:text-sm font-medium whitespace-nowrap ${
-                    currentStep >= step.number 
-                      ? 'text-[#15192C] dark:text-white' 
-                      : 'text-gray-500 dark:text-gray-400'}`}
-                  >
-                    {step.title}
-                  </span>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

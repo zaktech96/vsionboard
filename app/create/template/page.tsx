@@ -141,57 +141,62 @@ function TemplateContent() {
           </div>
         </div>
       </div>
-      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-12">
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-2xl md:text-3xl font-bold text-[#15192C] dark:text-white mb-2 md:mb-3">
-            Choose a Starting Point
-          </h1>
-          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-            Select a template for "{boardName}" or start from scratch
-          </p>
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8 md:mb-12">
-          {templates.map((template) => (
-            <button
-              key={template.id}
-              onClick={() => setSelectedTemplate(template.id)}
-              className={`group p-3 md:p-6 rounded-xl md:rounded-2xl border-2 transition-all duration-300 text-center
-                ${selectedTemplate === template.id 
-                  ? 'border-[#E6156F] bg-[#FFE7F1]/20' 
-                  : 'border-gray-200 dark:border-gray-800 hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10'}`}
+      {/* Main content */}
+      <div className="flex-1">
+        {/* Page content */}
+        <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-12">
+          <div className="text-center mb-8 md:mb-12">
+            <h1 className="text-2xl md:text-3xl font-bold text-[#15192C] dark:text-white mb-2 md:mb-3">
+              Choose a Starting Point
+            </h1>
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
+              Select a template for "{boardName}" or start from scratch
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8 md:mb-12">
+            {templates.map((template) => (
+              <button
+                key={template.id}
+                onClick={() => setSelectedTemplate(template.id)}
+                className={`group p-3 md:p-6 rounded-xl md:rounded-2xl border-2 transition-all duration-300 text-center
+                  ${selectedTemplate === template.id 
+                    ? 'border-[#E6156F] bg-[#FFE7F1]/20' 
+                    : 'border-gray-200 dark:border-gray-800 hover:border-[#E6156F]/40 hover:bg-[#FFE7F1]/10'}`}
+              >
+                <div className="mb-4 md:mb-6 aspect-square w-full overflow-hidden rounded-lg md:rounded-xl
+                             group-hover:border-[#FF1B7C]/20">
+                  {template.preview}
+                </div>
+                <h3 className={`text-lg md:text-xl font-semibold mb-2 md:mb-3 transition-colors
+                  ${selectedTemplate === template.id 
+                    ? 'text-[#E6156F]' 
+                    : 'text-[#15192C] dark:text-white group-hover:text-[#E6156F]'}`}>
+                  {template.name}
+                </h3>
+                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mx-auto max-w-[90%]">
+                  {template.description}
+                </p>
+              </button>
+            ))}
+          </div>
+
+          <div className="flex justify-center">
+            <Button
+              onClick={handleContinue}
+              disabled={!selectedTemplate}
+              className="w-full sm:w-auto min-w-[200px] px-6 md:px-8 py-4 md:py-5 
+                       rounded-xl text-base md:text-lg font-medium
+                       bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       transition-all duration-300
+                       shadow-[0_8px_30px_rgb(230,21,111,0.2)]
+                       hover:shadow-[0_8px_30px_rgb(230,21,111,0.4)]"
             >
-              <div className="mb-4 md:mb-6 aspect-square w-full overflow-hidden rounded-lg md:rounded-xl
-                           group-hover:border-[#FF1B7C]/20">
-                {template.preview}
-              </div>
-              <h3 className={`text-lg md:text-xl font-semibold mb-2 md:mb-3 transition-colors
-                ${selectedTemplate === template.id 
-                  ? 'text-[#E6156F]' 
-                  : 'text-[#15192C] dark:text-white group-hover:text-[#E6156F]'}`}>
-                {template.name}
-              </h3>
-              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mx-auto max-w-[90%]">
-                {template.description}
-              </p>
-            </button>
-          ))}
-        </div>
-
-        <div className="flex justify-center">
-          <Button
-            onClick={handleContinue}
-            disabled={!selectedTemplate}
-            className="w-full sm:w-auto min-w-[200px] px-6 md:px-8 py-4 md:py-5 
-                     rounded-xl text-base md:text-lg font-medium
-                     bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white
-                     disabled:opacity-50 disabled:cursor-not-allowed
-                     transition-all duration-300
-                     shadow-[0_8px_30px_rgb(230,21,111,0.2)]
-                     hover:shadow-[0_8px_30px_rgb(230,21,111,0.4)]"
-          >
-            Continue to Layout →
-          </Button>
+              Continue to Layout →
+            </Button>
+          </div>
         </div>
       </div>
     </div>
