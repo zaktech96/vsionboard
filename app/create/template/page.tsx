@@ -103,21 +103,20 @@ function TemplateContent() {
     <div className="min-h-screen bg-white dark:bg-gray-950">
       <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
         <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-4">
-          <div className="flex items-center justify-between min-w-[600px] md:min-w-0">
+          <div className="flex items-center justify-between">
             {steps.map((step, index) => (
               <div key={step.number} className="flex items-center">
                 {index === 0 ? (
                   <button
                     onClick={() => router.back()}
-                    className="mr-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2C2C30] 
-                             text-gray-600 dark:text-gray-400
-                             transition-colors duration-200"
+                    className="flex items-center gap-2 text-[#FF1B7C] hover:opacity-80
+                             transition-colors duration-200 mr-4"
                     aria-label="Go back"
                   >
                     <ArrowLeft className="w-5 h-5" />
                   </button>
                 ) : (
-                  <div className={`h-[2px] w-[60px] md:w-[100px] mx-2 md:mx-4 ${
+                  <div className={`h-[2px] w-[100px] mx-4 ${
                     currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
                   }`} />
                 )}
@@ -142,9 +141,7 @@ function TemplateContent() {
           </div>
         </div>
       </div>
-
-      {/* Content */}
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-12 md:py-24">
+      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-12">
         <div className="text-center mb-8 md:mb-12">
           <h1 className="text-2xl md:text-3xl font-bold text-[#15192C] dark:text-white mb-2 md:mb-3">
             Choose a Starting Point

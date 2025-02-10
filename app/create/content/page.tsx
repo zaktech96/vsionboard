@@ -276,9 +276,8 @@ function ContentEditor() {
                 {index === 0 ? (
                   <button
                     onClick={() => router.back()}
-                    className="mr-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2C2C30] 
-                             text-gray-600 dark:text-gray-400
-                             transition-colors duration-200"
+                    className="flex items-center gap-2 text-[#FF1B7C] hover:opacity-80
+                             transition-colors duration-200 mr-4"
                     aria-label="Go back"
                   >
                     <ArrowLeft className="w-5 h-5" />
@@ -288,22 +287,21 @@ function ContentEditor() {
                     currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
                   }`} />
                 )}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 md:gap-3">
                   <div 
-                    onClick={() => handleStepClick(step.number)}
                     className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
                       ${currentStep >= step.number 
                         ? 'bg-[#FF1B7C] text-white' 
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
-                      ${step.number < currentStep ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}
                       transition-all duration-300`}
                   >
                     {step.number}
                   </div>
-                  <span className={`text-sm font-medium whitespace-nowrap
-                    ${currentStep >= step.number 
+                  <span className={`text-xs md:text-sm font-medium whitespace-nowrap ${
+                    currentStep >= step.number 
                       ? 'text-[#15192C] dark:text-white' 
-                      : 'text-gray-400 dark:text-gray-500'}`}>
+                      : 'text-gray-500 dark:text-gray-400'}`}
+                  >
                     {step.title}
                   </span>
                 </div>
@@ -312,10 +310,8 @@ function ContentEditor() {
           </div>
         </div>
       </div>
-
-      {/* Content */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-16">
-        <div className="text-center mb-6 sm:mb-8 md:mb-12">
+      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-12">
+        <div className="text-center mb-8 md:mb-12">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3">
             Design Your Vision Board
           </h1>
