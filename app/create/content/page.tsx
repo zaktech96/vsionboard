@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
+import { ArrowLeft } from 'lucide-react';
+
 
 function ContentEditor() {
   const router = useRouter();
@@ -266,31 +268,45 @@ function ContentEditor() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
-      {/* Progress Bar */}
       <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
-        <div className="max-w-[1400px] mx-auto px-6 py-4">
-          <div className="flex items-center justify-between relative">
-            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] bg-gray-200 dark:bg-gray-700" />
-            
-            {steps.map((step) => (
-              <div key={step.number} className="relative z-10 flex flex-col items-center gap-2 bg-gray-50 dark:bg-gray-900 px-4">
-                <div 
-                  onClick={() => handleStepClick(step.number)}
-                  className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-4">
+          <div className="flex items-center justify-between">
+            {steps.map((step, index) => (
+              <div key={step.number} className="flex items-center">
+                {index === 0 ? (
+                  <button
+                    onClick={() => router.back()}
+                    className="mr-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2C2C30] 
+                             text-gray-600 dark:text-gray-400
+                             transition-colors duration-200"
+                    aria-label="Go back"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                ) : (
+                  <div className={`h-[2px] w-[100px] mx-4 ${
+                    currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
+                  }`} />
+                )}
+                <div className="flex items-center gap-3">
+                  <div 
+                    onClick={() => handleStepClick(step.number)}
+                    className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
+                      ${currentStep >= step.number 
+                        ? 'bg-[#FF1B7C] text-white' 
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
+                      ${step.number < currentStep ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}
+                      transition-all duration-300`}
+                  >
+                    {step.number}
+                  </div>
+                  <span className={`text-sm font-medium whitespace-nowrap
                     ${currentStep >= step.number 
-                      ? 'bg-[#FF1B7C] text-white' 
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
-                    ${step.number < currentStep ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}
-                    transition-all duration-300`}
-                >
-                  {step.number}
+                      ? 'text-[#15192C] dark:text-white' 
+                      : 'text-gray-400 dark:text-gray-500'}`}>
+                    {step.title}
+                  </span>
                 </div>
-                <span className={`text-sm font-medium whitespace-nowrap
-                  ${currentStep >= step.number 
-                    ? 'text-[#15192C] dark:text-white' 
-                    : 'text-gray-400 dark:text-gray-500'}`}>
-                  {step.title}
-                </span>
               </div>
             ))}
           </div>

@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, Suspense } from 'react';
+import { ArrowLeft } from 'lucide-react';
 
 function TemplateContent() {
   const router = useRouter();
@@ -100,13 +101,22 @@ function TemplateContent() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
-      {/* Progress Bar */}
       <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-4 overflow-x-auto">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between min-w-[600px] md:min-w-0">
             {steps.map((step, index) => (
               <div key={step.number} className="flex items-center">
-                {index > 0 && (
+                {index === 0 ? (
+                  <button
+                    onClick={() => router.back()}
+                    className="mr-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2C2C30] 
+                             text-gray-600 dark:text-gray-400
+                             transition-colors duration-200"
+                    aria-label="Go back"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                ) : (
                   <div className={`h-[2px] w-[60px] md:w-[100px] mx-2 md:mx-4 ${
                     currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
                   }`} />
