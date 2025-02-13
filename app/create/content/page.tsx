@@ -268,75 +268,78 @@ function ContentEditor() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
-      <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-4">
-          <div className="flex items-center">
+      {/* Steps Header - Full width with proper spacing */}
+      <div className="w-full bg-gray-50 dark:bg-gray-950 border-b dark:border-gray-800">
+        <div className="max-w-screen-2xl mx-auto px-6 py-4">
+          <div className="flex items-center gap-4">
             <button
               onClick={() => router.back()}
-              className="flex items-center gap-2 text-[#FF1B7C] hover:opacity-80
-                       transition-colors duration-200 mr-8"
-              aria-label="Go back"
+              className="text-[#FF1B7C] hover:opacity-80 transition-colors duration-200"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             
-            <div className="flex items-center justify-between flex-1">
+            <div className="flex items-center w-full">
               {steps.map((step, index) => (
-                <div key={step.number} className="flex items-center">
-                  {index > 0 && (
-                    <div className={`h-[2px] w-[100px] mx-4 ${
-                      currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
-                    }`} />
-                  )}
-                  <div className="flex items-center gap-2 md:gap-3">
-                    <div 
-                      className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
-                        ${currentStep >= step.number 
-                          ? 'bg-[#FF1B7C] text-white' 
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
-                        transition-all duration-300`}
+                <div key={step.number} className="flex items-center flex-1 last:flex-none">
+                  <div 
+                    className="flex items-center gap-3 cursor-pointer"
+                    onClick={() => handleStepClick(step.number)}
+                  >
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center
+                      ${currentStep === step.number 
+                        ? 'bg-[#FF1B7C] text-white' 
+                        : currentStep > step.number
+                          ? 'bg-[#FF1B7C] text-white'
+                          : 'bg-white text-gray-400 border-2 border-gray-200'}`}
                     >
                       {step.number}
                     </div>
-                    <span className={`text-xs md:text-sm font-medium whitespace-nowrap ${
-                      currentStep >= step.number 
-                        ? 'text-[#15192C] dark:text-white' 
-                        : 'text-gray-500 dark:text-gray-400'}`}
-                    >
+                    <span className={`text-sm font-medium ${
+                      currentStep >= step.number ? 'text-gray-900 dark:text-white' : 'text-gray-400'
+                    }`}>
                       {step.title}
                     </span>
                   </div>
+                  {index < steps.length - 1 && (
+                    <div className="flex-1 mx-4">
+                      <div className={`h-[2px] ${
+                        currentStep > step.number ? 'bg-[#FF1B7C]' : 'bg-gray-200'
+                      }`} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-12">
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3">
-            Design Your Vision Board
-          </h1>
-          <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400">
-            Click anywhere on the canvas to add content
-          </p>
+
+      {/* Main Content */}
+      <div className="max-w-screen-2xl mx-auto px-6 py-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-3">Design Your Vision Board</h1>
+          <p className="text-gray-500">Click anywhere on the canvas to add content</p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
-          {/* Sidebar - Horizontal scroll on mobile */}
-          <div className="w-full lg:w-64 flex lg:flex-col gap-2 sm:gap-3 
-                        overflow-x-auto lg:overflow-x-visible pb-3 lg:pb-0 
-                        scrollbar-hide">
+        {/* Content Area */}
+        <div className="flex gap-8">
+          {/* Tools */}
+          <div className="w-64 flex-shrink-0 space-y-3">
             {contentTypes.map((type) => (
               <button
                 key={type.id}
                 onClick={() => handleContentTypeClick(type.id)}
-                className="flex-shrink-0 w-[140px] sm:w-[160px] lg:w-full p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl"
+                className="w-full p-4 rounded-xl text-left hover:bg-gray-50 dark:hover:bg-gray-900
+                         border border-gray-100 dark:border-gray-800
+                         transition-all duration-200"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{type.icon}</span>
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    <span className="text-2xl">{type.icon}</span>
+                  </div>
                   <div>
-                    <div className="font-medium text-[#15192C] dark:text-white">
+                    <div className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">
                       {type.name}
                     </div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -348,67 +351,79 @@ function ContentEditor() {
             ))}
           </div>
 
-          {/* Canvas Area - Better height handling */}
-          <div className="flex-1 min-h-[300px] sm:min-h-[400px] lg:min-h-[600px] rounded-lg sm:rounded-xl border-2 border-dashed 
-                        border-gray-200 dark:border-gray-800
-                        bg-white dark:bg-gray-900
-                        overflow-hidden p-6 cursor-pointer"
-            onClick={(e) => {
-              // Get click coordinates for content placement
-              const rect = e.currentTarget.getBoundingClientRect();
-              const x = e.clientX - rect.left;
-              const y = e.clientY - rect.top;
-              console.log('Clicked at:', x, y);
-              if (selectedContentType) {
-                handleContentPlacement(selectedContentType);
-              } else {
-                setShowDialog(true);
-              }
-            }}
-          >
-            {templateId && templates[templateId as keyof typeof templates] ? (
-              <div className="relative w-full h-full">
-                {templates[templateId as keyof typeof templates]}
-                {/* Content items will be positioned absolutely here */}
+          {/* Canvas Area */}
+          <div className="flex-1">
+            <div 
+              className="w-full border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-xl
+                       min-h-[80vh] relative bg-white dark:bg-gray-950 overflow-hidden"
+              onClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                console.log('Clicked at:', x, y);
+                if (!selectedContentType) {
+                  setShowDialog(true);
+                }
+              }}
+            >
+              {/* Grid Background */}
+              <div className="absolute inset-0 bg-[linear-gradient(#ddd_1px,transparent_1px),linear-gradient(90deg,#ddd_1px,transparent_1px)] 
+                           dark:bg-[linear-gradient(#333_1px,transparent_1px),linear-gradient(90deg,#333_1px,transparent_1px)]
+                           bg-[size:20px_20px] opacity-10" />
+              
+              {/* Content Grid - Updated to maintain proper sizing */}
+              <div className="relative h-full p-6">
+                <div className="grid grid-cols-2 gap-6 h-full">
+                  <div className="bg-[#E6F0FF] dark:bg-blue-900/20 rounded-xl flex items-center justify-center aspect-[2/1]">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-4xl">💼</span>
+                    </div>
+                  </div>
+                  <div className="bg-[#E8FAE8] dark:bg-green-900/20 rounded-xl flex items-center justify-center aspect-[2/1]">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-4xl">📈</span>
+                    </div>
+                  </div>
+                  <div className="bg-[#F8E8FF] dark:bg-purple-900/20 rounded-xl flex items-center justify-center aspect-[2/1]">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-4xl">🎯</span>
+                    </div>
+                  </div>
+                  <div className="bg-[#FFF8E8] dark:bg-yellow-900/20 rounded-xl flex items-center justify-center aspect-[2/1]">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-4xl">⭐</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <p className="text-gray-400 dark:text-gray-600">
-                  Template not found: {templateId}
-                </p>
-              </div>
-            )}
+            </div>
           </div>
         </div>
 
-        {/* Dialog for content editing */}
-        <Dialog open={showDialog} onOpenChange={setShowDialog}>
-          <DialogContent>
-            {getDialogContent()}
-          </DialogContent>
-        </Dialog>
-
-        {/* Action Buttons - Better stacking */}
-        <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-3 mt-4 sm:mt-6">
+        {/* Action Buttons */}
+        <div className="flex justify-between mt-6">
           <Button
             onClick={() => router.back()}
-            className="w-full sm:w-auto order-2 sm:order-1
-                     border-2 border-[#FF1B7C] text-[#FF1B7C] hover:bg-[#FFE7F1]/20
-                     transition-all duration-300"
+            variant="outline"
+            className="px-6 py-2"
           >
             Back
           </Button>
           <Button
             onClick={handleSave}
-            className="w-full sm:w-auto order-1 sm:order-2
-                     bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white
-                     transition-all duration-300
-                     shadow-[0_8px_30px_rgb(230,21,111,0.2)]"
+            className="px-6 py-2 bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white"
           >
             Save Vision Board
           </Button>
         </div>
       </div>
+
+      {/* Keep existing Dialog component */}
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent>
+          {getDialogContent()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
