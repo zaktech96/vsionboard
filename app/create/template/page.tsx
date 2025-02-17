@@ -99,6 +99,16 @@ function TemplateContent() {
     }
   };
 
+  const handleStepClick = (stepNumber: number) => {
+    if (stepNumber >= currentStep) return;
+    
+    switch (stepNumber) {
+      case 1:
+        router.push('/create');
+        break;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
@@ -120,19 +130,27 @@ function TemplateContent() {
                     currentStep > index ? 'bg-[#FF1B7C]' : 'bg-gray-200 dark:bg-gray-700'
                   }`} />
                 )}
-                <div className="flex items-center gap-2 md:gap-3">
-                  <div 
-                    className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-sm md:text-base font-medium
-                      ${currentStep >= step.number 
-                        ? 'bg-[#FF1B7C] text-white' 
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}
-                      transition-all duration-300`}>
+                <div 
+                  onClick={() => handleStepClick(step.number)}
+                  className={`group flex items-center gap-2 md:gap-3 cursor-pointer relative
+                              transition-all duration-200 hover:translate-x-1`}
+                >
+                  <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full 
+                                  flex items-center justify-center 
+                                  text-sm md:text-base font-medium
+                                  transition-all duration-300
+                                  ${currentStep >= step.number 
+                                    ? 'bg-[#FF1B7C] text-white scale-110' 
+                                    : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 group-hover:bg-[#FF1B7C]/20'}`}
+                  >
                     {step.number}
                   </div>
-                  <span className={`text-xs md:text-sm font-medium whitespace-nowrap ${
-                    currentStep >= step.number 
-                      ? 'text-[#15192C] dark:text-white' 
-                      : 'text-gray-500 dark:text-gray-400'}`}>
+                  <span className={`text-xs md:text-sm font-medium whitespace-nowrap 
+                                    transition-colors duration-200
+                                    ${currentStep >= step.number 
+                                      ? 'text-[#15192C] dark:text-white' 
+                                      : 'text-gray-500 dark:text-gray-400 group-hover:text-[#FF1B7C]'}`}
+                  >
                     {step.title}
                   </span>
                 </div>

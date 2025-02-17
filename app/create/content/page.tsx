@@ -283,21 +283,26 @@ function ContentEditor() {
               {steps.map((step, index) => (
                 <div key={step.number} className="flex items-center flex-1 last:flex-none">
                   <div 
-                    className="flex items-center gap-3 cursor-pointer"
                     onClick={() => handleStepClick(step.number)}
+                    className={`group flex items-center gap-2 md:gap-3 cursor-pointer relative
+                                transition-all duration-200 hover:translate-x-1`}
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                      ${currentStep === step.number 
-                        ? 'bg-[#FF1B7C] text-white' 
-                        : currentStep > step.number
-                          ? 'bg-[#FF1B7C] text-white'
-                          : 'bg-white text-gray-400 border-2 border-gray-200'}`}
+                    <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full 
+                                    flex items-center justify-center 
+                                    text-sm md:text-base font-medium
+                                    transition-all duration-300
+                                    ${currentStep >= step.number 
+                                      ? 'bg-[#FF1B7C] text-white scale-110' 
+                                      : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 group-hover:bg-[#FF1B7C]/20'}`}
                     >
                       {step.number}
                     </div>
-                    <span className={`text-sm font-medium ${
-                      currentStep >= step.number ? 'text-gray-900 dark:text-white' : 'text-gray-400'
-                    }`}>
+                    <span className={`text-xs md:text-sm font-medium whitespace-nowrap 
+                                      transition-colors duration-200
+                                      ${currentStep >= step.number 
+                                        ? 'text-[#15192C] dark:text-white' 
+                                        : 'text-gray-500 dark:text-gray-400 group-hover:text-[#FF1B7C]'}`}
+                    >
                       {step.title}
                     </span>
                   </div>
