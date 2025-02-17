@@ -317,9 +317,16 @@ function ContentEditor() {
 
       {/* Main Content */}
       <div className="max-w-screen-2xl mx-auto px-6 py-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-3">Design Your Vision Board</h1>
-          <p className="text-gray-500">Click anywhere on the canvas to add content</p>
+        <div className="text-center mb-20">
+          <h1 className="text-[50px] font-bold mb-6 tracking-tight
+                        text-[#9D3C6B] dark:text-[#B84C82]
+                        leading-tight">
+            Design Your Vision Board
+          </h1>
+          <p className="text-[22px] text-gray-500/90 dark:text-gray-400/90 
+                        font-normal tracking-wide">
+            Click anywhere on the canvas to add content
+          </p>
         </div>
 
         {/* Content Area */}
@@ -330,16 +337,25 @@ function ContentEditor() {
               <button
                 key={type.id}
                 onClick={() => handleContentTypeClick(type.id)}
-                className="w-full p-4 rounded-xl text-left hover:bg-gray-50 dark:hover:bg-gray-900
-                         border border-gray-100 dark:border-gray-800
-                         transition-all duration-200"
+                className="w-full p-4 rounded-xl text-left transition-all duration-200 
+                          bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800
+                          hover:scale-[1.02] hover:shadow-lg hover:border-[#FF1B7C]/30
+                          group relative overflow-hidden"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <span className="text-2xl">{type.icon}</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FFE7F1]/0 to-[#FFE7F1]/20 
+                              dark:from-[#FF1B7C]/0 dark:to-[#FF1B7C]/10
+                              translate-x-[-100%] group-hover:translate-x-[0%] 
+                              transition-transform duration-300" />
+                
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className="w-12 h-12 rounded-xl bg-[#FFE7F1] dark:bg-[#FF1B7C]/10
+                                flex items-center justify-center
+                                group-hover:scale-110 transition-transform duration-200">
+                    <span className="text-2xl group-hover:animate-bounce">{type.icon}</span>
                   </div>
                   <div>
-                    <div className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">
+                    <div className="font-semibold text-[15px] text-gray-900 dark:text-gray-100
+                                  group-hover:text-[#FF1B7C] transition-colors duration-200">
                       {type.name}
                     </div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
