@@ -130,10 +130,13 @@ function ContentEditor() {
           <div
             key={index}
             onClick={() => handleImageClick(`grid-${index}`)}
-            className={`bg-[${index === 0 ? '#FFE7F1' : index === 1 ? '#E8FAE8' : index === 2 ? '#F8E8FF' : '#FFF8E8'}] 
+            className={`${index === 0 ? 'bg-[#FFE7F1]' : index === 1 ? 'bg-[#E8FAE8]' : index === 2 ? 'bg-[#F8E8FF]' : 'bg-[#FFF8E8]'}
                       dark:bg-${index === 0 ? 'pink' : index === 1 ? 'green' : index === 2 ? 'purple' : 'yellow'}-900/20 
-                      rounded-xl flex items-center justify-center aspect-[2/1] cursor-pointer 
-                      hover:opacity-90 transition-opacity relative overflow-hidden group`}
+                      rounded-2xl border-2 border-dashed border-gray-200/60 
+                      hover:border-[#FF1B7C]/20 hover:opacity-90
+                      transition-all duration-300 aspect-[4/3]
+                      flex items-center justify-center group cursor-pointer
+                      relative overflow-hidden`}
           >
             {selectedImages[`grid-${index}`] ? (
               <Image
@@ -143,12 +146,13 @@ function ContentEditor() {
                 className="object-cover"
               />
             ) : (
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 
-                              flex items-center justify-center">
-                  <span className="text-2xl text-gray-400">+</span>
+              <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
+                <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                              flex items-center justify-center bg-white shadow-sm
+                              group-hover:border-[#FF1B7C]/30 group-hover:shadow-[#FFE7F1]">
+                  <span className="text-gray-400 text-xl group-hover:text-[#FF1B7C]">+</span>
                 </div>
-                <span className="text-sm text-gray-400">Add Image</span>
+                <span className="text-gray-400 text-sm font-medium group-hover:text-[#FF1B7C]">Add Image</span>
               </div>
             )}
             {selectedImages[`grid-${index}`] && (
@@ -251,6 +255,111 @@ function ContentEditor() {
             )}
           </div>
         ))}
+      </div>
+    ),
+    'dynamic-flow': (
+      <div className="grid grid-cols-3 auto-rows-auto gap-6 h-full">
+        <div
+          onClick={() => handleImageClick('flow-0')}
+          className="bg-[#FFE7F1] dark:bg-pink-900/20 
+                    rounded-2xl border-2 border-dashed border-gray-200/60 
+                    hover:border-[#FF1B7C]/20 hover:opacity-90
+                    transition-all duration-300 aspect-[2/1]
+                    flex items-center justify-center group cursor-pointer
+                    relative overflow-hidden col-span-2"
+        >
+          {selectedImages['flow-0'] ? (
+            <Image
+              src={selectedImages['flow-0']}
+              alt="Selected content"
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                            flex items-center justify-center bg-white shadow-sm
+                            group-hover:border-[#FF1B7C]/30 group-hover:shadow-[#FFE7F1]">
+                <span className="text-gray-400 text-xl group-hover:text-[#FF1B7C]">+</span>
+              </div>
+              <span className="text-gray-400 text-sm font-medium group-hover:text-[#FF1B7C]">Add Image</span>
+            </div>
+          )}
+          {selectedImages['flow-0'] && (
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
+                          transition-opacity flex items-center justify-center">
+              <span className="text-white text-sm">Change Image</span>
+            </div>
+          )}
+        </div>
+
+        <div
+          onClick={() => handleImageClick('flow-1')}
+          className="bg-[#E8FAE8] dark:bg-green-900/20 
+                    rounded-2xl border-2 border-dashed border-gray-200/60 
+                    hover:border-[#FF1B7C]/20 hover:opacity-90
+                    transition-all duration-300 aspect-[3/4]
+                    flex items-center justify-center group cursor-pointer
+                    relative overflow-hidden row-span-2"
+        >
+          {selectedImages['flow-1'] ? (
+            <Image
+              src={selectedImages['flow-1']}
+              alt="Selected content"
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                            flex items-center justify-center bg-white shadow-sm
+                            group-hover:border-[#FF1B7C]/30 group-hover:shadow-[#FFE7F1]">
+                <span className="text-gray-400 text-xl group-hover:text-[#FF1B7C]">+</span>
+              </div>
+              <span className="text-gray-400 text-sm font-medium group-hover:text-[#FF1B7C]">Add Image</span>
+            </div>
+          )}
+          {selectedImages['flow-1'] && (
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
+                          transition-opacity flex items-center justify-center">
+              <span className="text-white text-sm">Change Image</span>
+            </div>
+          )}
+        </div>
+
+        <div
+          onClick={() => handleImageClick('flow-2')}
+          className="bg-[#F8E8FF] dark:bg-purple-900/20 
+                    rounded-2xl border-2 border-dashed border-gray-200/60 
+                    hover:border-[#FF1B7C]/20 hover:opacity-90
+                    transition-all duration-300 aspect-[2/1]
+                    flex items-center justify-center group cursor-pointer
+                    relative overflow-hidden col-span-2"
+        >
+          {selectedImages['flow-2'] ? (
+            <Image
+              src={selectedImages['flow-2']}
+              alt="Selected content"
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                            flex items-center justify-center bg-white shadow-sm
+                            group-hover:border-[#FF1B7C]/30 group-hover:shadow-[#FFE7F1]">
+                <span className="text-gray-400 text-xl group-hover:text-[#FF1B7C]">+</span>
+              </div>
+              <span className="text-gray-400 text-sm font-medium group-hover:text-[#FF1B7C]">Add Image</span>
+            </div>
+          )}
+          {selectedImages['flow-2'] && (
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
+                          transition-opacity flex items-center justify-center">
+              <span className="text-white text-sm">Change Image</span>
+            </div>
+          )}
+        </div>
       </div>
     )
   };

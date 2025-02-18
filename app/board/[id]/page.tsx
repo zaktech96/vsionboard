@@ -105,25 +105,66 @@ function VisionBoard() {
 
       {/* Main Content */}
       <div className="max-w-screen-2xl mx-auto px-6 py-12">
-        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 aspect-[4/3] relative overflow-hidden">
-          {/* Render the board based on layout */}
-          <div className="grid grid-cols-2 gap-6 h-full">
-            {[0, 1, 2, 3].map((index) => (
-              <div
-                key={index}
-                className="rounded-xl overflow-hidden relative group"
-              >
-                {board.images[`grid-${index}`] && (
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8">
+          {board.layout === 'dynamic-flow' ? (
+            <div className="grid grid-cols-3 auto-rows-auto gap-6 max-w-[1000px] mx-auto">
+              <div className="col-span-2 aspect-[2/1] rounded-2xl overflow-hidden relative bg-[#FFE7F1] dark:bg-pink-900/20">
+                {board.images['flow-0'] ? (
                   <Image
-                    src={board.images[`grid-${index}`]}
-                    alt={`Vision board image ${index + 1}`}
+                    src={board.images['flow-0']}
+                    alt="Vision board image 1"
                     fill
                     className="object-cover"
                   />
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full gap-4">
+                    <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                                  flex items-center justify-center bg-white shadow-sm">
+                      <span className="text-gray-400 text-xl">+</span>
+                    </div>
+                    <span className="text-gray-400 text-sm font-medium">Empty</span>
+                  </div>
                 )}
               </div>
-            ))}
-          </div>
+
+              <div className="row-span-2 aspect-[3/4] rounded-2xl overflow-hidden relative bg-[#E8FAE8] dark:bg-green-900/20">
+                {/* Similar structure for flow-1 */}
+              </div>
+
+              <div className="col-span-2 aspect-[2/1] rounded-2xl overflow-hidden relative bg-[#F8E8FF] dark:bg-purple-900/20">
+                {/* Similar structure for flow-2 */}
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-6 max-w-[1000px] mx-auto">
+              {[0, 1, 2, 3].map((index) => (
+                <div
+                  key={index}
+                  className={`${index === 0 ? 'bg-[#FFE7F1]' : index === 1 ? 'bg-[#E8FAE8]' : index === 2 ? 'bg-[#F8E8FF]' : 'bg-[#FFF8E8]'}
+                            dark:bg-${index === 0 ? 'pink' : index === 1 ? 'green' : index === 2 ? 'purple' : 'yellow'}-900/20 
+                            rounded-2xl border-2 border-gray-100 dark:border-gray-800
+                            aspect-[4/3] overflow-hidden relative group shadow-sm`}
+                >
+                  {board.images[`grid-${index}`] ? (
+                    <Image
+                      src={board.images[`grid-${index}`]}
+                      alt={`Vision board image ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full gap-4">
+                      <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                                    flex items-center justify-center bg-white shadow-sm">
+                        <span className="text-gray-400 text-xl">+</span>
+                      </div>
+                      <span className="text-gray-400 text-sm font-medium">Empty</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Creation Date */}
