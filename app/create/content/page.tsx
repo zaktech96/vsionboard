@@ -110,6 +110,74 @@ function ContentEditor() {
     )
   };
 
+  // Add this after the templates object
+  const templateEmojis = {
+    'career': ['💼', '📈', '🎯', '⭐'],
+    'lifestyle': ['🏖️', '🏡', '✈️'],
+    'fitness': ['��', '🥗', '🧘‍♀️', '🏃‍♂️'],
+    'blank': ['✨']
+  };
+
+  // Add layout templates
+  const layoutTemplates = {
+    'grid-2x2': (
+      <div className="grid grid-cols-2 gap-6 h-full">
+        {templateEmojis[templateId as keyof typeof templateEmojis]?.slice(0, 4).map((emoji, i) => (
+          <div key={i} className={`bg-[${i === 0 ? '#FFE7F1' : i === 1 ? '#E8FAE8' : i === 2 ? '#F8E8FF' : '#FFF8E8'}] 
+                      dark:bg-${i === 0 ? 'pink' : i === 1 ? 'green' : i === 2 ? 'purple' : 'yellow'}-900/20 
+                      rounded-xl flex items-center justify-center aspect-[2/1]`}>
+            <span className="text-4xl">{emoji}</span>
+          </div>
+        ))}
+      </div>
+    ),
+    'featured': (
+      <div className="grid grid-cols-2 h-full gap-6">
+        <div className="col-span-2 bg-[#FFE7F1] dark:bg-pink-900/20 rounded-xl aspect-[2/1] flex items-center justify-center">
+          <span className="text-6xl">{templateEmojis[templateId as keyof typeof templateEmojis]?.[0] || '✨'}</span>
+        </div>
+        <div className="bg-[#E8FAE8] dark:bg-green-900/20 rounded-xl aspect-[2/1] flex items-center justify-center">
+          <span className="text-4xl">{templateEmojis[templateId as keyof typeof templateEmojis]?.[1] || '✨'}</span>
+        </div>
+        <div className="bg-[#F8E8FF] dark:bg-purple-900/20 rounded-xl aspect-[2/1] flex items-center justify-center">
+          <span className="text-4xl">{templateEmojis[templateId as keyof typeof templateEmojis]?.[2] || '✨'}</span>
+        </div>
+      </div>
+    ),
+    'masonry': (
+      <div className="grid grid-cols-3 gap-6 h-full">
+        <div className="bg-[#FFE7F1] dark:bg-pink-900/20 rounded-xl aspect-square">
+          {templateEmojis[templateId as keyof typeof templateEmojis]?.[0] && (
+            <span className="text-4xl flex items-center justify-center h-full">
+              {templateEmojis[templateId as keyof typeof templateEmojis]?.[0]}
+            </span>
+          )}
+        </div>
+        <div className="row-span-2 bg-[#E8FAE8] dark:bg-green-900/20 rounded-xl">
+          {templateEmojis[templateId as keyof typeof templateEmojis]?.[1] && (
+            <span className="text-4xl flex items-center justify-center h-full">
+              {templateEmojis[templateId as keyof typeof templateEmojis]?.[1]}
+            </span>
+          )}
+        </div>
+        <div className="bg-[#F8E8FF] dark:bg-purple-900/20 rounded-xl aspect-square">
+          {templateEmojis[templateId as keyof typeof templateEmojis]?.[2] && (
+            <span className="text-4xl flex items-center justify-center h-full">
+              {templateEmojis[templateId as keyof typeof templateEmojis]?.[2]}
+            </span>
+          )}
+        </div>
+        <div className="col-span-2 bg-[#FFF8E8] dark:bg-yellow-900/20 rounded-xl aspect-[2/1]">
+          {templateEmojis[templateId as keyof typeof templateEmojis]?.[3] && (
+            <span className="text-4xl flex items-center justify-center h-full">
+              {templateEmojis[templateId as keyof typeof templateEmojis]?.[3]}
+            </span>
+          )}
+        </div>
+      </div>
+    )
+  };
+
   // Content type handlers
   const handleContentTypeClick = (type: string) => {
     setSelectedContentType(type);
@@ -373,10 +441,10 @@ function ContentEditor() {
           </div>
 
           {/* Canvas Area */}
-          <div className="flex-1">
+          <div className="flex-1 h-full">
             <div 
-              className="w-full border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-xl
-                       min-h-[80vh] relative bg-white dark:bg-gray-950 overflow-hidden"
+              className="w-full h-full border-2 border-dashed border-gray-200 dark:border-gray-800 
+                        rounded-xl bg-white dark:bg-gray-950 overflow-hidden p-6"
               onClick={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 const x = e.clientX - rect.left;
@@ -387,36 +455,7 @@ function ContentEditor() {
                 }
               }}
             >
-              {/* Grid Background */}
-              <div className="absolute inset-0 bg-[linear-gradient(#ddd_1px,transparent_1px),linear-gradient(90deg,#ddd_1px,transparent_1px)] 
-                           dark:bg-[linear-gradient(#333_1px,transparent_1px),linear-gradient(90deg,#333_1px,transparent_1px)]
-                           bg-[size:20px_20px] opacity-10" />
-              
-              {/* Content Grid - Updated to maintain proper sizing */}
-              <div className="relative h-full p-6">
-                <div className="grid grid-cols-2 gap-6 h-full">
-                  <div className="bg-[#E6F0FF] dark:bg-blue-900/20 rounded-xl flex items-center justify-center aspect-[2/1]">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-4xl">💼</span>
-                    </div>
-                  </div>
-                  <div className="bg-[#E8FAE8] dark:bg-green-900/20 rounded-xl flex items-center justify-center aspect-[2/1]">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-4xl">📈</span>
-                    </div>
-                  </div>
-                  <div className="bg-[#F8E8FF] dark:bg-purple-900/20 rounded-xl flex items-center justify-center aspect-[2/1]">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-4xl">🎯</span>
-                    </div>
-                  </div>
-                  <div className="bg-[#FFF8E8] dark:bg-yellow-900/20 rounded-xl flex items-center justify-center aspect-[2/1]">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-4xl">⭐</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {layoutTemplates[layoutId as keyof typeof layoutTemplates] || layoutTemplates['grid-2x2']}
             </div>
           </div>
         </div>
