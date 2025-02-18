@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, Suspense } from 'react';
+import { useState, Suspense, ChangeEvent, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
@@ -21,6 +21,9 @@ function ContentEditor() {
   const [showDialog, setShowDialog] = useState(false);
   const [text, setText] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImages, setSelectedImages] = useState<{ [key: string]: string }>({});
+  const [selectedCell, setSelectedCell] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const steps = [
     { number: 1, title: 'Name Your Board' },
@@ -33,8 +36,9 @@ function ContentEditor() {
     {
       id: 'image',
       name: 'Upload Image',
+      description: 'Upload your own images',
       icon: '🖼️',
-      description: 'Upload your own images'
+      bgColor: 'bg-[#FFE7F1]'
     },
     {
       id: 'text',
@@ -114,7 +118,7 @@ function ContentEditor() {
   const templateEmojis = {
     'career': ['💼', '📈', '🎯', '⭐'],
     'lifestyle': ['🏖️', '🏡', '✈️'],
-    'fitness': ['��', '🥗', '🧘‍♀️', '🏃‍♂️'],
+    'fitness': ['💪', '🥗', '🧘‍♀️', '🏃‍♂️'],
     'blank': ['✨']
   };
 
@@ -122,11 +126,37 @@ function ContentEditor() {
   const layoutTemplates = {
     'grid-2x2': (
       <div className="grid grid-cols-2 gap-6 h-full">
-        {templateEmojis[templateId as keyof typeof templateEmojis]?.slice(0, 4).map((emoji, i) => (
-          <div key={i} className={`bg-[${i === 0 ? '#FFE7F1' : i === 1 ? '#E8FAE8' : i === 2 ? '#F8E8FF' : '#FFF8E8'}] 
-                      dark:bg-${i === 0 ? 'pink' : i === 1 ? 'green' : i === 2 ? 'purple' : 'yellow'}-900/20 
-                      rounded-xl flex items-center justify-center aspect-[2/1]`}>
-            <span className="text-4xl">{emoji}</span>
+        {[0, 1, 2, 3].map((index) => (
+          <div
+            key={index}
+            onClick={() => handleImageClick(`grid-${index}`)}
+            className={`bg-[${index === 0 ? '#FFE7F1' : index === 1 ? '#E8FAE8' : index === 2 ? '#F8E8FF' : '#FFF8E8'}] 
+                      dark:bg-${index === 0 ? 'pink' : index === 1 ? 'green' : index === 2 ? 'purple' : 'yellow'}-900/20 
+                      rounded-xl flex items-center justify-center aspect-[2/1] cursor-pointer 
+                      hover:opacity-90 transition-opacity relative overflow-hidden group`}
+          >
+            {selectedImages[`grid-${index}`] ? (
+              <Image
+                src={selectedImages[`grid-${index}`]}
+                alt="Selected content"
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 
+                              flex items-center justify-center">
+                  <span className="text-2xl text-gray-400">+</span>
+                </div>
+                <span className="text-sm text-gray-400">Add Image</span>
+              </div>
+            )}
+            {selectedImages[`grid-${index}`] && (
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
+                            transition-opacity flex items-center justify-center">
+                <span className="text-white text-sm">Change Image</span>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -185,11 +215,18 @@ function ContentEditor() {
   };
 
   const handleAddContent = () => {
-    // Here you would add the content to the canvas
-    // For now, we'll just close the dialog
+    if (selectedContentType === 'image' && selectedImage) {
+      if (selectedCell) {
+        setSelectedImages(prev => ({
+          ...prev,
+          [selectedCell]: selectedImage
+        }));
+      }
+    }
     setShowDialog(false);
-    setText('');
     setSelectedImage(null);
+    setSelectedCell(null);
+    setSelectedContentType(null);
   };
 
   // Dialog content based on content type
@@ -201,30 +238,45 @@ function ContentEditor() {
             <DialogHeader>
               <DialogTitle>Upload Image</DialogTitle>
             </DialogHeader>
-            <div className="p-6">
-              <Input
+            <div className="p-6 space-y-4">
+              <div className="w-full aspect-video rounded-xl border-2 border-dashed border-gray-200 
+                            dark:border-gray-800 flex items-center justify-center relative overflow-hidden
+                            hover:border-[#FF1B7C]/30 transition-colors cursor-pointer"
+                   onClick={() => fileInputRef.current?.click()}>
+                {selectedImage ? (
+                  <>
+                    <Image
+                      src={selectedImage}
+                      alt="Preview"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 
+                                  transition-opacity flex items-center justify-center">
+                      <span className="text-white text-sm">Change Image</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-xl border-2 border-dashed border-gray-200 
+                                  flex items-center justify-center">
+                      <span className="text-2xl text-gray-400">+</span>
+                    </div>
+                    <span className="text-sm text-gray-400">Click to upload image</span>
+                  </div>
+                )}
+              </div>
+              <input
                 type="file"
+                ref={fileInputRef}
+                className="hidden"
                 accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                      setSelectedImage(reader.result as string);
-                    };
-                    reader.readAsDataURL(file);
-                  }
-                }}
-                className="mb-4"
+                onChange={handleImageChange}
               />
-              {selectedImage && (
-                <div className="w-full aspect-video relative rounded-lg overflow-hidden">
-                  <Image src={selectedImage} alt="Preview" fill className="object-cover" />
-                </div>
-              )}
               <Button 
                 onClick={handleAddContent}
-                className="w-full mt-4 bg-[#E6156F] hover:bg-[#D11463]"
+                disabled={!selectedImage}
+                className="w-full bg-[#E6156F] hover:bg-[#D11463] disabled:opacity-50"
               >
                 Add Image
               </Button>
@@ -334,6 +386,37 @@ function ContentEditor() {
     }
   };
 
+  const handleImageClick = (cellId: string) => {
+    setSelectedCell(cellId);
+    setSelectedContentType('image');
+    setShowDialog(true);
+  };
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageUrl = e.target?.result as string;
+        setSelectedImage(imageUrl);
+        if (selectedCell) {
+          setSelectedImages(prev => ({
+            ...prev,
+            [selectedCell]: imageUrl
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Update handleUploadClick to work with the content type buttons
+  const handleUploadClick = () => {
+    setSelectedContentType('image');
+    setShowDialog(true);
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Steps Header - Full width with proper spacing */}
@@ -421,9 +504,9 @@ function ContentEditor() {
                               transition-transform duration-300" />
                 
                 <div className="flex items-center gap-4 relative z-10">
-                  <div className="w-12 h-12 rounded-xl bg-[#FFE7F1] dark:bg-[#FF1B7C]/10
+                  <div className={`w-12 h-12 ${type.bgColor} rounded-xl 
                                 flex items-center justify-center
-                                group-hover:scale-110 transition-transform duration-200">
+                                group-hover:scale-110 transition-transform duration-200`}>
                     <span className="text-2xl group-hover:animate-bounce">{type.icon}</span>
                   </div>
                   <div>
@@ -484,6 +567,14 @@ function ContentEditor() {
           {getDialogContent()}
         </DialogContent>
       </Dialog>
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        accept="image/*"
+        onChange={handleImageChange}
+      />
     </div>
   );
 }
