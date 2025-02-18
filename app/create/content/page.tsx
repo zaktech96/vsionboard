@@ -122,7 +122,7 @@ function ContentEditor() {
     'blank': ['✨']
   };
 
-  // Add layout templates
+  // Update the layoutTemplates object
   const layoutTemplates = {
     'grid-2x2': (
       <div className="grid grid-cols-2 gap-6 h-full">
@@ -163,47 +163,94 @@ function ContentEditor() {
     ),
     'featured': (
       <div className="grid grid-cols-2 h-full gap-6">
-        <div className="col-span-2 bg-[#FFE7F1] dark:bg-pink-900/20 rounded-xl aspect-[2/1] flex items-center justify-center">
-          <span className="text-6xl">{templateEmojis[templateId as keyof typeof templateEmojis]?.[0] || '✨'}</span>
+        <div 
+          onClick={() => handleImageClick('featured-main')}
+          className="col-span-2 bg-[#FFE7F1] dark:bg-pink-900/20 rounded-xl aspect-[2/1] flex items-center justify-center cursor-pointer group relative overflow-hidden">
+          {selectedImages['featured-main'] ? (
+            <Image
+              src={selectedImages['featured-main']}
+              alt="Selected content"
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                <span className="text-2xl text-gray-400">+</span>
+              </div>
+              <span className="text-sm text-gray-400">Add Image</span>
+            </div>
+          )}
+          {selectedImages['featured-main'] && (
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span className="text-white text-sm">Change Image</span>
+            </div>
+          )}
         </div>
-        <div className="bg-[#E8FAE8] dark:bg-green-900/20 rounded-xl aspect-[2/1] flex items-center justify-center">
-          <span className="text-4xl">{templateEmojis[templateId as keyof typeof templateEmojis]?.[1] || '✨'}</span>
-        </div>
-        <div className="bg-[#F8E8FF] dark:bg-purple-900/20 rounded-xl aspect-[2/1] flex items-center justify-center">
-          <span className="text-4xl">{templateEmojis[templateId as keyof typeof templateEmojis]?.[2] || '✨'}</span>
-        </div>
+        {[1, 2].map((index) => (
+          <div
+            key={index}
+            onClick={() => handleImageClick(`featured-${index}`)}
+            className={`bg-[${index === 1 ? '#E8FAE8' : '#F8E8FF'}] dark:bg-${index === 1 ? 'green' : 'purple'}-900/20 
+                      rounded-xl aspect-[2/1] flex items-center justify-center cursor-pointer relative overflow-hidden group`}
+          >
+            {selectedImages[`featured-${index}`] ? (
+              <Image
+                src={selectedImages[`featured-${index}`]}
+                alt="Selected content"
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                  <span className="text-2xl text-gray-400">+</span>
+                </div>
+                <span className="text-sm text-gray-400">Add Image</span>
+              </div>
+            )}
+            {selectedImages[`featured-${index}`] && (
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span className="text-white text-sm">Change Image</span>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     ),
     'masonry': (
       <div className="grid grid-cols-3 gap-6 h-full">
-        <div className="bg-[#FFE7F1] dark:bg-pink-900/20 rounded-xl aspect-square">
-          {templateEmojis[templateId as keyof typeof templateEmojis]?.[0] && (
-            <span className="text-4xl flex items-center justify-center h-full">
-              {templateEmojis[templateId as keyof typeof templateEmojis]?.[0]}
-            </span>
-          )}
-        </div>
-        <div className="row-span-2 bg-[#E8FAE8] dark:bg-green-900/20 rounded-xl">
-          {templateEmojis[templateId as keyof typeof templateEmojis]?.[1] && (
-            <span className="text-4xl flex items-center justify-center h-full">
-              {templateEmojis[templateId as keyof typeof templateEmojis]?.[1]}
-            </span>
-          )}
-        </div>
-        <div className="bg-[#F8E8FF] dark:bg-purple-900/20 rounded-xl aspect-square">
-          {templateEmojis[templateId as keyof typeof templateEmojis]?.[2] && (
-            <span className="text-4xl flex items-center justify-center h-full">
-              {templateEmojis[templateId as keyof typeof templateEmojis]?.[2]}
-            </span>
-          )}
-        </div>
-        <div className="col-span-2 bg-[#FFF8E8] dark:bg-yellow-900/20 rounded-xl aspect-[2/1]">
-          {templateEmojis[templateId as keyof typeof templateEmojis]?.[3] && (
-            <span className="text-4xl flex items-center justify-center h-full">
-              {templateEmojis[templateId as keyof typeof templateEmojis]?.[3]}
-            </span>
-          )}
-        </div>
+        {['top-left', 'center', 'top-right', 'bottom'].map((cellId, index) => (
+          <div
+            key={cellId}
+            onClick={() => handleImageClick(`masonry-${cellId}`)}
+            className={`${index === 1 ? 'row-span-2' : index === 3 ? 'col-span-2' : ''} 
+                      bg-[${index === 0 ? '#FFE7F1' : index === 1 ? '#E8FAE8' : index === 2 ? '#F8E8FF' : '#FFF8E8'}]
+                      dark:bg-${index === 0 ? 'pink' : index === 1 ? 'green' : index === 2 ? 'purple' : 'yellow'}-900/20 
+                      rounded-xl flex items-center justify-center cursor-pointer relative overflow-hidden group`}
+          >
+            {selectedImages[`masonry-${cellId}`] ? (
+              <Image
+                src={selectedImages[`masonry-${cellId}`]}
+                alt="Selected content"
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                  <span className="text-2xl text-gray-400">+</span>
+                </div>
+                <span className="text-sm text-gray-400">Add Image</span>
+              </div>
+            )}
+            {selectedImages[`masonry-${cellId}`] && (
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span className="text-white text-sm">Change Image</span>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     )
   };
@@ -358,8 +405,22 @@ function ContentEditor() {
 
   // Add navigation handler
   const handleSave = () => {
-    // Add save logic here
-    router.push('/dashboard'); // or wherever you want to go after saving
+    // Save board data (replace with actual API call)
+    const boardId = Math.random().toString(36).substr(2, 9); // Generate random ID
+    const boardData = {
+      id: boardId,
+      name: boardName,
+      template: templateId,
+      layout: layoutId,
+      images: selectedImages,
+      createdAt: new Date().toISOString()
+    };
+
+    // Save to backend/localStorage
+    console.log('Saving board:', boardData);
+
+    // Redirect to board view
+    router.push(`/board/${boardId}`);
   };
 
   // Add function to handle content placement
