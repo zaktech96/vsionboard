@@ -75,7 +75,7 @@ export default function RootLayout({
               <Toaster />
             </ThemeProvider>
           </Provider>
-          <Analytics />
+          <Analytics mode="production" />
         </body>
       </html>
     </AuthWrapper>

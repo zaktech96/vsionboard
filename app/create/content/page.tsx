@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
 
+const generateUniqueId = () => crypto.randomUUID();
 
 function ContentEditor() {
   const router = useRouter();
@@ -43,20 +44,23 @@ function ContentEditor() {
     {
       id: 'text',
       name: 'Add Text',
+      description: 'Add inspiring quotes or notes',
       icon: '✍️',
-      description: 'Add inspiring quotes or notes'
+      bgColor: 'bg-[#FFE7F1]'
     },
     {
       id: 'sticker',
       name: 'Stickers',
       icon: '⭐',
-      description: 'Choose from our sticker collection'
+      description: 'Choose from our sticker collection',
+      bgColor: 'bg-[#FFE7F1]'
     },
     {
       id: 'shape',
       name: 'Shapes',
       icon: '⬡',
-      description: 'Add geometric shapes and lines'
+      description: 'Add geometric shapes and lines',
+      bgColor: 'bg-[#FFE7F1]'
     }
   ];
 
@@ -513,23 +517,28 @@ function ContentEditor() {
   };
 
   // Add navigation handler
-  const handleSave = () => {
-    // Save board data (replace with actual API call)
-    const boardId = Math.random().toString(36).substr(2, 9); // Generate random ID
-    const boardData = {
-      id: boardId,
-      name: boardName,
-      template: templateId,
-      layout: layoutId,
-      images: selectedImages,
-      createdAt: new Date().toISOString()
-    };
+  const handleSave = async () => {
+    try {
+      const boardData = {
+        id: searchParams.get('id') || generateUniqueId(),
+        name: boardName,
+        template: templateId,
+        layout: layoutId,
+        images: selectedImages, // Make sure this contains the base64 images
+        createdAt: new Date().toISOString()
+      };
 
-    // Save to backend/localStorage
-    console.log('Saving board:', boardData);
-
-    // Redirect to board view
-    router.push(`/board/${boardId}`);
+      // Save to localStorage
+      const existingBoards = JSON.parse(localStorage.getItem('visionBoards') || '[]');
+      const updatedBoards = existingBoards.filter((b: any) => b.id !== boardData.id);
+      updatedBoards.push(boardData);
+      
+      localStorage.setItem('visionBoards', JSON.stringify(updatedBoards));
+      
+      router.push(`/board/${boardData.id}`);
+    } catch (error) {
+      console.error('Error saving board:', error);
+    }
   };
 
   // Add function to handle content placement
