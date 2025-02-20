@@ -196,31 +196,20 @@ function ContentEditor() {
           )}
         </div>
 
-        {/* Only show supporting images button if main image exists */}
-        {selectedImages['featured-main'] && !selectedImages['featured-1'] && !selectedImages['featured-2'] && (
-          <button
-            onClick={() => handleImageClick('featured-1')}
-            className="w-full py-3 border-2 border-dashed border-gray-200/60 rounded-xl
-                     hover:border-[#FF1B7C]/20 hover:bg-[#FFE7F1]/10 transition-all
-                     flex items-center justify-center gap-2"
-          >
-            <Plus className="w-5 h-5 text-gray-400" />
-            <span className="text-gray-400">Add Supporting Images</span>
-          </button>
-        )}
-
-        {/* Show supporting images grid if main image exists */}
-        {selectedImages['featured-main'] && (selectedImages['featured-1'] || selectedImages['featured-2']) && (
-          <div className="grid grid-cols-2 gap-6">
+        {/* Supporting Images - Always visible */}
+        <div className="grid grid-cols-2 gap-6">
+          {[1, 2].map((i) => (
             <div
-              onClick={() => handleImageClick('featured-1')}
-              className="aspect-[21/9] bg-[#E8FAE8] rounded-2xl border-2 border-dashed border-gray-200/60 
-                       hover:border-[#FF1B7C]/20 hover:opacity-90 relative overflow-hidden cursor-pointer"
+              key={i}
+              onClick={() => handleImageClick(`featured-${i}`)}
+              className={`aspect-[21/9] ${i === 1 ? 'bg-[#E8FAE8]' : 'bg-[#F8E8FF]'} 
+                       rounded-2xl border-2 border-dashed border-gray-200/60 
+                       hover:border-[#FF1B7C]/20 hover:opacity-90 relative overflow-hidden cursor-pointer`}
             >
-              {selectedImages['featured-1'] ? (
+              {selectedImages[`featured-${i}`] ? (
                 <Image
-                  src={selectedImages['featured-1']}
-                  alt="Supporting image 1"
+                  src={selectedImages[`featured-${i}`]}
+                  alt={`Supporting image ${i}`}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -235,35 +224,8 @@ function ContentEditor() {
                 </div>
               )}
             </div>
-
-            {/* Show second supporting image only if first one exists */}
-            {selectedImages['featured-1'] && (
-              <div
-                onClick={() => handleImageClick('featured-2')}
-                className="aspect-[21/9] bg-[#F8E8FF] rounded-2xl border-2 border-dashed border-gray-200/60 
-                         hover:border-[#FF1B7C]/20 hover:opacity-90 relative overflow-hidden cursor-pointer"
-              >
-                {selectedImages['featured-2'] ? (
-                  <Image
-                    src={selectedImages['featured-2']}
-                    alt="Supporting image 2"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
-                                 flex items-center justify-center bg-white/80">
-                      <Plus className="w-5 h-5 text-gray-400" />
-                    </div>
-                    <span className="text-gray-400 mt-2">Add Image</span>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+          ))}
+        </div>
       </div>
     ),
     'masonry': (
