@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, Suspense, ChangeEvent, useRef } from 'react';
-import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
@@ -130,40 +129,39 @@ function ContentEditor() {
   const layoutTemplates = {
     'grid-2x2': (
       <div className="flex flex-col gap-6">
-        <div className="grid grid-cols-2 gap-6 h-full">
-          {Object.keys(selectedImages)
-            .filter(key => key.startsWith('grid-'))
-            .map((key) => (
-              <div
-                key={key}
-                onClick={() => handleImageClick(key)}
-                className="bg-[#FFE7F1] rounded-2xl border-2 border-dashed border-gray-200/60 
-                         hover:border-[#FF1B7C]/20 hover:opacity-90
-                         transition-all duration-300 aspect-[4/3]
-                         flex items-center justify-center group cursor-pointer
-                         relative overflow-hidden"
-              >
-                {selectedImages[key] ? (
-                  <Image
-                    src={selectedImages[key]}
-                    alt="Selected content"
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
-                    <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
-                                  flex items-center justify-center bg-white shadow-sm">
-                      <span className="text-gray-400 text-xl">+</span>
-                    </div>
-                    <span className="text-gray-400 text-sm">Add Image</span>
-                  </div>
-                )}
+        {/* Initial grid layout */}
+        <div className="grid grid-cols-2 gap-6">
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              onClick={() => handleImageClick(`grid-${i}`)}
+              className={`aspect-[4/3] rounded-2xl 
+                       border-2 border-dashed border-gray-200/60 
+                       hover:border-[#FF1B7C]/20 hover:opacity-90
+                       transition-all duration-300
+                       flex items-center justify-center group cursor-pointer
+                       ${i === 0 ? 'bg-[#FFE7F1]' : 
+                         i === 1 ? 'bg-[#E8FAE8]' : 
+                         i === 2 ? 'bg-[#F8E8FF]' : 
+                         'bg-[#FFF8E8]'}`}
+            >
+              <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
+                <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                              flex items-center justify-center bg-white/80">
+                  <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#FF1B7C]" />
+                </div>
+                <span className="text-gray-400 text-sm">Add Image</span>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
+
+        {/* Add More Images button */}
         <button
-          onClick={() => handleImageClick(`grid-${Object.keys(selectedImages).filter(k => k.startsWith('grid-')).length}`)}
+          onClick={() => {
+            const newIndex = Object.keys(selectedImages).filter(k => k.startsWith('grid-')).length;
+            handleImageClick(`grid-${newIndex}`);
+          }}
           className="w-full py-3 border-2 border-dashed border-gray-200/60 rounded-xl
                    hover:border-[#FF1B7C]/20 hover:bg-[#FFE7F1]/10 transition-all
                    flex items-center justify-center gap-2 group"
