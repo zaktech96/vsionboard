@@ -99,6 +99,27 @@ function VisionBoard() {
       );
     }
 
+    if (layout === 'grid-2x2') {
+      const gridImages = Object.entries(board?.images || {})
+        .filter(([key]) => key.startsWith('grid-'));
+      
+      return (
+        <div className="grid grid-cols-2 gap-6">
+          {gridImages.map(([key, src]) => (
+            <div
+              key={key}
+              className={`aspect-[4/3] rounded-2xl overflow-hidden relative 
+                        ${key === 'grid-0' ? 'bg-[#FFE7F1]' : 
+                          key === 'grid-1' ? 'bg-[#E8FAE8]' : 
+                          key === 'grid-2' ? 'bg-[#F8E8FF]' : 'bg-[#FFF8E8]'}`}
+            >
+              {renderImage(key)}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     switch (layout) {
       case 'masonry':
         return (
