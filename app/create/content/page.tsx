@@ -129,7 +129,6 @@ function ContentEditor() {
   const layoutTemplates = {
     'grid-2x2': (
       <div className="flex flex-col gap-6">
-        {/* Initial grid layout */}
         <div className="grid grid-cols-2 gap-6">
           {[...Array(4)].map((_, i) => (
             <div
@@ -139,24 +138,32 @@ function ContentEditor() {
                        border-2 border-dashed border-gray-200/60 
                        hover:border-[#FF1B7C]/20 hover:opacity-90
                        transition-all duration-300
-                       flex items-center justify-center group cursor-pointer
+                       flex items-center justify-center group cursor-pointer relative
                        ${i === 0 ? 'bg-[#FFE7F1]' : 
                          i === 1 ? 'bg-[#E8FAE8]' : 
                          i === 2 ? 'bg-[#F8E8FF]' : 
                          'bg-[#FFF8E8]'}`}
             >
-              <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
-                <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
-                              flex items-center justify-center bg-white/80">
-                  <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#FF1B7C]" />
+              {selectedImages[`grid-${i}`] ? (
+                <Image
+                  src={selectedImages[`grid-${i}`]}
+                  alt="Selected content"
+                  fill
+                  className="object-cover rounded-xl"
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                                flex items-center justify-center bg-white/80">
+                    <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#FF1B7C]" />
+                  </div>
+                  <span className="text-gray-400 text-sm">Add Image</span>
                 </div>
-                <span className="text-gray-400 text-sm">Add Image</span>
-              </div>
+              )}
             </div>
           ))}
         </div>
 
-        {/* Add More Images button */}
         <button
           onClick={() => {
             const newIndex = Object.keys(selectedImages).filter(k => k.startsWith('grid-')).length;
