@@ -25,37 +25,46 @@ function LayoutContent() {
     {
       id: 'grid-2x2',
       name: 'Classic Grid',
-      description: 'A balanced 2x2 grid layout',
+      description: 'Start with 2x2 grid, expand as needed',
       preview: (
-        <div className="grid grid-cols-2 gap-3 w-full aspect-square">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-gray-100 dark:bg-gray-800 rounded-xl" />
-          ))}
+        <div className="flex flex-col gap-2 w-full">
+          <div className="grid grid-cols-2 gap-2 w-full">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-gray-100 dark:bg-gray-800 rounded-xl aspect-square" />
+            ))}
+          </div>
+          <div className="w-full h-8 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center">
+            <span className="text-xs text-gray-400">+ Add More Images</span>
+          </div>
         </div>
       )
     },
     {
       id: 'featured',
       name: 'Featured Focus',
-      description: 'One large image with supporting elements',
+      description: 'One large image with expandable supporting elements',
       preview: (
-        <div className="grid grid-cols-3 gap-3 w-full aspect-square">
-          <div className="col-span-2 row-span-2 bg-gray-100 dark:bg-gray-800 rounded-xl" />
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-xl" />
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-xl" />
+        <div className="flex flex-col gap-2 w-full">
+          <div className="grid grid-cols-2 gap-2 w-full">
+            <div className="col-span-2 h-32 bg-gray-100 dark:bg-gray-800 rounded-xl" />
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl aspect-[2/1]" />
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl aspect-[2/1]" />
+          </div>
+          <div className="w-full h-8 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center">
+            <span className="text-xs text-gray-400">+ Add Supporting Images</span>
+          </div>
         </div>
       )
     },
     {
-      id: 'masonry',
-      name: 'Dynamic Flow',
-      description: 'Flexible arrangement for various content sizes',
+      id: 'gallery-flow',
+      name: 'Gallery Grid',
+      description: 'Flexible grid for multiple images',
       preview: (
-        <div className="grid grid-cols-3 gap-3 w-full aspect-square">
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-xl" />
-          <div className="row-span-2 bg-gray-100 dark:bg-gray-800 rounded-xl" />
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-xl" />
-          <div className="col-span-2 bg-gray-100 dark:bg-gray-800 rounded-xl" />
+        <div className="grid grid-cols-3 gap-2 w-full aspect-square">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="bg-gray-100 dark:bg-gray-800 rounded-xl" />
+          ))}
         </div>
       )
     }

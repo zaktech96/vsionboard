@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Plus, Upload } from 'lucide-react';
 
 const generateUniqueId = () => crypto.randomUUID();
 
@@ -129,101 +129,115 @@ function ContentEditor() {
   // Update the layoutTemplates object
   const layoutTemplates = {
     'grid-2x2': (
-      <div className="grid grid-cols-2 gap-6 h-full">
-        {[0, 1, 2, 3].map((index) => (
-          <div
-            key={index}
-            onClick={() => handleImageClick(`grid-${index}`)}
-            className={`${index === 0 ? 'bg-[#FFE7F1]' : index === 1 ? 'bg-[#E8FAE8]' : index === 2 ? 'bg-[#F8E8FF]' : 'bg-[#FFF8E8]'}
-                      dark:bg-${index === 0 ? 'pink' : index === 1 ? 'green' : index === 2 ? 'purple' : 'yellow'}-900/20 
-                      rounded-2xl border-2 border-dashed border-gray-200/60 
-                      hover:border-[#FF1B7C]/20 hover:opacity-90
-                      transition-all duration-300 aspect-[4/3]
-                      flex items-center justify-center group cursor-pointer
-                      relative overflow-hidden`}
-          >
-            {selectedImages[`grid-${index}`] ? (
-              <Image
-                src={selectedImages[`grid-${index}`]}
-                alt="Selected content"
-                fill
-                className="object-cover"
-              />
-            ) : (
-              <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
-                <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
-                              flex items-center justify-center bg-white shadow-sm
-                              group-hover:border-[#FF1B7C]/30 group-hover:shadow-[#FFE7F1]">
-                  <span className="text-gray-400 text-xl group-hover:text-[#FF1B7C]">+</span>
-                </div>
-                <span className="text-gray-400 text-sm font-medium group-hover:text-[#FF1B7C]">Add Image</span>
+      <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-2 gap-6 h-full">
+          {Object.keys(selectedImages)
+            .filter(key => key.startsWith('grid-'))
+            .map((key) => (
+              <div
+                key={key}
+                onClick={() => handleImageClick(key)}
+                className="bg-[#FFE7F1] rounded-2xl border-2 border-dashed border-gray-200/60 
+                         hover:border-[#FF1B7C]/20 hover:opacity-90
+                         transition-all duration-300 aspect-[4/3]
+                         flex items-center justify-center group cursor-pointer
+                         relative overflow-hidden"
+              >
+                {selectedImages[key] ? (
+                  <Image
+                    src={selectedImages[key]}
+                    alt="Selected content"
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
+                    <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                                  flex items-center justify-center bg-white shadow-sm">
+                      <span className="text-gray-400 text-xl">+</span>
+                    </div>
+                    <span className="text-gray-400 text-sm">Add Image</span>
+                  </div>
+                )}
               </div>
-            )}
-            {selectedImages[`grid-${index}`] && (
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
-                            transition-opacity flex items-center justify-center">
-                <span className="text-white text-sm">Change Image</span>
-              </div>
-            )}
-          </div>
-        ))}
+            ))}
+        </div>
+        <button
+          onClick={() => handleImageClick(`grid-${Object.keys(selectedImages).filter(k => k.startsWith('grid-')).length}`)}
+          className="w-full py-3 border-2 border-dashed border-gray-200/60 rounded-xl
+                   hover:border-[#FF1B7C]/20 hover:bg-[#FFE7F1]/10 transition-all
+                   flex items-center justify-center gap-2 group"
+        >
+          <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#FF1B7C]" />
+          <span className="text-gray-400 group-hover:text-[#FF1B7C]">Add More Images</span>
+        </button>
       </div>
     ),
     'featured': (
-      <div className="grid grid-cols-2 h-full gap-6">
-        <div 
-          onClick={() => handleImageClick('featured-main')}
-          className="col-span-2 bg-[#FFE7F1] dark:bg-pink-900/20 rounded-xl aspect-[2/1] flex items-center justify-center cursor-pointer group relative overflow-hidden">
-          {selectedImages['featured-main'] ? (
-            <Image
-              src={selectedImages['featured-main']}
-              alt="Selected content"
-              fill
-              className="object-cover"
-            />
-          ) : (
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
-                <span className="text-2xl text-gray-400">+</span>
-              </div>
-              <span className="text-sm text-gray-400">Add Image</span>
-            </div>
-          )}
-          {selectedImages['featured-main'] && (
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <span className="text-white text-sm">Change Image</span>
-            </div>
-          )}
-        </div>
-        {[1, 2].map((index) => (
-          <div
-            key={index}
-            onClick={() => handleImageClick(`featured-${index}`)}
-            className={`bg-[${index === 1 ? '#E8FAE8' : '#F8E8FF'}] dark:bg-${index === 1 ? 'green' : 'purple'}-900/20 
-                      rounded-xl aspect-[2/1] flex items-center justify-center cursor-pointer relative overflow-hidden group`}
-          >
-            {selectedImages[`featured-${index}`] ? (
-              <Image
-                src={selectedImages[`featured-${index}`]}
-                alt="Selected content"
-                fill
-                className="object-cover"
-              />
-            ) : (
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
-                  <span className="text-2xl text-gray-400">+</span>
+      <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-2 h-full gap-6">
+          <div className="col-span-2">
+            <div 
+              onClick={() => handleImageClick('featured-main')}
+              className="col-span-2 bg-[#FFE7F1] dark:bg-pink-900/20 rounded-xl aspect-[2/1] flex items-center justify-center cursor-pointer group relative overflow-hidden">
+              {selectedImages['featured-main'] ? (
+                <Image
+                  src={selectedImages['featured-main']}
+                  alt="Selected content"
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                    <span className="text-2xl text-gray-400">+</span>
+                  </div>
+                  <span className="text-sm text-gray-400">Add Image</span>
                 </div>
-                <span className="text-sm text-gray-400">Add Image</span>
-              </div>
-            )}
-            {selectedImages[`featured-${index}`] && (
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span className="text-white text-sm">Change Image</span>
-              </div>
-            )}
+              )}
+              {selectedImages['featured-main'] && (
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-white text-sm">Change Image</span>
+                </div>
+              )}
+            </div>
           </div>
-        ))}
+          {Object.keys(selectedImages)
+            .filter(key => key.startsWith('featured-sub-'))
+            .map((key) => (
+              <div key={key} onClick={() => handleImageClick(key)} className="aspect-[2/1]">
+                {selectedImages[key] ? (
+                  <Image
+                    src={selectedImages[key]}
+                    alt="Selected content"
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-10 h-10 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                      <span className="text-2xl text-gray-400">+</span>
+                    </div>
+                    <span className="text-sm text-gray-400">Add Image</span>
+                  </div>
+                )}
+                {selectedImages[key] && (
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="text-white text-sm">Change Image</span>
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
+        <button
+          onClick={() => handleImageClick(`featured-sub-${Object.keys(selectedImages).filter(k => k.startsWith('featured-sub-')).length}`)}
+          className="w-full py-3 border-2 border-dashed border-gray-200/60 rounded-xl
+                   hover:border-[#FF1B7C]/20 hover:bg-[#FFE7F1]/10 transition-all
+                   flex items-center justify-center gap-2 group"
+        >
+          <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#FF1B7C]" />
+          <span className="text-gray-400 group-hover:text-[#FF1B7C]">Add Supporting Images</span>
+        </button>
       </div>
     ),
     'masonry': (
@@ -365,6 +379,33 @@ function ContentEditor() {
           )}
         </div>
       </div>
+    ),
+    'gallery-flow': (
+      <div className="grid grid-cols-3 gap-4 h-full">
+        {Object.keys(selectedImages)
+          .filter(key => key.startsWith('gallery-'))
+          .map((key) => (
+            <div
+              key={key}
+              className="aspect-square bg-[#FFE7F1] rounded-2xl border-2 border-dashed border-gray-200/60 
+                       hover:border-[#FF1B7C]/20 relative overflow-hidden"
+            >
+              <Image
+                src={selectedImages[key]}
+                alt="Gallery image"
+                fill
+                className="object-cover"
+              />
+            </div>
+          ))}
+        <button
+          onClick={() => handleImageClick(`gallery-${Object.keys(selectedImages).filter(k => k.startsWith('gallery-')).length}`)}
+          className="aspect-square bg-[#FFE7F1]/50 rounded-2xl border-2 border-dashed border-gray-200/60 
+                   hover:border-[#FF1B7C]/20 flex items-center justify-center"
+        >
+          <Plus className="w-8 h-8 text-[#FF1B7C]" />
+        </button>
+      </div>
     )
   };
 
@@ -394,54 +435,36 @@ function ContentEditor() {
     switch (selectedContentType) {
       case 'image':
         return (
-          <>
+          <DialogContent>
             <DialogHeader>
-              <DialogTitle>Upload Image</DialogTitle>
-            </DialogHeader>
-            <div className="p-6 space-y-4">
-              <div className="w-full aspect-video rounded-xl border-2 border-dashed border-gray-200 
-                            dark:border-gray-800 flex items-center justify-center relative overflow-hidden
-                            hover:border-[#FF1B7C]/30 transition-colors cursor-pointer"
-                   onClick={() => fileInputRef.current?.click()}>
-                {selectedImage ? (
-                  <>
-                    <Image
-                      src={selectedImage}
-                      alt="Preview"
-                      fill
-                      className="object-cover"
+              <DialogTitle className="sr-only">Add Content</DialogTitle>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                      Upload Image
+                    </label>
+                    <input
+                      type="file"
+                      onChange={handleImageChange}
+                      accept="image/*"
+                      className="hidden"
+                      id="image-upload"
                     />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 
-                                  transition-opacity flex items-center justify-center">
-                      <span className="text-white text-sm">Change Image</span>
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-xl border-2 border-dashed border-gray-200 
-                                  flex items-center justify-center">
-                      <span className="text-2xl text-gray-400">+</span>
-                    </div>
-                    <span className="text-sm text-gray-400">Click to upload image</span>
+                    <label
+                      htmlFor="image-upload"
+                      className="flex items-center justify-center w-full px-4 py-2 border border-gray-300 
+                               dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 
+                               dark:hover:bg-gray-800 transition-colors"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Choose Image
+                    </label>
                   </div>
-                )}
+                </div>
               </div>
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-              <Button 
-                onClick={handleAddContent}
-                disabled={!selectedImage}
-                className="w-full bg-[#E6156F] hover:bg-[#D11463] disabled:opacity-50"
-              >
-                Add Image
-              </Button>
-            </div>
-          </>
+            </DialogHeader>
+          </DialogContent>
         );
       case 'text':
         return (
@@ -742,9 +765,7 @@ function ContentEditor() {
 
       {/* Keep existing Dialog component */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent>
-          {getDialogContent()}
-        </DialogContent>
+        {getDialogContent()}
       </Dialog>
 
       <input

@@ -59,41 +59,91 @@ function VisionBoard() {
   };
 
   const renderGrid = () => {
-    const layout = board?.layout || 'grid-2x2';
-    
-    if (layout === 'featured') {
+    const layout = board?.layout;
+
+    if (layout === 'gallery-flow') {
+      const galleryImages = Object.entries(board?.images || {})
+        .filter(([key]) => key.startsWith('gallery-'));
+      
       return (
-        <div className="grid grid-cols-2 gap-6">
-          <div className="col-span-2 aspect-[2/1] bg-[#FFE7F1] rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {galleryImages.map(([key]) => (
+            <div key={key} className="aspect-square rounded-2xl overflow-hidden relative">
+              {renderImage(key)}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (layout === 'featured-flow') {
+      const galleryImages = Object.entries(board?.images || {})
+        .filter(([key]) => key.startsWith('gallery-'));
+      
+      return (
+        <div className="flex flex-col gap-6">
+          {/* Featured Image */}
+          <div className="w-full aspect-[21/9] rounded-2xl overflow-hidden relative">
             {renderImage('featured-main')}
           </div>
-          <div className="bg-[#E8FAE8] rounded-2xl aspect-[4/3] overflow-hidden">
-            {renderImage('featured-1')}
-          </div>
-          <div className="bg-[#F8E8FF] rounded-2xl aspect-[4/3] overflow-hidden">
-            {renderImage('featured-2')}
+          
+          {/* Gallery Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {galleryImages.map(([key]) => (
+              <div key={key} className="aspect-square rounded-2xl overflow-hidden relative">
+                {renderImage(key)}
+              </div>
+            ))}
           </div>
         </div>
       );
     }
 
-    // Default grid-2x2 layout
-    return (
-      <div className="grid grid-cols-2 gap-6">
-        {[0, 1, 2, 3].map((index) => (
-          <div
-            key={index}
-            className={`${
-              index === 0 ? 'bg-[#FFE7F1]' : 
-              index === 1 ? 'bg-[#E8FAE8]' : 
-              index === 2 ? 'bg-[#F8E8FF]' : 'bg-[#FFF8E8]'
-            } rounded-2xl aspect-[4/3] overflow-hidden relative`}
-          >
-            {renderImage(`grid-${index}`)}
+    switch (layout) {
+      case 'masonry':
+        return (
+          <div className="grid grid-cols-3 gap-6">
+            {['top-left', 'center', 'top-right', 'bottom'].map((cellId, index) => (
+              <div
+                key={cellId}
+                className={`${index === 1 ? 'row-span-2' : index === 3 ? 'col-span-2' : ''} 
+                          bg-[${index === 0 ? '#FFE7F1' : index === 1 ? '#E8FAE8' : index === 2 ? '#F8E8FF' : '#FFF8E8'}]
+                          rounded-2xl overflow-hidden relative aspect-square`}
+              >
+                {renderImage(`masonry-${cellId}`)}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    );
+        );
+
+      case 'featured':
+        return (
+          <div className="grid grid-cols-2 gap-6">
+            <div className="col-span-2 aspect-[2/1] relative rounded-2xl overflow-hidden">
+              {renderImage('featured-main')}
+            </div>
+            {[1, 2].map((index) => (
+              <div key={index} className="aspect-[2/1] relative rounded-2xl overflow-hidden">
+                {renderImage(`featured-${index}`)}
+              </div>
+            ))}
+          </div>
+        );
+
+      default: // grid-2x2
+        return (
+          <div className="grid grid-cols-2 gap-6">
+            {[0, 1, 2, 3].map((index) => (
+              <div
+                key={index}
+                className="aspect-[4/3] rounded-2xl overflow-hidden relative"
+              >
+                {renderImage(`grid-${index}`)}
+              </div>
+            ))}
+          </div>
+        );
+    }
   };
 
   const renderImage = (key: string) => {
@@ -143,48 +193,41 @@ function VisionBoard() {
   if (!board) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
       {/* Header */}
-      <div className="w-full bg-gray-50 dark:bg-gray-900 border-b dark:border-gray-800">
+      <div className="border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg sticky top-0 z-50">
         <div className="max-w-screen-2xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => router.back()}
-                className="text-[#FF1B7C] hover:opacity-80 transition-colors duration-200"
+                className="text-gray-600 hover:text-[#FF1B7C]"
               >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                {board.name}
-              </h1>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <div>
+                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">{board?.name}</h1>
+                <p className="text-sm text-gray-500">Created on {new Date(board?.createdAt || '').toLocaleDateString()}</p>
+              </div>
             </div>
+            
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
-                size="sm"
-                onClick={handleShare}
-                className="flex items-center gap-2"
+                onClick={() => router.push(`/create/content?boardId=${board?.id}`)}
+                className="hover:border-[#FF1B7C] hover:text-[#FF1B7C]"
               >
-                <Share2 className="w-4 h-4" />
-                Share
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDownload}
-                className="flex items-center gap-2"
-              >
-                <Download className="w-4 h-4" />
-                Download
-              </Button>
-              <Button
-                onClick={handleEdit}
-                size="sm"
-                className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white flex items-center gap-2"
-              >
-                <Edit className="w-4 h-4" />
+                <Edit className="w-4 h-4 mr-2" />
                 Edit Board
+              </Button>
+              <Button
+                onClick={handleDownload}
+                className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download
               </Button>
             </div>
           </div>
@@ -193,39 +236,46 @@ function VisionBoard() {
 
       {/* Main Content */}
       <div className="max-w-screen-2xl mx-auto px-6 py-12">
-        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl overflow-hidden">
-          {/* Board Title */}
-          <div className="p-8 border-b border-gray-100 dark:border-gray-800">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              {board.name}
-            </h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-2">
-              Created on {new Date(board.createdAt).toLocaleDateString()}
-            </p>
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800">
+          {/* Board Info */}
+          <div className="p-8 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{board?.name}</h2>
+                <p className="text-gray-500 mt-1">Template: {board?.template}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" className="text-gray-500">
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share
+                </Button>
+              </div>
+            </div>
           </div>
 
-          {/* Vision Board Grid */}
+          {/* Grid Content */}
           <div className="p-8">
-            {renderGrid()}
+            <div id="vision-board" className="max-w-[1200px] mx-auto">
+              {renderGrid()}
+            </div>
           </div>
 
-          {/* Download & Share Section */}
-          <div className="p-8 bg-gray-50 dark:bg-gray-800/50">
+          {/* Footer Actions */}
+          <div className="p-8 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800">
             <div className="flex justify-center gap-4">
               <Button 
                 onClick={handleDownload}
-                className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white px-8"
+                className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white px-8 py-6 rounded-xl"
               >
-                <Download className="w-4 h-4 mr-2" />
-                Download Board
+                <Download className="w-5 h-5 mr-3" />
+                Download Vision Board
               </Button>
               <Button 
                 variant="outline"
-                onClick={handleShare}
-                className="px-8"
+                className="px-8 py-6 rounded-xl hover:border-[#FF1B7C] hover:text-[#FF1B7C]"
               >
-                <Share2 className="w-4 h-4 mr-2" />
-                Share Board
+                <Share2 className="w-5 h-5 mr-3" />
+                Share Vision Board
               </Button>
             </div>
           </div>
