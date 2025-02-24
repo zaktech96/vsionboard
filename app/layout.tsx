@@ -1,6 +1,6 @@
 import Provider from '@/app/provider';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from 'sonner';
 import AuthWrapper from '@/components/wrapper/auth-wrapper';
 import { Analytics } from '@vercel/analytics/react';
 import { GeistSans } from 'geist/font/sans';
@@ -72,7 +72,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               {children}
-              <Toaster />
+              <Toaster position="top-center" richColors />
             </ThemeProvider>
           </Provider>
           <Analytics mode="production" />
