@@ -38,19 +38,26 @@ const ShareMenu = ({ onShare, isOpen, setIsOpen }: {
 }) => (
   <div className="relative">
     {isOpen && (
-      <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
-        <div className="py-1" role="menu">
-          {['Download', 'Copy Link', 'Twitter', 'Facebook', 'LinkedIn', 'Pinterest'].map((option) => (
+      <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black/5 z-50">
+        <div className="p-1" role="menu">
+          {[
+            { name: 'Twitter', icon: '𝕏' },
+            { name: 'Facebook', icon: 'f' },
+            { name: 'LinkedIn', icon: 'in' },
+            { name: 'Pinterest', icon: '📌' },
+          ].map(({ name, icon }) => (
             <button
-              key={option}
+              key={name}
               onClick={() => {
-                onShare(option.toLowerCase());
+                onShare(name.toLowerCase());
                 setIsOpen(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="w-full flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 
+                       hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
               role="menuitem"
             >
-              {option}
+              <span className="w-5 text-center mr-2">{icon}</span>
+              {name}
             </button>
           ))}
         </div>
@@ -88,57 +95,38 @@ function VisionBoard() {
     }
   }, [params.id]);
 
-  const handleShare = async (platform?: string) => {
+  const handleShare = async (platform: string) => {
     try {
-      const shareUrl = `${window.location.origin}/board/${board?.id}`;
+      // Generate image first
+      const visionBoard = document.getElementById('vision-board');
+      if (!visionBoard) {
+        throw new Error('Vision board element not found');
+      }
+
+      const canvas = await html2canvas(visionBoard, { 
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+      });
+      
+      const imageUrl = canvas.toDataURL('image/jpeg', 0.9);
       const shareText = `Check out my vision board: ${board?.name}`;
 
-      switch (platform) {
+      switch (platform.toLowerCase()) {
         case 'twitter':
-          window.open(SOCIAL_SHARE_URLS.twitter(shareUrl, shareText), '_blank');
+          window.open(SOCIAL_SHARE_URLS.twitter('', shareText), '_blank');
           break;
         case 'facebook':
-          window.open(SOCIAL_SHARE_URLS.facebook(shareUrl), '_blank');
+          // Facebook requires server-side image hosting, so we'll share without image
+          window.open(SOCIAL_SHARE_URLS.facebook(''), '_blank');
           break;
         case 'linkedin':
-          window.open(SOCIAL_SHARE_URLS.linkedin(shareUrl), '_blank');
+          window.open(SOCIAL_SHARE_URLS.linkedin(''), '_blank');
           break;
         case 'pinterest':
-          const boardElement = document.getElementById('vision-board');
-          if (boardElement) {
-            const canvas = await html2canvas(boardElement, { scale: 2 });
-            const imageUrl = canvas.toDataURL('image/png');
-            window.open(SOCIAL_SHARE_URLS.pinterest(shareUrl, imageUrl), '_blank');
-          }
+          window.open(SOCIAL_SHARE_URLS.pinterest('', imageUrl), '_blank');
           break;
-        case 'copy link':
-          await navigator.clipboard.writeText(shareUrl);
-          toast.success('Link copied to clipboard!');
-          break;
-        case 'download':
-          handleDownload();
-          break;
-        default:
-          if (navigator.share) {
-            const boardElement = document.getElementById('vision-board');
-            if (boardElement) {
-              const canvas = await html2canvas(boardElement, { scale: 2 });
-              const blob = await new Promise<Blob>((resolve) => {
-                canvas.toBlob((b) => {
-                  if (b) resolve(b);
-                }, 'image/png', 1.0);
-              });
-              
-              const file = new File([blob], `${board?.name || 'vision-board'}.png`, { type: 'image/png' });
-              await navigator.share({
-                title: board?.name || 'My Vision Board',
-                text: shareText,
-                files: [file]
-              });
-            }
-          } else {
-            setIsShareMenuOpen(true);
-          }
       }
     } catch (error) {
       console.error('Share error:', error);
@@ -151,42 +139,46 @@ function VisionBoard() {
       setIsDownloading(true);
       setDownloadProgress(0);
 
-      // Pre-load images before capturing
-      const imageElements = document.querySelectorAll('.vision-board img');
+      const visionBoard = document.getElementById('vision-board');
+      if (!visionBoard) {
+        throw new Error('Vision board element not found');
+      }
+
+      // Pre-load images
+      const imageElements = visionBoard.querySelectorAll('img');
       await Promise.all(
         Array.from(imageElements).map((img) => {
           const imgElement = img as HTMLImageElement;
           if (imgElement.complete) return Promise.resolve();
-          return new Promise((resolve) => {
-            imgElement.onload = resolve;
-            imgElement.onerror = resolve;
+          return new Promise<void>((resolve) => {
+            imgElement.onload = () => resolve();
+            imgElement.onerror = () => {
+              console.warn(`Failed to load image: ${imgElement.src}`);
+              resolve();
+            };
           });
         })
       );
 
-      // Use dynamic import for html2canvas to reduce initial bundle size
       const html2canvas = (await import('html2canvas')).default;
       
-      // Optimize canvas capture
-      const canvas = await html2canvas(document.querySelector('.vision-board')!, {
-        scale: 2, // Adjust based on quality needs
+      const canvas = await html2canvas(visionBoard, {
+        scale: 2,
         useCORS: true,
         allowTaint: true,
-        logging: false,
-        imageTimeout: 15000,
+        logging: true, // Enable logging to debug issues
+        backgroundColor: null,
+        imageTimeout: 30000, // Increase timeout
         onclone: (doc) => {
-          // Clean up DOM before capture
-          const element = doc.querySelector('.vision-board');
+          const element = doc.getElementById('vision-board');
           if (element) {
             element.classList.add('downloading');
           }
         }
       });
 
-      // Use compression for the final image
-      const compressedImage = canvas.toDataURL('image/jpeg', 0.8); // Adjust quality as needed
+      const compressedImage = canvas.toDataURL('image/jpeg', 0.9); // Increased quality
 
-      // Create download with progress
       const link = document.createElement('a');
       link.download = `vision-board-${new Date().toISOString()}.jpg`;
       link.href = compressedImage;
@@ -196,7 +188,7 @@ function VisionBoard() {
       toast.success('Vision board downloaded successfully!');
     } catch (error) {
       console.error('Download failed:', error);
-      toast.error('Failed to download vision board. Please try again.');
+      toast.error(`Failed to download: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsDownloading(false);
       setDownloadProgress(0);
@@ -207,6 +199,34 @@ function VisionBoard() {
     if (board) {
       router.push(`/create/content?name=${board.name}&template=${board.template}&layout=${board.layout}`);
     }
+  };
+
+  const renderImage = (key: string) => {
+    const imageUrl = board?.images[key];
+
+    return imageUrl && !imageErrors[key] ? (
+      <div className="relative w-full h-full">
+        <Image
+          src={imageUrl}
+          alt="Vision board image"
+          fill
+          className="object-cover"
+          priority
+          sizes="(max-width: 768px) 100vw, 50vw"
+          onError={() => setImageErrors(prev => ({ ...prev, [key]: true }))}
+        />
+      </div>
+    ) : (
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="w-12 h-12 rounded-xl border-2 border-dashed border-gray-200 
+                      flex items-center justify-center bg-white/80">
+          <span className="text-gray-400 text-2xl">+</span>
+        </div>
+        <span className="text-gray-500 mt-3 font-medium">
+          {imageErrors[key] ? 'Failed to load image' : 'Empty Space'}
+        </span>
+      </div>
+    );
   };
 
   const renderGrid = () => {
@@ -318,180 +338,47 @@ function VisionBoard() {
     }
   };
 
-  const renderImage = (key: string) => {
-    const imageUrl = board?.images[key];
-
-    return imageUrl && !imageErrors[key] ? (
-      <div className="relative w-full h-full">
-        <Image
-          src={imageUrl}
-          alt="Vision board image"
-          fill
-          className="object-cover"
-          priority
-          sizes="(max-width: 768px) 100vw, 50vw"
-          onError={() => setImageErrors(prev => ({ ...prev, [key]: true }))}
-        />
-      </div>
-    ) : (
-      <div className="flex flex-col items-center justify-center h-full">
-        <div className="w-12 h-12 rounded-xl border-2 border-dashed border-gray-200 
-                      flex items-center justify-center bg-white/80">
-          <span className="text-gray-400 text-2xl">+</span>
-        </div>
-        <span className="text-gray-500 mt-3 font-medium">
-          {imageErrors[key] ? 'Failed to load image' : 'Empty Space'}
-        </span>
-      </div>
-    );
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#FF1B7C]" />
-        <span className="ml-2 text-lg">Loading your vision board...</span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <p className="text-red-500 mb-4">{error}</p>
-        <Button onClick={() => router.push('/create')} className="bg-[#FF1B7C]">
-          Create New Board
-        </Button>
-      </div>
-    );
-  }
-
-  if (!board) return null;
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
       {/* Header */}
       <div className="border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg sticky top-0 z-50">
         <div className="max-w-screen-2xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                onClick={() => router.back()}
-                className="text-gray-600 hover:text-[#FF1B7C]"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
-              <div>
-                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">{board?.name}</h1>
-                <p className="text-sm text-gray-500">Created on {new Date(board?.createdAt || '').toLocaleDateString()}</p>
-              </div>
-            </div>
-            
-            {/* Existing buttons */}
-            <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                onClick={() => router.push(`/create/content?boardId=${board?.id}`)}
-                className="hover:border-[#FF1B7C] hover:text-[#FF1B7C]"
-              >
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Board
-              </Button>
-              <Button
-                onClick={handleDownload}
-                disabled={isDownloading}
-                className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white relative"
-              >
+            <Button
+              variant="ghost"
+              onClick={() => router.back()}
+              className="text-gray-600 hover:text-[#FF1B7C]"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+            <div className="flex items-center space-x-2">
+              <Button onClick={handleDownload} disabled={isDownloading}>
                 {isDownloading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    <span>Processing {downloadProgress}%...</span>
-                    <div 
-                      className="absolute bottom-0 left-0 h-1 bg-white/20"
-                      style={{ width: `${downloadProgress}%` }}
-                    />
-                  </>
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <>
-                    <Download className="w-4 h-4 mr-2" />
-                    Download
-                  </>
+                  <Download className="h-4 w-4 mr-2" />
                 )}
+                {isDownloading ? 'Downloading...' : 'Download'}
+              </Button>
+              <Button onClick={() => setIsShareMenuOpen(!isShareMenuOpen)} variant="outline">
+                <Share2 className="h-4 w-4 mr-2" />
+                Share
               </Button>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Main Content */}
-      <div className="max-w-screen-2xl mx-auto px-6 py-12">
-        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800">
-          {/* Board Info */}
-          <div className="p-8 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{board?.name}</h2>
-                <p className="text-gray-500 mt-1">Template: {board?.template}</p>
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="text-gray-500 relative"
-                  onClick={() => handleShare()}
-                >
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Share
-                  <ShareMenu
-                    onShare={handleShare}
-                    isOpen={isShareMenuOpen}
-                    setIsOpen={setIsShareMenuOpen}
-                  />
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Grid Content */}
-          <div className="p-8">
-            <div id="vision-board" className="max-w-[1200px] mx-auto">
-              {renderGrid()}
-            </div>
-          </div>
-
-          {/* Footer Actions */}
-          <div className="p-8 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800">
-            <div className="flex justify-center gap-4">
-              <Button 
-                onClick={handleDownload}
-                className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white px-8 py-6 rounded-xl"
-              >
-                <Download className="w-5 h-5 mr-3" />
-                Download Vision Board
-              </Button>
-              <Button 
-                variant="outline"
-                onClick={() => handleShare()}
-                className="px-8 py-6 rounded-xl hover:border-[#FF1B7C] hover:text-[#FF1B7C]"
-              >
-                <Share2 className="w-5 h-5 mr-3" />
-                Share Vision Board
-              </Button>
-            </div>
-          </div>
-        </div>
+      <ShareMenu 
+        isOpen={isShareMenuOpen}
+        setIsOpen={setIsShareMenuOpen}
+        onShare={handleShare}
+      />
+      <div id="vision-board" className="max-w-[1200px] mx-auto p-8">
+        {renderGrid()}
       </div>
     </div>
   );
 }
 
-const styles = `
-  .vision-board.downloading * {
-    animation: none !important;
-    transition: none !important;
-  }
-`;
-
-export default VisionBoard; 
+export default VisionBoard;
