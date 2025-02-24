@@ -166,18 +166,19 @@ function VisionBoard() {
         scale: 2,
         useCORS: true,
         allowTaint: true,
-        logging: true, // Enable logging to debug issues
-        backgroundColor: null,
-        imageTimeout: 30000, // Increase timeout
+        logging: true,
+        backgroundColor: '#ffffff',
+        imageTimeout: 30000,
         onclone: (doc) => {
           const element = doc.getElementById('vision-board');
           if (element) {
+            element.style.backgroundColor = '#ffffff';
             element.classList.add('downloading');
           }
         }
       });
 
-      const compressedImage = canvas.toDataURL('image/jpeg', 0.9); // Increased quality
+      const compressedImage = canvas.toDataURL('image/jpeg', 0.9);
 
       const link = document.createElement('a');
       link.download = `vision-board-${new Date().toISOString()}.jpg`;
@@ -353,7 +354,11 @@ function VisionBoard() {
               Back
             </Button>
             <div className="flex items-center space-x-2">
-              <Button onClick={handleDownload} disabled={isDownloading}>
+              <Button 
+                onClick={handleDownload} 
+                disabled={isDownloading}
+                className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white"
+              >
                 {isDownloading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
@@ -361,7 +366,11 @@ function VisionBoard() {
                 )}
                 {isDownloading ? 'Downloading...' : 'Download'}
               </Button>
-              <Button onClick={() => setIsShareMenuOpen(!isShareMenuOpen)} variant="outline">
+              <Button 
+                onClick={() => setIsShareMenuOpen(!isShareMenuOpen)} 
+                variant="outline"
+                className="border-[#FF1B7C] text-[#FF1B7C] hover:bg-[#FF1B7C]/10"
+              >
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
               </Button>

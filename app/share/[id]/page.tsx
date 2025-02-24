@@ -99,7 +99,7 @@ export default function SharePreview() {
         <div className="relative rounded-2xl overflow-hidden shadow-2xl">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
             <Link href="/create">
-              <Button className="bg-white/90 hover:bg-white text-black">
+              <Button className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white">
                 Create Your Own <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
@@ -115,7 +115,7 @@ export default function SharePreview() {
             Create Your Own Vision Board
           </h2>
           <Link href="/create">
-            <Button size="lg" className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90">
+            <Button size="lg" className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white">
               Get Started <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
