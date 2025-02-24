@@ -7,6 +7,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
 import { ArrowLeft, Plus, Upload } from 'lucide-react';
+import { optimizeImage } from '@/lib/image-optimization';
+import { toast } from 'sonner';
 
 const generateUniqueId = () => crypto.randomUUID();
 
@@ -627,13 +629,13 @@ function ContentEditor() {
     setShowDialog(true);
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageUrl = e.target?.result as string;
+      try {
+        const optimizedImage = await optimizeImage(file);
+        // Use optimized image blob
+        const imageUrl = URL.createObjectURL(optimizedImage);
         setSelectedImage(imageUrl);
         if (selectedCell) {
           setSelectedImages(prev => ({
@@ -654,8 +656,9 @@ function ContentEditor() {
             }
           }
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        toast.error('Failed to process image. Please try again.');
+      }
     }
   };
 

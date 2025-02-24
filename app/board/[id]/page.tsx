@@ -66,6 +66,7 @@ function VisionBoard() {
   const [error, setError] = useState<string | null>(null);
   const [board, setBoard] = useState<VisionBoard | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState(0);
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
 
@@ -148,29 +149,57 @@ function VisionBoard() {
   const handleDownload = async () => {
     try {
       setIsDownloading(true);
-      toast.loading('Preparing your vision board...');
-      
-      const boardElement = document.getElementById('vision-board');
-      if (!boardElement) throw new Error('Board element not found');
+      setDownloadProgress(0);
 
-      const canvas = await html2canvas(boardElement, {
-        scale: 2,
+      // Pre-load images before capturing
+      const imageElements = document.querySelectorAll('.vision-board img');
+      await Promise.all(
+        Array.from(imageElements).map((img) => {
+          const imgElement = img as HTMLImageElement;
+          if (imgElement.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            imgElement.onload = resolve;
+            imgElement.onerror = resolve;
+          });
+        })
+      );
+
+      // Use dynamic import for html2canvas to reduce initial bundle size
+      const html2canvas = (await import('html2canvas')).default;
+      
+      // Optimize canvas capture
+      const canvas = await html2canvas(document.querySelector('.vision-board')!, {
+        scale: 2, // Adjust based on quality needs
         useCORS: true,
-        backgroundColor: null,
+        allowTaint: true,
         logging: false,
+        imageTimeout: 15000,
+        onclone: (doc) => {
+          // Clean up DOM before capture
+          const element = doc.querySelector('.vision-board');
+          if (element) {
+            element.classList.add('downloading');
+          }
+        }
       });
 
-      canvas.toBlob((blob: Blob | null) => {
-        if (blob) {
-          saveAs(blob, `${board?.name || 'vision-board'}.png`);
-          toast.success('Vision board downloaded successfully!');
-        }
-      }, 'image/png', 1.0);
+      // Use compression for the final image
+      const compressedImage = canvas.toDataURL('image/jpeg', 0.8); // Adjust quality as needed
+
+      // Create download with progress
+      const link = document.createElement('a');
+      link.download = `vision-board-${new Date().toISOString()}.jpg`;
+      link.href = compressedImage;
+      link.click();
+
+      setDownloadProgress(100);
+      toast.success('Vision board downloaded successfully!');
     } catch (error) {
-      console.error('Download error:', error);
-      toast.error('Failed to download vision board');
+      console.error('Download failed:', error);
+      toast.error('Failed to download vision board. Please try again.');
     } finally {
       setIsDownloading(false);
+      setDownloadProgress(0);
     }
   };
 
@@ -373,14 +402,23 @@ function VisionBoard() {
               <Button
                 onClick={handleDownload}
                 disabled={isDownloading}
-                className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white"
+                className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white relative"
               >
                 {isDownloading ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <span>Processing {downloadProgress}%...</span>
+                    <div 
+                      className="absolute bottom-0 left-0 h-1 bg-white/20"
+                      style={{ width: `${downloadProgress}%` }}
+                    />
+                  </>
                 ) : (
-                  <Download className="w-4 h-4 mr-2" />
+                  <>
+                    <Download className="w-4 h-4 mr-2" />
+                    Download
+                  </>
                 )}
-                {isDownloading ? 'Downloading...' : 'Download'}
               </Button>
             </div>
           </div>
@@ -448,5 +486,12 @@ function VisionBoard() {
     </div>
   );
 }
+
+const styles = `
+  .vision-board.downloading * {
+    animation: none !important;
+    transition: none !important;
+  }
+`;
 
 export default VisionBoard; 
