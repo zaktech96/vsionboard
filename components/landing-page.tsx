@@ -19,22 +19,38 @@ export function LandingPage() {
     <div className="flex flex-col min-h-screen relative overflow-hidden">
       {/* Enhanced background effects */}
       <div className="fixed inset-0 -z-10 h-full w-full">
-        {/* Primary gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-pink-50 via-white to-purple-50 
-                        dark:from-gray-950 dark:via-gray-900 dark:to-gray-950" />
+        {/* Primary gradient background - more subtle */}
+        <div className="absolute inset-0 bg-white dark:bg-gray-950" />
 
-        {/* Animated gradient blobs */}
-        <div className="absolute top-0 -left-1/4 w-[1000px] h-[1000px] rotate-[225deg] animate-blob">
+        {/* Centered circular gradient */}
+        <div className="absolute top-[20%] left-1/2 -translate-x-1/2 
+                        w-[1200px] h-[1200px] rounded-full 
+                        bg-gradient-to-b from-pink-50 via-white to-purple-50 
+                        dark:from-gray-900 dark:via-gray-900 dark:to-gray-950
+                        opacity-60" />
+
+        {/* Circular gradient overlays - more concentrated */}
+        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 
+                        w-[800px] h-[800px] rounded-full 
+                        bg-[radial-gradient(circle_at_center,#FF1B7C_0%,transparent_70%)]
+                        opacity-30 blur-3xl" />
+        <div className="absolute top-[25%] left-1/2 -translate-x-1/2 
+                        w-[600px] h-[600px] rounded-full 
+                        bg-[radial-gradient(circle_at_center,purple_0%,transparent_70%)]
+                        opacity-25 blur-3xl animate-pulse-slow" />
+
+        {/* Animated blobs - more contained */}
+        <div className="absolute top-[20%] left-[35%] w-[500px] h-[500px] rotate-[225deg] animate-blob">
           <div className="absolute w-full h-full bg-gradient-to-r from-pink-400 via-[#FF1B7C] to-purple-500 
                           opacity-30 dark:opacity-20 blur-3xl" />
         </div>
-        <div className="absolute bottom-0 -right-1/4 w-[1000px] h-[1000px] rotate-45 animate-blob animation-delay-2000">
+        <div className="absolute top-[30%] right-[35%] w-[500px] h-[500px] rotate-45 animate-blob animation-delay-2000">
           <div className="absolute w-full h-full bg-gradient-to-r from-purple-500 via-[#FF1B7C] to-pink-400 
                           opacity-30 dark:opacity-20 blur-3xl" />
         </div>
 
-        {/* Noise texture */}
-        <div className="absolute inset-0 bg-grid-small-white/[0.2] dark:bg-grid-small-white/[0.05] opacity-100" />
+        {/* Noise texture - more subtle */}
+        <div className="absolute inset-0 bg-grid-small-white/[0.15] dark:bg-grid-small-white/[0.03] opacity-100" />
       </div>
 
       {/* Glassmorphism header */}

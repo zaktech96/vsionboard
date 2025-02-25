@@ -148,6 +148,10 @@ const config: Config = {
             transform: 'translate(-20px, 20px) scale(0.9)',
           },
         },
+        'pulse-slow': {
+          '0%, 100%': { opacity: '0.2' },
+          '50%': { opacity: '0.15' }
+        },
       },
       animation: {
         'logo-cloud': 'logo-cloud 30s linear infinite', // Adjust duration and timing as needed for your design.
@@ -162,6 +166,7 @@ const config: Config = {
         'float': 'float 6s ease-in-out infinite',    // Faster than 8s
         'fade-in': 'fade-in 0.7s ease-out forwards', // Slightly faster fade-in
         blob: 'blob 8s infinite',                  // Faster than 12s
+        'pulse-slow': 'pulse-slow 8s ease-in-out infinite',
       },
     },
   },
