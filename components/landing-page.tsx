@@ -7,34 +7,59 @@ import { useState } from 'react';
 import { useTheme } from "next-themes"
 import { Moon, Sun } from "lucide-react"
 
+// Add this constant at the top of the file, after the imports
+const TITLE_TAILWIND_CLASS = "text-[72px] leading-[1.1] mb-6";
+
 export function LandingPage() {
   const router = useRouter();
   const [selectedLayout, setSelectedLayout] = useState<'grid' | 'rows' | 'featured'>('grid');
   const { theme, setTheme } = useTheme()
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950">
-      {/* Header */}
-      <header className="w-full py-4 px-6 bg-white dark:bg-gray-950 border-b dark:border-gray-800">
+    <div className="flex flex-col min-h-screen relative overflow-hidden">
+      {/* Enhanced background effects */}
+      <div className="fixed inset-0 -z-10 h-full w-full">
+        {/* Primary gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-pink-50 via-white to-purple-50 
+                        dark:from-gray-950 dark:via-gray-900 dark:to-gray-950" />
+
+        {/* Animated gradient blobs */}
+        <div className="absolute top-0 -left-1/4 w-[1000px] h-[1000px] rotate-[225deg] animate-blob">
+          <div className="absolute w-full h-full bg-gradient-to-r from-pink-400 via-[#FF1B7C] to-purple-500 
+                          opacity-30 dark:opacity-20 blur-3xl" />
+        </div>
+        <div className="absolute bottom-0 -right-1/4 w-[1000px] h-[1000px] rotate-45 animate-blob animation-delay-2000">
+          <div className="absolute w-full h-full bg-gradient-to-r from-purple-500 via-[#FF1B7C] to-pink-400 
+                          opacity-30 dark:opacity-20 blur-3xl" />
+        </div>
+
+        {/* Noise texture */}
+        <div className="absolute inset-0 bg-grid-small-white/[0.2] dark:bg-grid-small-white/[0.05] opacity-100" />
+      </div>
+
+      {/* Glassmorphism header */}
+      <header className="sticky top-0 w-full py-4 px-6 backdrop-blur-md bg-white/50 dark:bg-gray-950/50 z-50
+                        border-b border-white/10 dark:border-gray-800/10">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center">
-          <Link href="/" className="text-[22px] font-bold text-[#FF1B7C]">
+          <Link href="/" className="text-[22px] font-bold bg-clip-text text-transparent 
+                                   bg-gradient-to-r from-[#FF1B7C] to-purple-600">
             VisionBoard
           </Link>
           <div className="flex items-center gap-4">
-            <Button
-              className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white rounded-full px-6 py-2 text-[15px]"
-            >
+            <Button className="bg-gradient-to-r from-[#FF1B7C] to-purple-600 hover:opacity-90
+                              text-white rounded-full px-6 py-2 text-[15px] shadow-lg shadow-pink-500/25">
               Create Board
             </Button>
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+              className="p-2 rounded-full backdrop-blur-sm bg-white/10 dark:bg-gray-800/10 
+                         hover:bg-white/20 dark:hover:bg-gray-800/20 transition-all duration-300"
               aria-label="Toggle theme"
             >
               {theme === "dark" ? (
-                <Sun className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <Sun className="h-5 w-5 text-amber-400" />
               ) : (
-                <Moon className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <Moon className="h-5 w-5 text-gray-600" />
               )}
             </button>
           </div>
@@ -42,23 +67,49 @@ export function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="px-6 pt-32 pb-24">
-        <div className="max-w-[1400px] mx-auto text-center">
-          <div className="inline-flex items-center bg-[#FFE7F1] rounded-full px-4 py-1.5 mb-8">
-            <span className="text-sm text-[#FF1B7C]">✨ Visualize Your Future</span>
+      <section className="px-6 pt-32 pb-24 relative">
+        <div className="max-w-[1400px] mx-auto text-center relative">
+          {/* Simplified floating badge */}
+          <div className="inline-flex items-center px-4 py-2 rounded-full 
+                          bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-pink-500/10
+                          backdrop-blur-sm border border-white/20 dark:border-gray-800/20
+                          animate-float shadow-xl shadow-pink-500/10">
+            <span className="text-sm bg-gradient-to-r from-[#FF1B7C] to-purple-600 bg-clip-text text-transparent 
+                            font-medium">✨ Visualize Your Future</span>
           </div>
-          <h1 className="text-[72px] leading-[1.1] font-bold mb-6 text-[#15192C]">
-            Where Dreams Take<br />
-            <span className="text-[#FF1B7C]">Visual Form</span>
+
+          {/* Simplified heading */}
+          <h1 className="mt-12 text-[85px] leading-[1.1] font-bold tracking-tight relative">
+            <span className="absolute inset-0 bg-gradient-to-r from-[#FF1B7C] via-purple-500 to-[#FF1B7C] 
+                            opacity-50 blur-3xl" />
+            <span className="relative bg-gradient-to-r from-[#FF1B7C] via-purple-500 to-[#FF1B7C] 
+                            bg-clip-text text-transparent bg-[length:200%_auto] animate-shimmer">
+              Where Dreams Take<br />
+              Visual Form
+            </span>
           </h1>
-          <p className="text-xl text-[#4B5563] mb-12 max-w-[800px] mx-auto">
-            Create stunning vision boards that inspire action. Transform your goals from imagination to reality with our powerful, intuitive design tools.
+
+          {/* Simplified description */}
+          <p className="mt-8 text-xl max-w-[800px] mx-auto 
+                        opacity-0 animate-fade-in backdrop-blur-sm
+                        px-4 py-2 rounded-lg
+                        text-gray-600 dark:text-gray-300">
+            Create stunning vision boards that inspire action. Transform your goals from imagination 
+            to reality with our powerful, intuitive design tools.
           </p>
+
+          {/* Simplified CTA button */}
           <Button
-            className="bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white text-base px-6 py-2.5 rounded-full"
             onClick={() => router.push('/create')}
+            className="mt-12 relative group overflow-hidden rounded-full px-8 py-6 text-lg font-medium
+                       bg-gradient-to-r from-[#FF1B7C] via-purple-600 to-[#FF1B7C] 
+                       hover:shadow-2xl hover:shadow-pink-500/25 transition-all duration-300
+                       hover:scale-105 text-white"
           >
-            Start Creating →
+            <span className="relative z-10 flex items-center gap-2">
+              Start Creating
+              <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+            </span>
           </Button>
         </div>
       </section>

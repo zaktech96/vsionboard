@@ -104,12 +104,8 @@ const config: Config = {
           },
         },
         shimmer: {
-          '0%, 90%, 100%': {
-            'background-position': 'calc(-100% - var(--shimmer-width)) 0',
-          },
-          '30%, 60%': {
-            'background-position': 'calc(100% + var(--shimmer-width)) 0',
-          },
+          '0%': { backgroundPosition: '200% 50%' },
+          '100%': { backgroundPosition: '-200% 50%' }
         },
         'accordion-down': {
           from: { height: '0' },
@@ -133,17 +129,39 @@ const config: Config = {
             transform: 'scale(1)',
           },
         },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        'fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
+        },
+        blob: {
+          '0%, 100%': {
+            transform: 'translate(0, 0) scale(1)',
+          },
+          '33%': {
+            transform: 'translate(30px, -50px) scale(1.1)',
+          },
+          '66%': {
+            transform: 'translate(-20px, 20px) scale(0.9)',
+          },
+        },
       },
       animation: {
         'logo-cloud': 'logo-cloud 30s linear infinite', // Adjust duration and timing as needed for your design.
         orbit: 'orbit calc(var(--duration)*1s) linear infinite',
         gradient: 'gradient 8s linear infinite',
-        shimmer: 'shimmer 8s infinite',
+        shimmer: 'shimmer 10s linear infinite',    // Faster than 15s
         buttonheartbeat: 'buttonheartbeat 2s infinite ease-in-out',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
         'background-shine': 'background-shine 2s linear infinite',
+        'float': 'float 6s ease-in-out infinite',    // Faster than 8s
+        'fade-in': 'fade-in 0.7s ease-out forwards', // Slightly faster fade-in
+        blob: 'blob 8s infinite',                  // Faster than 12s
       },
     },
   },
