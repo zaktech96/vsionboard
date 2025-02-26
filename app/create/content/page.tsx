@@ -12,6 +12,20 @@ import { toast } from 'sonner';
 
 const generateUniqueId = () => crypto.randomUUID();
 
+interface DraggingContent {
+  type: 'text' | 'sticker' | 'shape';
+  cellId: string;
+}
+
+interface Shape {
+  type: string;
+  color: string;
+  position?: {
+    x: string;
+    y: string;
+  };
+}
+
 function ContentEditor() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,11 +44,12 @@ function ContentEditor() {
   const [galleryCount, setGalleryCount] = useState(6);
   const [selectedText, setSelectedText] = useState<{ [key: string]: string }>({});
   const [selectedStickers, setSelectedStickers] = useState<{ [key: string]: string }>({});
-  const [selectedShapes, setSelectedShapes] = useState<{ [key: string]: { type: string; color: string } }>({});
+  const [selectedShapes, setSelectedShapes] = useState<{ [key: string]: Shape }>({});
   const [textInput, setTextInput] = useState('');
   const [textColor, setTextColor] = useState('#000000');
   const [textSize, setTextSize] = useState('md');
   const [shapeColor, setShapeColor] = useState('#FF1B7C');
+  const [draggingContent, setDraggingContent] = useState<DraggingContent | null>(null);
 
   const steps = [
     { number: 1, title: 'Name Your Board' },
@@ -138,29 +153,75 @@ function ContentEditor() {
 
   const renderContentOverlay = (cellId: string) => {
     if (selectedText[cellId]) {
-      const textData = JSON.parse(selectedText[cellId]);
-      return (
-        <div className="absolute inset-0 flex items-center justify-center p-4">
-          <p style={{ 
-            color: textData.color,
-            fontSize: textData.size === 'sm' ? '14px' : textData.size === 'md' ? '18px' : '24px'
-          }} className="text-center font-medium">
-            {textData.content}
-          </p>
-        </div>
-      );
+      try {
+        const textData = JSON.parse(selectedText[cellId]);
+        return (
+          <div className="absolute inset-0 flex items-center justify-center p-4 cursor-move"
+               draggable="true"
+               onDragStart={(e) => {
+                 e.dataTransfer.setData('text/plain', 'text');
+                 setDraggingContent({ type: 'text', cellId });
+               }}
+               onDragEnd={() => setDraggingContent(null)}
+               style={{
+                 position: 'absolute',
+                 left: textData.position?.x || '50%',
+                 top: textData.position?.y || '50%',
+                 transform: 'translate(-50%, -50%)',
+                 zIndex: 10
+               }}>
+            <p style={{ 
+              color: textData.color,
+              fontSize: textData.size === 'sm' ? '14px' : textData.size === 'md' ? '18px' : '24px',
+              textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+            }} className="text-center font-medium select-none whitespace-pre-wrap">
+              {textData.content}
+            </p>
+          </div>
+        );
+      } catch (error) {
+        console.error('Error parsing text data:', error);
+        return null;
+      }
     }
     if (selectedStickers[cellId]) {
+      const stickerData = JSON.parse(selectedStickers[cellId]);
       return (
-        <div className="absolute inset-0 flex items-center justify-center text-4xl">
-          {selectedStickers[cellId]}
+        <div className="absolute cursor-move"
+             draggable="true"
+             onDragStart={(e) => {
+               e.dataTransfer.setData('text/plain', 'sticker');
+               setDraggingContent({ type: 'sticker', cellId });
+             }}
+             onDragEnd={() => setDraggingContent(null)}
+             style={{
+               position: 'absolute',
+               left: stickerData.position?.x || '50%',
+               top: stickerData.position?.y || '50%',
+               transform: 'translate(-50%, -50%)'
+             }}>
+          <div className="text-4xl select-none">
+            {stickerData.content}
+          </div>
         </div>
       );
     }
     if (selectedShapes[cellId]) {
       const shape = selectedShapes[cellId];
       return (
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute cursor-move"
+             draggable="true"
+             onDragStart={(e) => {
+               e.dataTransfer.setData('text/plain', 'shape');
+               setDraggingContent({ type: 'shape', cellId });
+             }}
+             onDragEnd={() => setDraggingContent(null)}
+             style={{
+               position: 'absolute',
+               left: shape.position?.x || '50%',
+               top: shape.position?.y || '50%',
+               transform: 'translate(-50%, -50%)'
+             }}>
           <div 
             className={`${
               shape.type === 'circle' ? 'rounded-full' : 
@@ -429,6 +490,7 @@ function ContentEditor() {
             <div
               key={i}
               onClick={() => handleCellClick(`gallery-${i}`)}
+              onDragOver={(e) => handleDragOver(e, `gallery-${i}`)}
               className={`aspect-square rounded-2xl border-2 border-dashed border-gray-200/60 
                          hover:border-[#FF1B7C]/20 hover:bg-[#FFE7F1]/10
                          transition-all duration-300
@@ -445,7 +507,7 @@ function ContentEditor() {
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
                               transition-opacity flex items-center justify-center">
-                    <span className="text-white text-sm">Change Image</span>
+                    <span className="text-white text-sm">Change Content</span>
                   </div>
                 </>
               ) : (
@@ -454,9 +516,10 @@ function ContentEditor() {
                               flex items-center justify-center bg-white/80">
                     <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#FF1B7C]" />
                   </div>
-                  <span className="text-gray-400 text-sm">Add Image</span>
+                  <span className="text-gray-400 text-sm">Add Content</span>
                 </div>
               )}
+              {renderContentOverlay(`gallery-${i}`)}
             </div>
           ))}
         </div>
@@ -479,6 +542,22 @@ function ContentEditor() {
   const handleAddContent = () => {
     if (selectedCell) {
       switch (selectedContentType) {
+        case 'text':
+          const textContent = {
+            content: textInput,
+            color: textColor,
+            size: textSize,
+            position: { x: '50%', y: '50%' }
+          };
+          setSelectedText(prev => ({
+            ...prev,
+            [selectedCell]: JSON.stringify(textContent)
+          }));
+          setShowDialog(false);
+          setSelectedCell(null);
+          setSelectedContentType(null);
+          setTextInput('');
+          break;
         case 'image':
           if (selectedImage) {
             setSelectedImages(prev => ({
@@ -487,23 +566,14 @@ function ContentEditor() {
             }));
           }
           break;
-        case 'text':
-          if (textInput.trim()) {
-            setSelectedText(prev => ({
-              ...prev,
-              [selectedCell]: JSON.stringify({
-                content: textInput,
-                color: textColor,
-                size: textSize
-              })
-            }));
-          }
-          break;
         case 'sticker':
           if (selectedImage) {
             setSelectedStickers(prev => ({
               ...prev,
-              [selectedCell]: selectedImage
+              [selectedCell]: JSON.stringify({
+                content: selectedImage,
+                position: { x: '50%', y: '50%' }
+              })
             }));
           }
           break;
@@ -512,17 +582,13 @@ function ContentEditor() {
             ...prev,
             [selectedCell]: {
               type: selectedImage || 'square',
-              color: shapeColor
+              color: shapeColor,
+              position: { x: '50%', y: '50%' }
             }
           }));
           break;
       }
     }
-    setShowDialog(false);
-    setSelectedImage(null);
-    setSelectedCell(null);
-    setSelectedContentType(null);
-    setTextInput('');
   };
 
   // Dialog content based on content type
@@ -771,6 +837,45 @@ function ContentEditor() {
   const handleUploadClick = () => {
     setSelectedContentType('image');
     setShowDialog(true);
+  };
+
+  // Add drag and drop handlers for cells
+  const handleDragOver = (e: React.DragEvent, cellId: string) => {
+    e.preventDefault();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    if (draggingContent) {
+      const { type, cellId: dragCellId } = draggingContent;
+      if (type === 'text' && selectedText[dragCellId]) {
+        const textData = JSON.parse(selectedText[dragCellId]);
+        setSelectedText(prev => ({
+          ...prev,
+          [dragCellId]: JSON.stringify({
+            ...textData,
+            position: { x: `${x}%`, y: `${y}%` }
+          })
+        }));
+      } else if (type === 'sticker' && selectedStickers[dragCellId]) {
+        const stickerData = JSON.parse(selectedStickers[dragCellId]);
+        setSelectedStickers(prev => ({
+          ...prev,
+          [dragCellId]: JSON.stringify({
+            ...stickerData,
+            position: { x: `${x}%`, y: `${y}%` }
+          })
+        }));
+      } else if (type === 'shape' && selectedShapes[dragCellId]) {
+        setSelectedShapes(prev => ({
+          ...prev,
+          [dragCellId]: {
+            ...prev[dragCellId],
+            position: { x: `${x}%`, y: `${y}%` }
+          }
+        }));
+      }
+    }
   };
 
   return (
