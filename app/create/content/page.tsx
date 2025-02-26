@@ -156,27 +156,38 @@ function ContentEditor() {
       try {
         const textData = JSON.parse(selectedText[cellId]);
         return (
-          <div className="absolute inset-0 flex items-center justify-center p-4 cursor-move"
-               draggable="true"
-               onDragStart={(e) => {
-                 e.dataTransfer.setData('text/plain', 'text');
-                 setDraggingContent({ type: 'text', cellId });
-               }}
-               onDragEnd={() => setDraggingContent(null)}
-               style={{
-                 position: 'absolute',
-                 left: textData.position?.x || '50%',
-                 top: textData.position?.y || '50%',
-                 transform: 'translate(-50%, -50%)',
-                 zIndex: 10
-               }}>
-            <p style={{ 
-              color: textData.color,
-              fontSize: textData.size === 'sm' ? '14px' : textData.size === 'md' ? '18px' : '24px',
-              textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-            }} className="text-center font-medium select-none whitespace-pre-wrap">
-              {textData.content}
-            </p>
+          <div 
+            className="absolute inset-0 pointer-events-auto"
+            draggable="true"
+            onDragStart={(e) => {
+              e.dataTransfer.setData('text/plain', 'text');
+              setDraggingContent({ type: 'text', cellId });
+            }}
+            onDragEnd={() => setDraggingContent(null)}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                left: textData.position?.x || '50%',
+                top: textData.position?.y || '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 20,
+                maxWidth: '90%',
+                padding: '4px'
+              }}
+            >
+              <p 
+                style={{ 
+                  color: textData.color,
+                  fontSize: textData.size === 'sm' ? '14px' : textData.size === 'md' ? '18px' : '24px',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                  wordBreak: 'break-word'
+                }} 
+                className="text-center font-medium select-none whitespace-pre-wrap cursor-move"
+              >
+                {textData.content}
+              </p>
+            </div>
           </div>
         );
       } catch (error) {
@@ -638,7 +649,7 @@ function ContentEditor() {
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
                 placeholder="Enter your text..."
-                className="w-full min-h-[100px] p-3 border rounded-lg"
+                className="w-full min-h-[100px] p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#FF1B7C]"
               />
               <div className="flex gap-4">
                 <div className="flex-1">
@@ -655,7 +666,7 @@ function ContentEditor() {
                   <select
                     value={textSize}
                     onChange={(e) => setTextSize(e.target.value)}
-                    className="w-full h-10 rounded border"
+                    className="w-full h-10 rounded border px-2 focus:outline-none focus:ring-2 focus:ring-[#FF1B7C]"
                   >
                     <option value="sm">Small</option>
                     <option value="md">Medium</option>
@@ -663,12 +674,19 @@ function ContentEditor() {
                   </select>
                 </div>
               </div>
-              <button
-                onClick={handleAddContent}
+              <Button
+                onClick={() => {
+                  if (!textInput.trim()) {
+                    toast.error('Please enter some text');
+                    return;
+                  }
+                  handleAddContent();
+                  setShowDialog(false);
+                }}
                 className="w-full py-2 bg-[#FF1B7C] text-white rounded-lg hover:bg-[#FF1B7C]/90"
               >
                 Add Text
-              </button>
+              </Button>
             </div>
           </DialogContent>
         );
@@ -802,33 +820,45 @@ function ContentEditor() {
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      try {
-        const optimizedImage = await optimizeImage(file);
-        // Use optimized image blob
-        const imageUrl = URL.createObjectURL(optimizedImage);
-        setSelectedImage(imageUrl);
-        if (selectedCell) {
+    if (!file) return;
+
+    try {
+      // Create URL immediately for preview
+      const previewUrl = URL.createObjectURL(file);
+      
+      if (selectedCell) {
+        // Update UI immediately with preview
+        setSelectedImages(prev => ({
+          ...prev,
+          [selectedCell]: previewUrl
+        }));
+
+        try {
+          // Try to optimize in background
+          const optimizedImage = await optimizeImage(file);
+          const optimizedUrl = URL.createObjectURL(optimizedImage);
+          
+          // Update with optimized version
           setSelectedImages(prev => ({
             ...prev,
-            [selectedCell]: imageUrl
+            [selectedCell]: optimizedUrl
           }));
-
-          // Close dialog after image is added
-          setShowDialog(false);
-          setSelectedImage(null);
-          setSelectedCell(null);
-          
-          // If we're close to filling all cells, automatically add more
-          if (selectedCell.startsWith('gallery-')) {
-            const filledCells = Object.keys(selectedImages).filter(k => k.startsWith('gallery-')).length;
-            if (filledCells >= galleryCount - 2) {
-              setGalleryCount(prev => prev + 3);
-            }
-          }
+          URL.revokeObjectURL(previewUrl);
+        } catch (optimizeError) {
+          // If optimization fails, keep using the preview URL
+          console.warn('Image optimization failed, using original:', optimizeError);
         }
-      } catch (error) {
-        toast.error('Failed to process image. Please try again.');
+
+        // Close dialog and reset state
+        setShowDialog(false);
+        setSelectedCell(null);
+        setSelectedContentType(null);
+      }
+    } catch (error) {
+      console.error('Image upload error:', error);
+      toast.error('Failed to upload image. Please try again.');
+      if (selectedImage) {
+        URL.revokeObjectURL(selectedImage);
       }
     }
   };
