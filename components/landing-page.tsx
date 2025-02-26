@@ -90,7 +90,7 @@ export function LandingPage() {
                           bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-pink-500/10
                           backdrop-blur-sm border border-white/20 dark:border-gray-800/20
                           animate-float shadow-xl shadow-pink-500/10">
-            <span className="text-sm bg-gradient-to-r from-[#FF1B7C] to-purple-600 bg-clip-text text-transparent 
+            <span className="text-lg bg-gradient-to-r from-[#FF1B7C] to-purple-600 bg-clip-text text-transparent 
                             font-medium">✨ Visualize Your Future</span>
           </div>
 
