@@ -28,6 +28,13 @@ function ContentEditor() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [gridCount, setGridCount] = useState(4);
   const [galleryCount, setGalleryCount] = useState(6);
+  const [selectedText, setSelectedText] = useState<{ [key: string]: string }>({});
+  const [selectedStickers, setSelectedStickers] = useState<{ [key: string]: string }>({});
+  const [selectedShapes, setSelectedShapes] = useState<{ [key: string]: { type: string; color: string } }>({});
+  const [textInput, setTextInput] = useState('');
+  const [textColor, setTextColor] = useState('#000000');
+  const [textSize, setTextSize] = useState('md');
+  const [shapeColor, setShapeColor] = useState('#FF1B7C');
 
   const steps = [
     { number: 1, title: 'Name Your Board' },
@@ -129,14 +136,58 @@ function ContentEditor() {
     'blank': ['✨']
   };
 
-  // Update the layoutTemplates object
+  const renderContentOverlay = (cellId: string) => {
+    if (selectedText[cellId]) {
+      const textData = JSON.parse(selectedText[cellId]);
+      return (
+        <div className="absolute inset-0 flex items-center justify-center p-4">
+          <p style={{ 
+            color: textData.color,
+            fontSize: textData.size === 'sm' ? '14px' : textData.size === 'md' ? '18px' : '24px'
+          }} className="text-center font-medium">
+            {textData.content}
+          </p>
+        </div>
+      );
+    }
+    if (selectedStickers[cellId]) {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center text-4xl">
+          {selectedStickers[cellId]}
+        </div>
+      );
+    }
+    if (selectedShapes[cellId]) {
+      const shape = selectedShapes[cellId];
+      return (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div 
+            className={`${
+              shape.type === 'circle' ? 'rounded-full' : 
+              shape.type === 'triangle' ? 'triangle' : 
+              'rounded-lg'
+            } w-16 h-16`}
+            style={{ backgroundColor: shape.color }}
+          />
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const handleCellClick = (cellId: string) => {
+    setSelectedCell(cellId);
+    setShowDialog(true);
+  };
+
+  // Update layoutTemplates to use handleCellClick
   const layoutTemplates = {
     'grid-2x2': (
       <div className="grid grid-cols-2 gap-6">
         {[0, 1, 2, 3].map((i) => (
           <div
             key={i}
-            onClick={() => handleImageClick(`grid-${i}`)}
+            onClick={() => handleCellClick(`grid-${i}`)}
             className={`${i === 0 ? 'bg-[#FFE7F1]' : i === 1 ? 'bg-[#E8FAE8]' : i === 2 ? 'bg-[#F8E8FF]' : 'bg-[#FFF8E8]'}
                       dark:bg-${i === 0 ? 'pink' : i === 1 ? 'green' : i === 2 ? 'purple' : 'yellow'}-900/20 
                       rounded-2xl border-2 border-dashed border-gray-200/60 
@@ -158,13 +209,14 @@ function ContentEditor() {
                               flex items-center justify-center bg-white/80">
                   <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#FF1B7C]" />
                 </div>
-                <span className="text-gray-400 text-sm">Add Image</span>
+                <span className="text-gray-400 text-sm">Add Content</span>
               </div>
             )}
-            {selectedImages[`grid-${i}`] && (
+            {renderContentOverlay(`grid-${i}`)}
+            {(selectedImages[`grid-${i}`] || selectedText[`grid-${i}`] || selectedStickers[`grid-${i}`] || selectedShapes[`grid-${i}`]) && (
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
                           transition-opacity flex items-center justify-center">
-                <span className="text-white text-sm">Change Image</span>
+                <span className="text-white text-sm">Change Content</span>
               </div>
             )}
           </div>
@@ -175,7 +227,7 @@ function ContentEditor() {
       <div className="flex flex-col gap-6">
         {/* Featured Main Image */}
         <div 
-          onClick={() => handleImageClick('featured-main')}
+          onClick={() => handleCellClick('featured-main')}
           className="w-full aspect-[21/9] bg-[#FFE7F1] rounded-2xl border-2 border-dashed border-gray-200/60 
                    hover:border-[#FF1B7C]/20 hover:opacity-90 relative overflow-hidden cursor-pointer"
         >
@@ -203,7 +255,7 @@ function ContentEditor() {
           {[1, 2].map((i) => (
             <div
               key={i}
-              onClick={() => handleImageClick(`featured-${i}`)}
+              onClick={() => handleCellClick(`featured-${i}`)}
               className={`aspect-[21/9] ${i === 1 ? 'bg-[#E8FAE8]' : 'bg-[#F8E8FF]'} 
                        rounded-2xl border-2 border-dashed border-gray-200/60 
                        hover:border-[#FF1B7C]/20 hover:opacity-90 relative overflow-hidden cursor-pointer`}
@@ -235,7 +287,7 @@ function ContentEditor() {
         {['top-left', 'center', 'top-right', 'bottom'].map((cellId, index) => (
           <div
             key={cellId}
-            onClick={() => handleImageClick(`masonry-${cellId}`)}
+            onClick={() => handleCellClick(`masonry-${cellId}`)}
             className={`${index === 1 ? 'row-span-2' : index === 3 ? 'col-span-2' : ''} 
                       bg-[${index === 0 ? '#FFE7F1' : index === 1 ? '#E8FAE8' : index === 2 ? '#F8E8FF' : '#FFF8E8'}]
                       dark:bg-${index === 0 ? 'pink' : index === 1 ? 'green' : index === 2 ? 'purple' : 'yellow'}-900/20 
@@ -268,7 +320,7 @@ function ContentEditor() {
     'dynamic-flow': (
       <div className="grid grid-cols-3 auto-rows-auto gap-6 h-full">
         <div
-          onClick={() => handleImageClick('flow-0')}
+          onClick={() => handleCellClick('flow-0')}
           className="bg-[#FFE7F1] dark:bg-pink-900/20 
                     rounded-2xl border-2 border-dashed border-gray-200/60 
                     hover:border-[#FF1B7C]/20 hover:opacity-90
@@ -302,7 +354,7 @@ function ContentEditor() {
         </div>
 
         <div
-          onClick={() => handleImageClick('flow-1')}
+          onClick={() => handleCellClick('flow-1')}
           className="bg-[#E8FAE8] dark:bg-green-900/20 
                     rounded-2xl border-2 border-dashed border-gray-200/60 
                     hover:border-[#FF1B7C]/20 hover:opacity-90
@@ -336,7 +388,7 @@ function ContentEditor() {
         </div>
 
         <div
-          onClick={() => handleImageClick('flow-2')}
+          onClick={() => handleCellClick('flow-2')}
           className="bg-[#F8E8FF] dark:bg-purple-900/20 
                     rounded-2xl border-2 border-dashed border-gray-200/60 
                     hover:border-[#FF1B7C]/20 hover:opacity-90
@@ -373,48 +425,40 @@ function ContentEditor() {
     'gallery-flow': (
       <div className="flex flex-col gap-6">
         <div className="grid grid-cols-3 gap-4">
-          {/* Show only filled cells plus one empty cell */}
-          {(() => {
-            const filledCells = Object.keys(selectedImages)
-              .filter(key => key.startsWith('gallery-'))
-              .length;
-            const cellsToShow = Math.min(filledCells + 1, 6);
-            
-            return [...Array(cellsToShow)].map((_, i) => (
-              <div
-                key={i}
-                onClick={() => handleImageClick(`gallery-${i}`)}
-                className={`aspect-square rounded-2xl border-2 border-dashed border-gray-200/60 
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              onClick={() => handleCellClick(`gallery-${i}`)}
+              className={`aspect-square rounded-2xl border-2 border-dashed border-gray-200/60 
                          hover:border-[#FF1B7C]/20 hover:bg-[#FFE7F1]/10
                          transition-all duration-300
                          flex items-center justify-center group cursor-pointer relative
                          ${selectedImages[`gallery-${i}`] ? 'bg-[#FFE7F1]' : 'bg-gray-50/50'}`}
-              >
-                {selectedImages[`gallery-${i}`] ? (
-                  <>
-                    <Image
-                      src={selectedImages[`gallery-${i}`]}
-                      alt={`Gallery image ${i + 1}`}
-                      fill
-                      className="object-cover rounded-xl"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
-                                transition-opacity flex items-center justify-center">
-                      <span className="text-white text-sm">Change Image</span>
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
-                    <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
-                                flex items-center justify-center bg-white/80">
-                      <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#FF1B7C]" />
-                    </div>
-                    <span className="text-gray-400 text-sm">Add Image</span>
+            >
+              {selectedImages[`gallery-${i}`] ? (
+                <>
+                  <Image
+                    src={selectedImages[`gallery-${i}`]}
+                    alt={`Gallery image ${i + 1}`}
+                    fill
+                    className="object-cover rounded-xl"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
+                              transition-opacity flex items-center justify-center">
+                    <span className="text-white text-sm">Change Image</span>
                   </div>
-                )}
-              </div>
-            ));
-          })()}
+                </>
+              ) : (
+                <div className="flex flex-col items-center gap-4 transform group-hover:scale-105 transition-transform">
+                  <div className="w-10 h-10 rounded-xl border-2 border-dashed border-gray-200/60 
+                              flex items-center justify-center bg-white/80">
+                    <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#FF1B7C]" />
+                  </div>
+                  <span className="text-gray-400 text-sm">Add Image</span>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     )
@@ -433,18 +477,52 @@ function ContentEditor() {
   };
 
   const handleAddContent = () => {
-    if (selectedContentType === 'image' && selectedImage) {
-      if (selectedCell) {
-        setSelectedImages(prev => ({
-          ...prev,
-          [selectedCell]: selectedImage
-        }));
+    if (selectedCell) {
+      switch (selectedContentType) {
+        case 'image':
+          if (selectedImage) {
+            setSelectedImages(prev => ({
+              ...prev,
+              [selectedCell]: selectedImage
+            }));
+          }
+          break;
+        case 'text':
+          if (textInput.trim()) {
+            setSelectedText(prev => ({
+              ...prev,
+              [selectedCell]: JSON.stringify({
+                content: textInput,
+                color: textColor,
+                size: textSize
+              })
+            }));
+          }
+          break;
+        case 'sticker':
+          if (selectedImage) {
+            setSelectedStickers(prev => ({
+              ...prev,
+              [selectedCell]: selectedImage
+            }));
+          }
+          break;
+        case 'shape':
+          setSelectedShapes(prev => ({
+            ...prev,
+            [selectedCell]: {
+              type: selectedImage || 'square',
+              color: shapeColor
+            }
+          }));
+          break;
       }
     }
     setShowDialog(false);
     setSelectedImage(null);
     setSelectedCell(null);
     setSelectedContentType(null);
+    setTextInput('');
   };
 
   // Dialog content based on content type
@@ -485,71 +563,114 @@ function ContentEditor() {
         );
       case 'text':
         return (
-          <>
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Text</DialogTitle>
             </DialogHeader>
-            <div className="p-6">
-              <Textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+            <div className="p-6 space-y-4">
+              <textarea
+                value={textInput}
+                onChange={(e) => setTextInput(e.target.value)}
                 placeholder="Enter your text..."
-                className="min-h-[150px] mb-4"
+                className="w-full min-h-[100px] p-3 border rounded-lg"
               />
-              <Button 
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="block text-sm mb-1">Text Color</label>
+                  <input
+                    type="color"
+                    value={textColor}
+                    onChange={(e) => setTextColor(e.target.value)}
+                    className="w-full h-10 rounded cursor-pointer"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm mb-1">Text Size</label>
+                  <select
+                    value={textSize}
+                    onChange={(e) => setTextSize(e.target.value)}
+                    className="w-full h-10 rounded border"
+                  >
+                    <option value="sm">Small</option>
+                    <option value="md">Medium</option>
+                    <option value="lg">Large</option>
+                  </select>
+                </div>
+              </div>
+              <button
                 onClick={handleAddContent}
-                className="w-full bg-[#E6156F] hover:bg-[#D11463]"
+                className="w-full py-2 bg-[#FF1B7C] text-white rounded-lg hover:bg-[#FF1B7C]/90"
               >
                 Add Text
-              </Button>
+              </button>
             </div>
-          </>
+          </DialogContent>
         );
       case 'sticker':
         return (
-          <>
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Choose Sticker</DialogTitle>
             </DialogHeader>
-            <div className="p-6 grid grid-cols-4 gap-4">
-              {['⭐', '❤️', '🌟', '✨', '🎯', '💫', '🌈', '🎨'].map((sticker) => (
-                <button
-                  key={sticker}
-                  onClick={() => {
-                    // Add sticker to canvas
-                    handleAddContent();
-                  }}
-                  className="text-4xl p-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800
-                           transition-colors duration-200"
-                >
-                  {sticker}
-                </button>
-              ))}
+            <div className="p-6">
+              <div className="grid grid-cols-4 gap-4">
+                {['⭐', '❤️', '🌟', '✨', '🎯', '💫', '🌈', '🎨', '🎭', '🎪', '🎡', '🎢'].map((sticker) => (
+                  <button
+                    key={sticker}
+                    onClick={() => {
+                      setSelectedImage(sticker);
+                      handleAddContent();
+                    }}
+                    className="text-4xl p-4 rounded-xl hover:bg-[#FFE7F1] transition-colors"
+                  >
+                    {sticker}
+                  </button>
+                ))}
+              </div>
             </div>
-          </>
+          </DialogContent>
         );
       case 'shape':
         return (
-          <>
+          <DialogContent>
             <DialogHeader>
-              <DialogTitle>Choose Shape</DialogTitle>
+              <DialogTitle>Add Shape</DialogTitle>
             </DialogHeader>
-            <div className="p-6 grid grid-cols-3 gap-4">
-              {['square', 'circle', 'triangle'].map((shape) => (
-                <button
-                  key={shape}
-                  onClick={() => {
-                    // Add shape to canvas
-                    handleAddContent();
-                  }}
-                  className="aspect-square rounded-xl border-2 border-gray-200 dark:border-gray-700
-                           hover:border-[#E6156F] transition-colors duration-200"
-                >
-                  {/* Add shape SVG or icon here */}
-                </button>
-              ))}
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                {['square', 'circle', 'triangle'].map((shape) => (
+                  <button
+                    key={shape}
+                    onClick={() => setSelectedImage(shape)}
+                    className={`aspect-square rounded-lg border-2 transition-colors ${
+                      selectedImage === shape ? 'border-[#FF1B7C] bg-[#FFE7F1]' : 'border-gray-200'
+                    }`}
+                  >
+                    <div className={`w-full h-full flex items-center justify-center ${
+                      shape === 'circle' ? 'rounded-full' : 
+                      shape === 'triangle' ? 'triangle' : 
+                      'rounded-lg'
+                    }`} style={{ backgroundColor: shapeColor }} />
+                  </button>
+                ))}
+              </div>
+              <div>
+                <label className="block text-sm mb-1">Shape Color</label>
+                <input
+                  type="color"
+                  value={shapeColor}
+                  onChange={(e) => setShapeColor(e.target.value)}
+                  className="w-full h-10 rounded cursor-pointer"
+                />
+              </div>
+              <button
+                onClick={handleAddContent}
+                className="w-full py-2 bg-[#FF1B7C] text-white rounded-lg hover:bg-[#FF1B7C]/90"
+              >
+                Add Shape
+              </button>
             </div>
-          </>
+          </DialogContent>
         );
       default:
         return null;
@@ -564,7 +685,10 @@ function ContentEditor() {
         name: boardName,
         template: templateId,
         layout: layoutId,
-        images: selectedImages, // Make sure this contains the base64 images
+        images: selectedImages,
+        text: selectedText,
+        stickers: selectedStickers,
+        shapes: selectedShapes,
         createdAt: new Date().toISOString()
       };
 
@@ -606,27 +730,8 @@ function ContentEditor() {
   };
 
   const handleImageClick = (cellId: string) => {
-    // If it's a grid cell, check if previous cells are filled
-    if (cellId.startsWith('grid-')) {
-      const currentIndex = parseInt(cellId.split('-')[1]);
-      const previousCells = [...Array(currentIndex)].map((_, i) => `grid-${i}`);
-      
-      // Check if any previous cells are empty
-      const hasEmptyPreviousCells = previousCells.some(cell => !selectedImages[cell]);
-      
-      if (hasEmptyPreviousCells) {
-        // Find first empty cell
-        const firstEmptyCell = previousCells.find(cell => !selectedImages[cell]);
-        setSelectedCell(firstEmptyCell || cellId);
-      } else {
-        setSelectedCell(cellId);
-      }
-    } else {
-      setSelectedCell(cellId);
-    }
-    
+    handleCellClick(cellId);
     setSelectedContentType('image');
-    setShowDialog(true);
   };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

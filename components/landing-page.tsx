@@ -348,19 +348,53 @@ export function LandingPage() {
                 <div className="absolute inset-0 bg-gradient-to-bl from-[#FFE7F1]/30 via-transparent to-[#FFE7F1]/20 
                               opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 relative z-10">
-                  {[...Array(4)].map((_, i) => (
-                    <div 
-                      key={i} 
-                      className="aspect-square rounded-xl border-2 border-dashed border-gray-200/60 
-                               bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm
-                               hover:border-[#FF1B7C]/30 hover:bg-[#FFE7F1]/20
-                               dark:hover:bg-[#FFE7F1]/5
-                               group-hover:shadow-lg
-                               transition-all duration-300"
-                    />
-                  ))}
-                </div>
+                {/* Updated preview layout */}
+                {selectedLayout === 'featured' ? (
+                  <div className="flex flex-col gap-4 relative z-10">
+                    {/* Featured large image */}
+                    <div className="w-full h-[200px] rounded-xl border-2 border-dashed border-gray-200/60 
+                                 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm
+                                 hover:border-[#FF1B7C]/30 hover:bg-[#FFE7F1]/20
+                                 dark:hover:bg-[#FFE7F1]/5
+                                 group-hover:shadow-lg
+                                 transition-all duration-300
+                                 flex items-center justify-center" />
+                    
+                    {/* Supporting images row */}
+                    <div className="grid grid-cols-2 gap-4">
+                      {[...Array(2)].map((_, i) => (
+                        <div 
+                          key={i}
+                          className="aspect-square rounded-xl border-2 border-dashed border-gray-200/60 
+                                   bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm
+                                   hover:border-[#FF1B7C]/30 hover:bg-[#FFE7F1]/20
+                                   dark:hover:bg-[#FFE7F1]/5
+                                   group-hover:shadow-lg
+                                   transition-all duration-300
+                                   flex items-center justify-center"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  // Original grid/rows layout
+                  <div className={`grid ${
+                    selectedLayout === 'grid' ? 'grid-cols-2' : 'grid-cols-1'
+                  } gap-4 relative z-10`}>
+                    {[...Array(selectedLayout === 'grid' ? 4 : 2)].map((_, i) => (
+                      <div 
+                        key={i} 
+                        className="aspect-square rounded-xl border-2 border-dashed border-gray-200/60 
+                                 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm
+                                 hover:border-[#FF1B7C]/30 hover:bg-[#FFE7F1]/20
+                                 dark:hover:bg-[#FFE7F1]/5
+                                 group-hover:shadow-lg
+                                 transition-all duration-300
+                                 flex items-center justify-center"
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

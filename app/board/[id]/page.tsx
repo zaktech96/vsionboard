@@ -301,20 +301,17 @@ function VisionBoard() {
     }
 
     if (layout === 'grid-2x2') {
-      const gridImages = Object.entries(board?.images || {})
-        .filter(([key]) => key.startsWith('grid-'));
-      
       return (
         <div className="grid grid-cols-2 gap-6">
-          {gridImages.map(([key, src]) => (
+          {[0, 1, 2, 3].map((i) => (
             <div
-              key={key}
+              key={i}
               className={`aspect-[4/3] rounded-2xl overflow-hidden relative 
-                        ${key === 'grid-0' ? 'bg-[#FFE7F1]' : 
-                          key === 'grid-1' ? 'bg-[#E8FAE8]' : 
-                          key === 'grid-2' ? 'bg-[#F8E8FF]' : 'bg-[#FFF8E8]'}`}
+                        ${i === 0 ? 'bg-[#FFE7F1]' : 
+                          i === 1 ? 'bg-[#E8FAE8]' : 
+                          i === 2 ? 'bg-[#F8E8FF]' : 'bg-[#FFF8E8]'}`}
             >
-              {renderImage(key, board?.images || {}, imageErrors, setImageErrors)}
+              {renderImage(`grid-${i}`, board?.images || {}, imageErrors, setImageErrors)}
             </div>
           ))}
         </div>
@@ -422,12 +419,7 @@ function VisionBoard() {
             onShare={handleShare}
           />
           <div id="vision-board" className="max-w-[1200px] mx-auto p-8">
-            <GridLayout 
-              layout={board?.layout || ''} 
-              images={board?.images || {}} 
-              imageErrors={imageErrors}
-              setImageErrors={setImageErrors}
-            />
+            {renderGrid()}
           </div>
         </>
       )}
