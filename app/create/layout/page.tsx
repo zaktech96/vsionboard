@@ -237,12 +237,12 @@ function LayoutContent() {
           <Button
             onClick={handleContinue}
             disabled={!selectedTemplate}
-            className="w-full sm:w-auto min-w-[200px] py-5 px-8 rounded-xl
+            className="w-full sm:w-auto min-w-[240px] py-6 px-10 rounded-full
                      bg-[#FF1B7C] hover:bg-[#E3196E] dark:bg-[#FF1B7C] dark:hover:bg-[#E3196E]
-                     text-white text-base font-semibold
+                     text-white text-lg font-medium tracking-wide
                      disabled:opacity-50 disabled:cursor-not-allowed
                      transition-all duration-200 mx-4
-                     shadow-xl shadow-[#FF1B7C]/25 dark:shadow-[#FF1B7C]/20"
+                     shadow-[0_8px_16px_rgba(255,27,124,0.25)] hover:shadow-[0_12px_20px_rgba(255,27,124,0.3)]"
           >
             Continue to Content →
           </Button>
