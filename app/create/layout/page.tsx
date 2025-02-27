@@ -5,6 +5,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, Suspense } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
+interface Template {
+  id: string;
+  name: string;
+  description: string;
+  gradient: string;
+  previewColor: string;
+  activeColor: string;
+  preview: (selectedState: boolean) => React.ReactElement;
+}
+
 // Create a component to handle the search params
 function LayoutContent() {
   const router = useRouter();
@@ -21,12 +31,15 @@ function LayoutContent() {
     { number: 4, title: 'Add Content' },
   ];
 
-  const templates = [
+  const templates: Template[] = [
     {
       id: 'grid-2x2',
       name: 'Classic Grid',
       description: 'Start with 2x2 grid, expand as needed',
-      preview: (
+      gradient: 'from-[#FFE7F1] to-[#FFF5F9]',
+      previewColor: 'bg-[#FF1B7C]/10',
+      activeColor: 'bg-[#FF1B7C]/20',
+      preview: (selectedState: boolean) => (
         <div className="flex flex-col gap-2 w-full">
           <div className="grid grid-cols-2 gap-2 w-full">
             {[...Array(4)].map((_, i) => (
@@ -43,7 +56,10 @@ function LayoutContent() {
       id: 'featured',
       name: 'Featured Focus',
       description: 'One large image with expandable supporting elements',
-      preview: (
+      gradient: 'from-[#FFE7F1] to-[#FFF5F9]',
+      previewColor: 'bg-[#FF1B7C]/10',
+      activeColor: 'bg-[#FF1B7C]/20',
+      preview: (selectedState: boolean) => (
         <div className="flex flex-col gap-2 w-full">
           <div className="grid grid-cols-2 gap-2 w-full">
             <div className="col-span-2 h-32 bg-gray-100 dark:bg-gray-800 rounded-xl" />
@@ -60,7 +76,10 @@ function LayoutContent() {
       id: 'gallery-flow',
       name: 'Gallery Grid',
       description: 'Flexible grid for multiple images',
-      preview: (
+      gradient: 'from-[#FFE7F1] to-[#FFF5F9]',
+      previewColor: 'bg-[#FF1B7C]/10',
+      activeColor: 'bg-[#FF1B7C]/20',
+      preview: (selectedState: boolean) => (
         <div className="grid grid-cols-3 gap-2 w-full aspect-square">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="bg-gray-100 dark:bg-gray-800 rounded-xl" />
@@ -154,39 +173,82 @@ function LayoutContent() {
         </div>
 
         {/* Layout Grid - Responsive columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mb-16">
           {templates.map((template) => (
             <button
               key={template.id}
               onClick={() => setSelectedTemplate(template.id)}
-              className={`p-4 md:p-6 rounded-xl border-2 transition-all duration-300
+              className={`group relative p-8 rounded-2xl border transition-all duration-300 ease-in-out
                 ${selectedTemplate === template.id 
-                  ? 'border-[#FF1B7C] bg-[#FFE7F1]/20' 
-                  : 'border-gray-200 dark:border-gray-800 hover:border-[#FF1B7C]/40 hover:bg-[#FFE7F1]/10'}`}
+                  ? 'border-[#FF1B7C] shadow-xl shadow-[#FFE7F1]/30 scale-[1.02] bg-white dark:bg-gray-900' 
+                  : 'border-gray-100 dark:border-gray-800 hover:border-[#FF1B7C]/40 hover:shadow-lg hover:-translate-y-1 bg-white/50 dark:bg-gray-900/50'}
+                hover:bg-white dark:hover:bg-gray-900`}
             >
-              <div className="aspect-square mb-4 md:mb-6">
-                {template.preview}
+              {/* Preview Container */}
+              <div className={`relative w-full mb-8 rounded-xl overflow-hidden
+                ${selectedTemplate === template.id 
+                  ? 'ring-4 ring-[#FF1B7C] ring-offset-4 dark:ring-offset-gray-900' 
+                  : 'ring-1 ring-gray-100 dark:ring-gray-800 group-hover:ring-[#FF1B7C]/30 group-hover:ring-offset-2 dark:group-hover:ring-offset-gray-900'}
+                transition-all duration-300 ease-in-out bg-gradient-to-br ${template.gradient}`}
+              >
+                <div className="absolute inset-0 p-6">
+                  {template.preview(selectedTemplate === template.id)}
+                </div>
+                <div className="pt-[100%]" /> {/* Maintain aspect ratio */}
+                
+                {/* Add Image Indicator */}
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+                  <div className="px-4 py-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm
+                               text-xs text-gray-600 dark:text-gray-400 font-medium
+                               shadow-sm transition-all duration-300">
+                    + Add Images
+                  </div>
+                </div>
               </div>
-              <h3 className="text-lg md:text-xl font-semibold mb-2">
-                {template.name}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {template.description}
-              </p>
+
+              {/* Text Content */}
+              <div className="text-center">
+                <h3 className={`text-xl font-semibold mb-3 transition-colors duration-300
+                  ${selectedTemplate === template.id 
+                    ? 'text-[#FF1B7C]' 
+                    : 'text-gray-900 dark:text-white group-hover:text-[#FF1B7C]'}`}>
+                  {template.name}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 max-w-[80%] mx-auto">
+                  {template.description}
+                </p>
+              </div>
+
+              {/* Selection Indicator */}
+              {selectedTemplate === template.id && (
+                <div className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#FF1B7C] text-white 
+                              flex items-center justify-center shadow-lg shadow-[#FF1B7C]/20
+                              animate-scale-in">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M13.3333 4L5.99992 11.3333L2.66659 8" 
+                          stroke="currentColor" 
+                          strokeWidth="2.5" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              )}
             </button>
           ))}
         </div>
 
         {/* Action Button */}
-        <div className="flex justify-center">
+        <div className="fixed bottom-8 left-0 right-0 flex justify-center">
           <Button
             onClick={handleContinue}
             disabled={!selectedTemplate}
-            className="w-full sm:w-auto min-w-[200px] py-4 md:py-6 px-6 md:px-8 rounded-xl
-                     bg-[#FF1B7C] hover:bg-[#FF1B7C]/90 text-white
+            className="w-full sm:w-auto min-w-[200px] py-6 px-8 rounded-full
+                     bg-gradient-to-r from-[#FF1B7C] to-[#FF617C] hover:opacity-90
+                     text-white text-lg font-medium
                      disabled:opacity-50 disabled:cursor-not-allowed
-                     transition-all duration-300
-                     shadow-[0_8px_30px_rgb(230,21,111,0.2)]"
+                     transition-all duration-300 mx-4
+                     shadow-[0_8px_32px_rgb(255,27,124,0.25)]
+                     backdrop-blur-sm"
           >
             Continue to Content →
           </Button>
