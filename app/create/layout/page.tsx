@@ -36,18 +36,18 @@ function LayoutContent() {
       id: 'grid-2x2',
       name: 'Classic Grid',
       description: 'Start with 2x2 grid, expand as needed',
-      gradient: 'from-[#FFE7F1] to-[#FFF5F9]',
-      previewColor: 'bg-[#FF1B7C]/10',
-      activeColor: 'bg-[#FF1B7C]/20',
+      gradient: 'from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40',
+      previewColor: 'bg-blue-600/10',
+      activeColor: 'bg-blue-600/20',
       preview: (selectedState: boolean) => (
         <div className="flex flex-col gap-2 w-full">
           <div className="grid grid-cols-2 gap-2 w-full">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-gray-100 dark:bg-gray-800 rounded-xl aspect-square" />
+              <div key={i} className="bg-white/90 dark:bg-gray-800/90 shadow-md rounded-lg aspect-square" />
             ))}
           </div>
-          <div className="w-full h-8 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center">
-            <span className="text-xs text-gray-400">+ Add More Images</span>
+          <div className="w-full h-8 bg-white/95 dark:bg-gray-800/95 rounded-lg flex items-center justify-center">
+            <span className="text-xs text-gray-600">+ Add More Images</span>
           </div>
         </div>
       )
@@ -56,18 +56,18 @@ function LayoutContent() {
       id: 'featured',
       name: 'Featured Focus',
       description: 'One large image with expandable supporting elements',
-      gradient: 'from-[#FFE7F1] to-[#FFF5F9]',
-      previewColor: 'bg-[#FF1B7C]/10',
-      activeColor: 'bg-[#FF1B7C]/20',
+      gradient: 'from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40',
+      previewColor: 'bg-purple-600/10',
+      activeColor: 'bg-purple-600/20',
       preview: (selectedState: boolean) => (
         <div className="flex flex-col gap-2 w-full">
           <div className="grid grid-cols-2 gap-2 w-full">
-            <div className="col-span-2 h-32 bg-gray-100 dark:bg-gray-800 rounded-xl" />
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl aspect-[2/1]" />
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl aspect-[2/1]" />
+            <div className="col-span-2 h-32 bg-white/90 dark:bg-gray-800/90 shadow-md rounded-lg" />
+            <div className="bg-white/90 dark:bg-gray-800/90 shadow-md rounded-lg aspect-[2/1]" />
+            <div className="bg-white/90 dark:bg-gray-800/90 shadow-md rounded-lg aspect-[2/1]" />
           </div>
-          <div className="w-full h-8 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center">
-            <span className="text-xs text-gray-400">+ Add Supporting Images</span>
+          <div className="w-full h-8 bg-white/95 dark:bg-gray-800/95 rounded-lg flex items-center justify-center">
+            <span className="text-xs text-gray-600">+ Add Supporting Images</span>
           </div>
         </div>
       )
@@ -76,13 +76,13 @@ function LayoutContent() {
       id: 'gallery-flow',
       name: 'Gallery Grid',
       description: 'Flexible grid for multiple images',
-      gradient: 'from-[#FFE7F1] to-[#FFF5F9]',
-      previewColor: 'bg-[#FF1B7C]/10',
-      activeColor: 'bg-[#FF1B7C]/20',
+      gradient: 'from-emerald-100 to-teal-100 dark:from-emerald-900/40 dark:to-teal-900/40',
+      previewColor: 'bg-emerald-600/10',
+      activeColor: 'bg-emerald-600/20',
       preview: (selectedState: boolean) => (
         <div className="grid grid-cols-3 gap-2 w-full aspect-square">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="bg-gray-100 dark:bg-gray-800 rounded-xl" />
+            <div key={i} className="bg-white/90 dark:bg-gray-800/90 shadow-md rounded-lg" />
           ))}
         </div>
       )
@@ -173,58 +173,53 @@ function LayoutContent() {
         </div>
 
         {/* Layout Grid - Responsive columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {templates.map((template) => (
             <button
               key={template.id}
               onClick={() => setSelectedTemplate(template.id)}
-              className={`group relative p-8 rounded-2xl border transition-all duration-300 ease-in-out
+              className={`group relative p-6 rounded-xl border-2 transition-all duration-200
                 ${selectedTemplate === template.id 
-                  ? 'border-[#FF1B7C] shadow-xl shadow-[#FFE7F1]/30 scale-[1.02] bg-white dark:bg-gray-900' 
-                  : 'border-gray-100 dark:border-gray-800 hover:border-[#FF1B7C]/40 hover:shadow-lg hover:-translate-y-1 bg-white/50 dark:bg-gray-900/50'}
-                hover:bg-white dark:hover:bg-gray-900`}
+                  ? 'border-blue-600 dark:border-blue-500 shadow-xl shadow-blue-200 dark:shadow-blue-950/30' 
+                  : 'border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-600'}
+                bg-white dark:bg-gray-900`}
             >
-              {/* Preview Container */}
-              <div className={`relative w-full mb-8 rounded-xl overflow-hidden
+              <div className={`relative w-full mb-6 rounded-lg overflow-hidden
                 ${selectedTemplate === template.id 
-                  ? 'ring-4 ring-[#FF1B7C] ring-offset-4 dark:ring-offset-gray-900' 
-                  : 'ring-1 ring-gray-100 dark:ring-gray-800 group-hover:ring-[#FF1B7C]/30 group-hover:ring-offset-2 dark:group-hover:ring-offset-gray-900'}
-                transition-all duration-300 ease-in-out bg-gradient-to-br ${template.gradient}`}
+                  ? 'ring-2 ring-blue-600 dark:ring-blue-500' 
+                  : 'ring-1 ring-gray-300 dark:ring-gray-700'}
+                transition-all duration-200 bg-gradient-to-br ${template.gradient}`}
               >
-                <div className="absolute inset-0 p-6">
+                <div className="absolute inset-0 p-4">
                   {template.preview(selectedTemplate === template.id)}
                 </div>
-                <div className="pt-[100%]" /> {/* Maintain aspect ratio */}
+                <div className="pt-[100%]" />
                 
-                {/* Add Image Indicator */}
-                <div className="absolute bottom-4 left-0 right-0 flex justify-center">
-                  <div className="px-4 py-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm
-                               text-xs text-gray-600 dark:text-gray-400 font-medium
-                               shadow-sm transition-all duration-300">
-                    + Add Images
+                <div className="absolute bottom-3 left-0 right-0 flex justify-center">
+                  <div className="px-3 py-1.5 rounded-lg bg-white/95 dark:bg-gray-800/95
+                               text-xs text-gray-700 dark:text-gray-300 font-medium
+                               shadow-md">
+                    Add Images
                   </div>
                 </div>
               </div>
 
-              {/* Text Content */}
               <div className="text-center">
-                <h3 className={`text-xl font-semibold mb-3 transition-colors duration-300
+                <h3 className={`text-lg font-semibold mb-2 transition-colors duration-200
                   ${selectedTemplate === template.id 
-                    ? 'text-[#FF1B7C]' 
-                    : 'text-gray-900 dark:text-white group-hover:text-[#FF1B7C]'}`}>
+                    ? 'text-blue-700 dark:text-blue-400' 
+                    : 'text-gray-900 dark:text-white'}`}>
                   {template.name}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 max-w-[80%] mx-auto">
+                <p className="text-sm text-gray-700 dark:text-gray-300">
                   {template.description}
                 </p>
               </div>
 
-              {/* Selection Indicator */}
               {selectedTemplate === template.id && (
-                <div className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#FF1B7C] text-white 
-                              flex items-center justify-center shadow-lg shadow-[#FF1B7C]/20
-                              animate-scale-in">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-blue-600 text-white 
+                              flex items-center justify-center shadow-lg">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                     <path d="M13.3333 4L5.99992 11.3333L2.66659 8" 
                           stroke="currentColor" 
                           strokeWidth="2.5" 
@@ -242,13 +237,12 @@ function LayoutContent() {
           <Button
             onClick={handleContinue}
             disabled={!selectedTemplate}
-            className="w-full sm:w-auto min-w-[200px] py-6 px-8 rounded-full
-                     bg-gradient-to-r from-[#FF1B7C] to-[#FF617C] hover:opacity-90
-                     text-white text-lg font-medium
+            className="w-full sm:w-auto min-w-[200px] py-5 px-8 rounded-xl
+                     bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700
+                     text-white text-base font-semibold
                      disabled:opacity-50 disabled:cursor-not-allowed
-                     transition-all duration-300 mx-4
-                     shadow-[0_8px_32px_rgb(255,27,124,0.25)]
-                     backdrop-blur-sm"
+                     transition-all duration-200 mx-4
+                     shadow-xl shadow-blue-300 dark:shadow-blue-950/40"
           >
             Continue to Content →
           </Button>
