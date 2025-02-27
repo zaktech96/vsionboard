@@ -218,10 +218,10 @@ devDependencies:
     specifier: ^1.0.0
     version: 1.0.0
   '@types/node':
-    specifier: latest
+    specifier: 22.13.5
     version: 22.13.5
   '@types/react':
-    specifier: latest
+    specifier: 19.0.10
     version: 19.0.10
   '@types/react-dom':
     specifier: latest
@@ -236,7 +236,7 @@ devDependencies:
     specifier: ^3.3.5
     version: 3.4.17
   typescript:
-    specifier: latest
+    specifier: 5.7.3
     version: 5.7.3
 
 packages:

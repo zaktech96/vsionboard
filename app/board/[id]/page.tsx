@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Share2, Download, Edit, ArrowLeft, Loader2 } from 'lucide-react';
 import html2canvas from 'html2canvas';
-import { saveAs } from 'file-saver';
 import { toast } from 'sonner';
 
 interface VisionBoard {
