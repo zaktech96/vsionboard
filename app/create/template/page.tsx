@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -55,7 +56,7 @@ const templates = [
   }
 ];
 
-export default function TemplatePage() {
+function TemplateContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const boardName = searchParams.get('name') || '';
@@ -206,5 +207,13 @@ export default function TemplatePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TemplatePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <TemplateContent />
+    </Suspense>
   );
 } 
