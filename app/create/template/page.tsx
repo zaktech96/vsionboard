@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -84,8 +84,14 @@ function LoadingState() {
 function TemplateContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const boardName = searchParams.get('name') || '';
+  const [boardName, setBoardName] = useState('');
+  const [isClient, setIsClient] = useState(false);
   const currentStep = 2;
+
+  useEffect(() => {
+    setIsClient(true);
+    setBoardName(searchParams.get('name') || '');
+  }, [searchParams]);
 
   const handleTemplateSelect = (templateId: string) => {
     router.push(`/create/layout?name=${encodeURIComponent(boardName)}&template=${templateId}`);
@@ -100,6 +106,10 @@ function TemplateContent() {
         break;
     }
   };
+
+  if (!isClient) {
+    return <LoadingState />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white dark:from-gray-950 dark:to-gray-900">
@@ -237,9 +247,5 @@ function TemplateContent() {
 
 // Main page component
 export default function TemplatePage() {
-  return (
-    <Suspense fallback={<LoadingState />}>
-      <TemplateContent />
-    </Suspense>
-  );
+  return <TemplateContent />;
 } 
